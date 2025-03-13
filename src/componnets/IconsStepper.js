@@ -14,7 +14,7 @@ export const CompletedIconWrapper = styled.div`
 `;
 
 export const CompletedIcon = () => (
-    <CompletedIconWrapper>
+    // <CompletedIconWrapper>
         <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
             <path
                 d="M9.87912 13.5199L12.2198 15.8605L16.1209 10.399"
@@ -24,7 +24,7 @@ export const CompletedIcon = () => (
                 strokeLinejoin="round"
             />
         </svg>
-    </CompletedIconWrapper>
+    // </CompletedIconWrapper>
 );
 
 

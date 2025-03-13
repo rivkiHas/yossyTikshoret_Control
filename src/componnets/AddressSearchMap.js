@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { GoogleMap, LoadScript, Marker, Autocomplete } from "@react-google-maps/api";
 import { useSelector, useDispatch } from 'react-redux';
 import { updateBrunchDetails } from "../redux/brunchSlice";
@@ -8,7 +8,6 @@ import TextOnTextFiled from "./TextOnTextFiled";
 const GOOGLE_MAPS_API_KEY = "AIzaSyCd4oRcSJmbJQhcaEGsgwlNR5AgmvARYwM";
 
 const containerStyle = {
-  // width: "384px",
   height: "478.43px",
   flexShrink: 0,
   alignSelf: 'stretch',
@@ -17,11 +16,20 @@ const containerStyle = {
   background: "url(<path-to-image>) lightgray -212.782px -5.3px / 237.14% 102.469% no-repeat",
 };
 
-export default function AddressSearchMap({ brunch, typeMarketer }) {
+// הגדרת הנתיב של ה-SVG
+const customMarkerIcon = {
+  url: "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(`
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+      <path d="M25.6136 14.0175C25.6136 23.3987 15.7622 28.7946 15.7622 28.7946C15.7622 28.7946 5.91083 23.3987 5.91083 14.0175C5.91083 11.4048 6.94874 8.89903 8.79623 7.05154C10.6437 5.20405 13.1495 4.16614 15.7622 4.16614C18.375 4.16614 20.8807 5.20405 22.7282 7.05154C24.5757 8.89903 25.6136 11.4048 25.6136 14.0175Z" fill="#F8BD00" stroke="white" stroke-width="1.31352" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  `),
+  scaledSize: { width: 32, height: 32 }, // התאמת גודל הסמן
+};
+
+export default function AddressSearchMap({ brunch }) {
   const dispatch = useDispatch();
   const autocompleteRef = useRef(null);
 
-  // מקבלים את הכתובת של הסניף הספציפי ישירות מהסטייט
   const address = useSelector(state =>
     state.brunch.brunches.find(b => b.id === brunch.id)?.address || ""
   );
@@ -29,6 +37,12 @@ export default function AddressSearchMap({ brunch, typeMarketer }) {
   const location = useSelector(state =>
     state.brunch.brunches.find(b => b.id === brunch.id)?.location || { lat: 32.0853, lng: 34.7818 }
   );
+
+  useEffect(() => {
+    if (location && autocompleteRef.current) {
+      autocompleteRef.current.setBounds(location);
+    }
+  }, [location]);
 
   const handleLoad = (autocomplete) => {
     autocompleteRef.current = autocomplete;
@@ -43,7 +57,6 @@ export default function AddressSearchMap({ brunch, typeMarketer }) {
           lng: place.geometry.location.lng(),
         };
 
-        // שולחים את הכתובת והקורדינטות ישירות ל-Redux
         dispatch(updateBrunchDetails({
           id: brunch.id,
           address: place.formatted_address,
@@ -93,7 +106,7 @@ export default function AddressSearchMap({ brunch, typeMarketer }) {
                 <input
                   type="text"
                   placeholder="הכנס כתובת..."
-                  value={address} // משתמש ישירות בכתובת מהסטייט
+                  value={address}
                   onChange={(e) =>
                     dispatch(updateBrunchDetails({ id: brunch.id, address: e.target.value }))
                   }
@@ -118,7 +131,7 @@ export default function AddressSearchMap({ brunch, typeMarketer }) {
               center={location}
               zoom={location ? 15 : 10}
             >
-              {location && <Marker position={location} />}
+              {location && <Marker position={location} icon={customMarkerIcon} />}
             </GoogleMap>
           </div>
         </LoadScript>
