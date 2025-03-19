@@ -1,44 +1,40 @@
-import React, { useState, useCallback } from "react"; // ייבוא useCallback מ-react
+import React, { useState, useCallback } from "react";
 import HoursDay from "./HoursDay";
 import HeaderText from "./HeaderText";
 import EditIcon from "./buttons/EditIcon";
 import CustomTimeFiled from "./CustomTimeField";
 import { Typography } from "@mui/material";
-import { useDispatch } from "react-redux"; // ייבוא Redux
+import { useDispatch } from "react-redux";
 import { updateBrunchDetails } from "../redux/brunchSlice";
+import SwitchButton from "./buttons/SwitchButton";
 
 export default function HoursOpenEdit({ setIsEditing, placeholder, isEditing, brunch }) {
-
     const dispatch = useDispatch();
     const days = ["יום ראשון", "יום שני", "יום שלישי", "יום רביעי", "יום חמישי", "יום שישי"];
 
     const [hours, setHours] = useState(
-        days.map(() => ({ morningOpen: "", morningClose: "", eveningOpen: "", eveningClose: "" }))
+        { day: 0, am: null, fromTime: "00:00", endTime: "00:00" }
     );
 
-    const handleUpdateHours = useCallback((dayIndex, timeOfDay, timeType, timeValue) => {
-        setHours(prevHours => {
-            const updatedHours = [...prevHours];  // יצירת עותק של ה-state
-            updatedHours[dayIndex] = {
-                ...updatedHours[dayIndex],
-                [`${timeOfDay}${timeType}`]: timeValue
-            };
-
-            // עדכון השעות ב-Redux
+    const handleUpdateHours = useCallback((dayIndex, endTime, timeValue, am) => {
+        isEditing ?
             dispatch(updateBrunchDetails({
-                id: brunch.id,  // מזהה הסניף
-                hoursOpen: updatedHours.map(hour => hour.morningOpen || hour.eveningOpen),  // שעות פתיחה
-                hoursClose: updatedHours.map(hour => hour.morningClose || hour.eveningClose)  // שעות סגירה
-            }));
+                id: brunch.id,
 
-            return updatedHours;
-        });
+                hoursOpen: { day: dayIndex, am: isEditing ? null : am, fromTime: timeValue, endTime: endTime }
+
+            })) : days.map((x, index) => dispatch(updateBrunchDetails({
+                id: brunch.id,
+
+                hoursOpen: { day: index + 1, am: am, fromTime: timeValue, endTime: endTime }
+
+            })));
     }, [dispatch, brunch.id]);
- 
+
 
 
     return (
-        
+
         <div style={{
             display: "flex",
             flexDirection: "column",
@@ -48,7 +44,6 @@ export default function HoursOpenEdit({ setIsEditing, placeholder, isEditing, br
         }}>
             <div style={{
                 display: "flex",
-                // width: "488px",
                 justifyContent: "space-between",
                 alignItems: "center",
                 flexShrink: 0,
@@ -57,6 +52,7 @@ export default function HoursOpenEdit({ setIsEditing, placeholder, isEditing, br
                 <EditIcon setIsEditing={setIsEditing} />
                 <HeaderText placeholder={placeholder} color={'black'} />
             </div>
+            <SwitchButton />
 
             {/* אם לא במצב עריכה */}
             {!isEditing ? (

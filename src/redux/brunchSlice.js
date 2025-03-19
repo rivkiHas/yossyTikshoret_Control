@@ -4,10 +4,13 @@ const initialState = {
     brunches: [{
         id: Date.now(),
         address: '',
-        hoursOpen: Array(7).fill(""),
-        hoursClose: Array(7).fill(""),
-        name: "סניף חדש",  // שים לב שהוספתי שם ברירת מחדל
-    }],
+        location: {
+            lat: 32.0853,
+            lng: 34.7818
+        },
+        hoursOpen: [{ day: 0, am: null, fromTime: "00:00", endTime: "00:00" }],  
+        name: "סניף חדש"
+    }], 
     activeBrunch: null
 };
 
@@ -29,16 +32,16 @@ const brunchSlice = createSlice({
         },
         updateBrunchDetails: (state, action) => {
             // debugger;
-            const { id, address, hoursOpen, hoursClose } = action.payload;
+            const { id, address, hoursOpen, hoursClose, location } = action.payload;
             const brunch = state.brunches.find(b => b.id === id);
             if (brunch) {
                 if (address !== undefined) brunch.address = address;
+                brunch.location = location;
                 if (hoursOpen) {
-                    brunch.hoursOpen = hoursOpen;  // עדכון מערך שעות הפתיחה
+                    const exist = brunch.hoursOpen.findIndex(x => x.am == hoursOpen.am && x.day == hoursOpen.day);
+                    exist ? brunch.hoursOpen[exist] = hoursOpen : brunch.hoursOpen.push(hoursOpen);  // עדכון מערך שעות הפתיחה
                 }
-                if (hoursClose) {
-                    brunch.hoursClose = hoursClose;  // עדכון מערך שעות הסגירה
-                }
+
             }
         }
     }

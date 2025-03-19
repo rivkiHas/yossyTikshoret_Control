@@ -11,7 +11,7 @@ const formSlice = createSlice({
             id: '',
             phone: '',
             logo: null,
-            typeMarketer: '',
+            typeMarketer: 'חנות',
             typeSales: []
         }
 

@@ -7,6 +7,7 @@ import StepThree from './componnets/StepThree';
 import { nextStep, prevStep } from './redux/stepSlice.js'; // ייבוא הפעולות
 // import Stepper2 from './componnets/Stepper2.js';
 import Control from './componnets/Control.js';
+import StepZero from './componnets/stepZero.js';
 
 function App() {
   const activeStep = useSelector((state) => state.stepper.activeStep); // שליפת הסטפ הנוכחי מ-redux
@@ -35,8 +36,9 @@ function App() {
       // height: '100vh',
       alignItems: 'center'
     }}>
-      {renderStepComponent()} {/* הצגת הקומפוננטה המתאימה */}
+      {renderStepComponent()}   
       <Control />
+      
       {/* <div>
         <button onClick={() => dispatch(prevStep())}>שלב קודם</button>
         <button onClick={() => dispatch(nextStep())}>שלב הבא</button>
