@@ -12,6 +12,7 @@ export default function EditIcon({ setIsEditing , functionName , placeholder ,co
     };
 
     const closePopup = () => {
+        
         setIsPopupOpen(false); // סוגר את הפופאפ
     };
 

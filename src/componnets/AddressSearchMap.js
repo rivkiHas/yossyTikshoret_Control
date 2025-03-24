@@ -231,8 +231,7 @@ export default function AddressSearchMap({ brunch }) {
             </GoogleMap>
           </div>
           
-        </LoadScript>
-        <Carusela/>
+        </LoadScript><Carusela/>
       </div>
     </div>
   );

@@ -7,11 +7,12 @@ import { Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { updateBrunchDetails } from "../redux/brunchSlice";
 import SwitchButton from "./buttons/SwitchButton";
+import CustomIcon from "./buttons/CustomIcon";
 
 export default function HoursOpenEdit({ setIsEditing, placeholder, isEditing, brunch }) {
     const dispatch = useDispatch();
     const days = ["יום ראשון", "יום שני", "יום שלישי", "יום רביעי", "יום חמישי", "יום שישי"];
-
+    const [rowHover, setRowHover] = useState();
     const [hours, setHours] = useState(
         { day: 0, am: null, fromTime: "00:00", endTime: "00:00" }
     );
@@ -20,12 +21,10 @@ export default function HoursOpenEdit({ setIsEditing, placeholder, isEditing, br
         isEditing ?
             dispatch(updateBrunchDetails({
                 id: brunch.id,
-
                 hoursOpen: { day: dayIndex, am: isEditing ? null : am, fromTime: timeValue, endTime: endTime }
 
             })) : days.map((x, index) => dispatch(updateBrunchDetails({
                 id: brunch.id,
-
                 hoursOpen: { day: index + 1, am: am, fromTime: timeValue, endTime: endTime }
 
             })));
@@ -77,7 +76,7 @@ export default function HoursOpenEdit({ setIsEditing, placeholder, isEditing, br
                     overflowY: "auto",
                 }}>
                     {days.map((day, index) => (
-                        <div key={index} style={{
+                        <div key={index} onMouseEnter={() => setRowHover(index)} style={{
                             display: 'flex',
                             justifyContent: 'flex-start',
                             alignItems: 'flex-start',
@@ -87,7 +86,7 @@ export default function HoursOpenEdit({ setIsEditing, placeholder, isEditing, br
                             background: 'var(--Color, #FFF)',
                             direction: 'rtl',
                             marginRight: '0px',
-                        }}>
+                        }}>{rowHover === index && <CustomIcon />}
                             <div>
                                 <div style={{ display: 'flex', flexDirection: 'row', gap: '20px' }}>
                                     {isEditing ? (

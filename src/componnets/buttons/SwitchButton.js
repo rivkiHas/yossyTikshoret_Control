@@ -17,7 +17,7 @@ export default function SwitchButton() {
             <Switch
                 defaultChecked
                 sx={{
-                 color:""
+                 color:"#FEF2CC"
                 }}
             />
         </div>

@@ -3,7 +3,8 @@ import { useSelector } from "react-redux";
 import { Stepper, Step, StepConnector } from "@mui/material";
 import { styled } from "@mui/system";
 import { CompletedIcon, StepOneIcon, StepTwoIcon, StepThreeIcon, CircleIcon } from "./IconsStepper.js";
-
+import HeaderText from "./HeaderText.js"
+import TextOnTextFiled from "./TextOnTextFiled.js"
 // מחבר מותאם אישית
 const CustomConnector = styled(StepConnector)({
   "&.MuiStepConnector-root": {
@@ -18,7 +19,7 @@ const StepContainer = styled("div")(({ isActive }) => ({
   display: "flex",
   alignItems: "center",
   gap: "10px",
-  padding: "10px 20px",
+  padding: "5px 5px",
   borderRadius: "20px",
   backgroundColor: isActive ? "#FEF2CC" : "transparent",
 }));
@@ -72,8 +73,8 @@ export default function Stepper2() {
             <StepContainer isActive={isActive}>
               <IconWrapper>{isActive ? step.icon : index < activeStep ? <CompletedIcon /> : <CircleIcon />}</IconWrapper>
               <StepText>
-                <StepTitle>{step.label}</StepTitle>
-                <StepSubtitle>{step.description}</StepSubtitle>
+                <HeaderText placeholder={step.label} color={"#333"}></HeaderText>
+                <TextOnTextFiled header={step.description}></TextOnTextFiled>
               </StepText>
             </StepContainer>
           </Step>
