@@ -54,35 +54,35 @@ export default function FormButtons() {
 
             <div style={{
                 display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'flex-start',
-                gap: '24px',
-                alignSelf: 'stretch'
+                flexDirection: 'row',
+                alignItems: 'flex-end',
+                gap: '170px',
+                alignSelf: 'stretch',
+                justifyContent:'flex-end'
             }}>
                 <TextOnTextFiled header="אפשר לבחור יותר מאפשרות אחת" />
                 <HeaderText placeholder="סוג המכירות " />
-
-                <div style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '24px',
-                }}>
-                    <CustomButtonRectangle
-                        item={{ value: "3", image: "https://www.yaelyaniv.com/cdn/shop/products/73_large.jpg?v=1494952095", label: "קווי" }}
-                        selected={formData.typeSales.includes("3")}
-                        handleSelect={() => handleSelectSales("3")}
-                    />
-                    <CustomButtonRectangle
-                        item={{ value: "4", image: "https://www.yaelyaniv.com/cdn/shop/products/73_large.jpg?v=1494952095", label: "סלולארי" }}
-                        selected={formData.typeSales.includes("4")}
-                        handleSelect={() => handleSelectSales("4")}
-                    />
-                    <CustomButtonRectangle
-                        item={{ value: "5", image: "https://www.yaelyaniv.com/cdn/shop/products/73_large.jpg?v=1494952095", label: "רכבים" }}
-                        selected={formData.typeSales.includes("5")}
-                        handleSelect={() => handleSelectSales("5")}
-                    />
-                </div>
+            </div>
+            <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '24px',
+            }}>
+                <CustomButtonRectangle
+                    item={{ value: "3", image: "https://www.yaelyaniv.com/cdn/shop/products/73_large.jpg?v=1494952095", label: "קווי" }}
+                    selected={formData.typeSales.includes("3")}
+                    handleSelect={() => handleSelectSales("3")}
+                />
+                <CustomButtonRectangle
+                    item={{ value: "4", image: "https://www.yaelyaniv.com/cdn/shop/products/73_large.jpg?v=1494952095", label: "סלולארי" }}
+                    selected={formData.typeSales.includes("4")}
+                    handleSelect={() => handleSelectSales("4")}
+                />
+                <CustomButtonRectangle
+                    item={{ value: "5", image: "https://www.yaelyaniv.com/cdn/shop/products/73_large.jpg?v=1494952095", label: "רכבים" }}
+                    selected={formData.typeSales.includes("5")}
+                    handleSelect={() => handleSelectSales("5")}
+                />
             </div>
         </div>
     );

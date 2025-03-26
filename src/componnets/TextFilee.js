@@ -17,7 +17,7 @@ const TextFilee = ({ header, type, placeholder, value, onChange, name, error, op
         <Box
             sx={{
                 display: 'flex',
-                height: '80px',
+                padding:'8px',
                 flexDirection: 'column',
                 alignItems: 'flex-end',
                 gap: '10px',
@@ -28,7 +28,7 @@ const TextFilee = ({ header, type, placeholder, value, onChange, name, error, op
             {/* כותרת השדה */}
             <TextOnTextFiled header={header} />
 
-            <Box sx={{ position: 'relative', width: '100%' }}>
+            <Box sx={{ position: 'relative', }}>
                 {/* שדה הקלט */}
                 {type === 'file' ? (
                     <>

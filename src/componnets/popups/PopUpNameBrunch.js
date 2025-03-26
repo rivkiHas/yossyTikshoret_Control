@@ -6,7 +6,7 @@ import TextFilee from "../TextFilee";
 import ButtonsWithIcon from "../buttons/ButtonswithIcon";
 import { updateBrunchDetails } from "../../redux/brunchSlice";
 
-export default function PopUpNameBrunch({ closePopup }) {
+export default function PopUpNameBrunch({ closePopup, activeBrunch }) {
     const dispatch = useDispatch();
     const [branchName, setBranchName] = useState("");  // שומר את שם הסניף במצב
 
@@ -17,9 +17,8 @@ export default function PopUpNameBrunch({ closePopup }) {
 
     const handleSubmit = () => {
         // שולח את שם הסניף ל-RRedux
-        const activeBrunchId = 1; // ה-ID של הסניף צריך להיות דינמי או מתקבל ממקום אחר
         dispatch(updateBrunchDetails({
-            id: activeBrunchId,
+            id: activeBrunch.id,
             name: branchName,  // שולח את שם הסניף החדש
         }));
         closePopup();

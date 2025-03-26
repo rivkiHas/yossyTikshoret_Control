@@ -7,14 +7,7 @@ import { useDispatch } from "react-redux";
 import { nextStep, prevStep } from "../redux/stepSlice.js"; // ייבוא הפעולה מרדקס
 
 export default function StepOne() {
-    // const [formData, setFormData] = useState({
-    //     name: '',
-    //     email: '',
-    //     id: '',
-    //     phone: '',
-    //     logo: null,
-    // });
-    // const [validateForm, setValidateFunction] = useState(() => () => true);
+   
     const dispatch = useDispatch();
     const [isEditing, setIsEditing] = useState(false);
  
@@ -28,19 +21,12 @@ export default function StepOne() {
     const handleSubmit = (event) => {
         event.preventDefault();
        
-        // if (validateForm()) {
-        //     console.log("נתוני הטופס:", formData);
-        //     // כאן תוכל להוסיף לוגיקה לשליחת הנתונים או לעיבוד נוסף
-        // } else {
-        //     console.log("יש שגיאות בטופס");
-        // }
     };
 
     return (
         <div style={{
             display: 'flex',
             flexDirection: 'column',
-            // width: '1224px',
             height: '888px',
             padding: '78px 109px',
             borderRadius: '40px',

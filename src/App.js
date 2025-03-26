@@ -32,9 +32,7 @@ function App() {
       display: 'flex',
       gap: '30px',
       backgroundColor: '#F4F4F4',
-      // width: '100vh',
-      // height: '100vh',
-      alignItems: 'center'
+      // alignItems: 'center'
     }}>
       {renderStepComponent()}   
       <Control />

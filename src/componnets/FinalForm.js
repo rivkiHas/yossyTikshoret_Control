@@ -105,7 +105,7 @@ export default function FinalForm({ contactId }) {
                         gap: "10px",
                         flexShrink: 0
                     }}>
-                        <ButtonsWithIcon onClick={sendPhone} variant="outlined" color={'#FFF'}>שלח</ButtonsWithIcon>
+                        <ButtonsWithIcon onClick={sendPhone} variant="outlined" color={'#FFF'} i>שלח</ButtonsWithIcon>
                         <TextOnTextFiled header={"לשלוח לך קוד אימות לטלפון זה?"} />
                     </div>
                 )}

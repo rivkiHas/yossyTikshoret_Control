@@ -5,14 +5,13 @@ import { useDispatch } from "react-redux";
 import { removeBrunch } from "../../redux/brunchSlice";
 import { deleteContactMan, removeContactMan } from "../../redux/conectManSlice";
 
-export default function PopUpOkCencel({ placeholder, functionName, closePopup, contactId }) {
+export default function PopUpOkCencel({ placeholder, functionName, closePopup, Id ,contactId}) {
     const dispatch = useDispatch();
 
     const OkFunction = () => {
-        console.log(contactId);
         debugger;
         if (functionName === "brunch") {
-            dispatch(removeBrunch());
+            dispatch(removeBrunch(Id));
         } else {
             dispatch(deleteContactMan(contactId));
         }

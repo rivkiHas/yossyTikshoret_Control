@@ -1,18 +1,43 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    brunches: [{
-        id: Date.now(),
-        address: '',
-        location: {
-            lat: 32.0853,
-            lng: 34.7818
-        },
-        hoursOpen: [{ day: 0, am: null, fromTime: "00:00", endTime: "00:00" }],  
-        name: "סניף חדש"
-    }], 
-    activeBrunch: null
+    brunches: [
+        {
+            id: Date.now(),
+            address: '',
+            location: {
+                lat: 32.0853,
+                lng: 34.7818
+            },
+            hoursOpen: [
+                { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
+                { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
+                { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
+                { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
+                { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
+                { morning: { open: "", close: "" }, evening: { open: "", close: "" } }
+            ],
+            weekday: { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
+            name: "סניף מספר 01"
+        }
+    ],
+    activeBrunch: {
+        id: "",
+        address: "",
+        location: { lat: "", lng: "" },
+        hoursOpen: [
+            { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
+            { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
+            { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
+            { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
+            { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
+            { morning: { open: "", close: "" }, evening: { open: "", close: "" } }
+        ],
+        weekday: { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
+        name: "סניף מספר 01"
+    }
 };
+
 
 const brunchSlice = createSlice({
     name: "brunch",
@@ -25,25 +50,30 @@ const brunchSlice = createSlice({
             state.activeBrunch = action.payload;  // הגדרת הסניף הפעיל
         },
         removeBrunch: (state, action) => {
-            state.brunches = state.brunches.filter(brunch => brunch.id !== action.payload);
-            if (state.activeBrunch && state.activeBrunch.id === action.payload) {
-                state.activeBrunch = null;
-            }
+            state.activeBrunch = state.brunches.filter(brunch => brunch.id !== action.payload); // מחיקת איש קשר לפי מזהה
+
         },
         updateBrunchDetails: (state, action) => {
-            // debugger;
-            const { id, address, hoursOpen, hoursClose, location } = action.payload;
+            debugger;
+            const { id, address, hoursOpen, location, name, weekday } = action.payload;
+            console.log("before update: ", state.brunches);  // לראות את הסטייט לפני העדכון
             const brunch = state.brunches.find(b => b.id === id);
             if (brunch) {
                 if (address !== undefined) brunch.address = address;
                 brunch.location = location;
-                if (hoursOpen) {
-                    const exist = brunch.hoursOpen.findIndex(x => x.am == hoursOpen.am && x.day == hoursOpen.day);
-                    exist ? brunch.hoursOpen[exist] = hoursOpen : brunch.hoursOpen.push(hoursOpen);  // עדכון מערך שעות הפתיחה
+                brunch.name = name;
+                if (weekday) {
+                    const { period, type, value } = weekday;
+                    brunch.weekday[period][type] = value;
                 }
-
+                if (hoursOpen) {
+                    const { day, period, type, value } = hoursOpen;
+                    brunch.hoursOpen[day][period][type] = value;
+                }
             }
+            console.log("after update: ", state.brunches);  // לראות את הסטייט אחרי העדכון
         }
+
     }
 });
 
