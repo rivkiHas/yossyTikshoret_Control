@@ -12,11 +12,9 @@ import { useEffect } from "react";
 const CustomConnector = styled(StepConnector)({
   "&.MuiStepConnector-root": {
     position: "relative",
-    // top: "20px",
-    left: "-40px", // כדי להתאים את הקו למרכז האייקון
-    height: "40px", // 42px זה הגובה של האייקון
+    left: "-35px", // כדי להתאים את הקו למרכז האייקון
+    height: "40px",
     borderRight: "3px solid #F4B400",
-    // zIndex: -1,
   },
   "& .MuiStepConnector-line": {
     borderColor: "transparent", // הסתרת הקו המקורי של המחבר
@@ -29,7 +27,7 @@ const StepContainer = styled("div")(({ isActive }) => ({
   display: "flex",
   alignItems: "center",
   // gap: "12px",
-  padding: "10px",
+  // padding: "10px",
   borderRadius: "10px",
   backgroundColor: isActive ? "#FDEBB2" : "transparent",
   boxShadow: isActive ? "0px 4px 10px rgba(0, 0, 0, 0.1)" : "none",

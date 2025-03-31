@@ -1,7 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import CustomButton from './CustomButton';
-import { Box } from 'lucide-react';
+
 export default function Carousela() {
   const brunches = useSelector((state) => state.brunch.brunches);
 
@@ -9,60 +8,42 @@ export default function Carousela() {
     <div className="relative w-full overflow-hidden">
       <div className="flex space-x-4 overflow-x-auto scrollbar-hide px-4">
         {brunches.map((brunch) => (
-          <div
-            key={brunch.id}
-            className="relative min-w-[150px] h-[100px] rounded-2xl overflow-hidden shadow-md bg-gray-200 flex items-center justify-center transform transition-transform duration-300 hover:scale-105"
-          >
-            {/* <img
-              src="/map-placeholder.png"
-              alt="map"
-              className="absolute inset-0 w-full h-full object-cover opacity-40"
-            />
-            <span className="relative text-black font-semibold text-lg whitespace-nowrap">
-              {brunch.address || 'ללא כתובת'}
-            </span> */}
-            <CarouselaItem item={brunch} />
-          </div>
+          <CarouselaItem key={brunch.id} item={brunch} />
         ))}
       </div>
     </div>
   );
 }
-function CarouselaItem({item}) {
+
+function CarouselaItem({ item }) {
   return (
-    <Box
-      sx={{
-        position: "relative",
-        width: '227px',
-        height: '146px',
-        borderRadius: "40px",
-        overflow: "hidden",
+    <div
+      className="flex flex-col justify-center items-center gap-[6.503px] flex-shrink-0"
+      style={{
+        width: '132px',
+        height: '84.899px',
+        padding: '12px 22.11px',
+        aspectRatio: '132 / 84.90',
+        borderRadius: '8px',
         backgroundImage: `url(${item.image})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        boxShadow: 3,
-        cursor: "pointer",
-        transition: "0.3s",
-        
-        "&:hover": {
-          opacity: 0.9,
-        },
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
+        cursor: 'pointer',
+        transition: '0.3s',
       }}
     >
-      <Box
-        sx={{
-          position: "absolute",
-          bottom: 16,
-          left: 16,
-          backgroundColor: "white",
-          padding: "8px 16px",
-          borderRadius: "20px",
-          fontWeight: "bold",
-          boxShadow: 1,
+      <div
+        style={{
+          backgroundColor: 'white',
+          padding: '8px 16px',
+          borderRadius: '20px',
+          fontWeight: 'bold',
+          boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
         }}
       >
         {item.name}
-      </Box>
-    </Box>
+      </div>
+    </div>
   );
 }

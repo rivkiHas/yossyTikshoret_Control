@@ -5,13 +5,15 @@ import { updateBrunchDetails } from "../redux/brunchSlice";
 import HeaderText from "./HeaderText";
 import EditIcon from "./buttons/EditIcon";
 import TextOnTextFiled from "./TextOnTextFiled";
+import SwitchButton from "./buttons/SwitchButton";
 
 const BusinessHours2 = ({ brunch }) => {
   const dispatch = useDispatch();
   const [isGrouped, setIsGrouped] = useState(false);
   const [hover, setHover] = useState(-1);
+  const [isSwitch, setIsSwitch] = useState(true);
 
-  const handleChange = ( period, type, value, index) => {
+  const handleChange = (period, type, value, index) => {
     dispatch(
       updateBrunchDetails({
         id: brunch.id,
@@ -25,15 +27,21 @@ const BusinessHours2 = ({ brunch }) => {
           period,
           type,
           value
-        },
-        name: "gfahjbkv", // שימי לב אם צריך לעדכן את השדה הזה בהתאם ללוגיקה שלך
+        }
       })
     );
   };
 
+  const onChangeSwitch = () => {
+    setIsSwitch((prev) => !prev); // מעדכן את מצב ה-Switch
+
+  }
+
   return (
     <div>
       <EditIcon setIsEditing={setIsGrouped} />
+      <SwitchButton onChange={onChangeSwitch} setIsSwitch={setIsSwitch} />
+
       <div>
         {!isGrouped ? (
           <DayRow
@@ -74,38 +82,107 @@ const BusinessHours2 = ({ brunch }) => {
 };
 
 const DayRow = ({ day, label, hours, handleChange, hover, index }) => (
-  <div>
-    <HeaderText placeholder={label} color={"#F8BD00"} />
-    <div>
-      <TextOnTextFiled header={"שעת פתיחה"} />
-      <input
-        type="time"
-        value={hours?.morning?.open || ""}
-        onChange={(e) => handleChange(day, "morning", "open", e.target.value, index)}
-      />
-      -
-      <TextOnTextFiled header={"שעת סגירה"} />
-      <input
-        type="time"
-        value={hours?.morning?.close || ""}
-        onChange={(e) => handleChange(day, "morning", "close", e.target.value, index)}
-      />
-    </div>
-    {hover && (
+  <div style={{
+    display: "flex",
+    flexDirection: "row"
+
+  }}  >
+    <div style={{
+      display: "flex",
+      flexDirection: "columm",
+      textAlign: "right"
+    }}>
       <div>
-        <span>ערב:</span>
+        <TextOnTextFiled header={"שעת פתיחה"} />
+        <input
+          type="time"
+          value={hours?.morning?.open || ""}
+          onChange={(e) => handleChange(day, "morning", "open", e.target.value, index)}
+          style={{
+            padding: '9px 12px 9px 15px',
+            borderRadius: '6px',
+            border: '1px solid #DBDEDE',
+            backgroundColor: '#FFFFFF',
+            boxSizing: 'border-box',
+            textAlign: 'right',
+            fontFamily: 'SimplerPro_HLAR, sans-serif',
+            fontSize: '12px',
+            fontWeight: '400',
+            color: '#4C585B',
+            width: '100%', // הרחבה לכל הרוחב
+          }}
+        />
+        <HeaderText placeholder={label} color={"#F8BD00"} />
+      </div>
+
+      <div>
+        <TextOnTextFiled header={"שעת סגירה"} />
+        <input
+          type="time"
+          value={hours?.morning?.close || ""}
+          onChange={(e) => handleChange(day, "morning", "close", e.target.value, index)}
+          style={{
+            padding: '9px 12px 9px 15px',
+            borderRadius: '6px',
+            border: '1px solid #DBDEDE',
+            backgroundColor: '#FFFFFF',
+            boxSizing: 'border-box',
+            textAlign: 'right',
+            fontFamily: 'SimplerPro_HLAR, sans-serif',
+            fontSize: '12px',
+            fontWeight: '400',
+            color: '#4C585B',
+            width: '100%', // הרחבה לכל הרוחב
+          }}
+        />
+      </div>
+    </div>
+
+    {hover && (
+      <div style={{
+        // display: "flex",
+        // flexDirection: "row"
+      }}>
+        <div>
         <TextOnTextFiled header={"שעת פתיחה"} />
         <input
           type="time"
           value={hours?.evening?.open || ""}
           onChange={(e) => handleChange(day, "evening", "open", e.target.value, index)}
+          style={{
+            padding: '9px 12px 9px 15px',
+            borderRadius: '6px',
+            border: '1px solid #DBDEDE',
+            backgroundColor: '#FFFFFF',
+            boxSizing: 'border-box',
+            textAlign: 'right',
+            fontFamily: 'SimplerPro_HLAR, sans-serif',
+            fontSize: '12px',
+            fontWeight: '400',
+            color: '#4C585B',
+            width: '100%', // הרחבה לכל הרוחב
+          }}
         />
-        -
+        </div>
+      
         <TextOnTextFiled header={"שעת סגירה"} />
         <input
           type="time"
           value={hours?.evening?.close || ""}
           onChange={(e) => handleChange(day, "evening", "close", e.target.value, index)}
+          style={{
+            padding: '9px 12px 9px 15px',
+            borderRadius: '6px',
+            border: '1px solid #DBDEDE',
+            backgroundColor: '#FFFFFF',
+            boxSizing: 'border-box',
+            textAlign: 'right',
+            fontFamily: 'SimplerPro_HLAR, sans-serif',
+            fontSize: '12px',
+            fontWeight: '400',
+            color: '#4C585B',
+            width: '100%', // הרחבה לכל הרוחב
+          }}
         />
       </div>
     )}

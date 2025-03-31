@@ -4,54 +4,51 @@ import FormButtons from "./FormButtons";
 import { ButtonsWithIcon } from "./buttons/ButtonswithIcon";
 import { Box } from "@mui/material";
 import { useDispatch } from "react-redux";
-import { nextStep, prevStep } from "../redux/stepSlice.js"; // ייבוא הפעולה מרדקס
-
+import { nextStep, prevStep } from "../redux/stepSlice.js";
+import HeaderText from "./HeaderText.js";
 export default function StepOne() {
-   
+
     const dispatch = useDispatch();
     const [isEditing, setIsEditing] = useState(false);
- 
+
     const nextStepInRedux = () => {
-        dispatch(nextStep()); // מקדם שלב ברדקס
+        dispatch(nextStep());
     };
 
     const previousStepInRedux = () => {
-        dispatch(prevStep()); // מחזיר שלב ברדקס
+        dispatch(prevStep());
     };
     const handleSubmit = (event) => {
         event.preventDefault();
-       
+
     };
 
     return (
         <div style={{
             display: 'flex',
             flexDirection: 'column',
-            height: '888px',
-            padding: '78px 109px',
+            padding:" 54px 75px 54px 76.5px",
             borderRadius: '40px',
             background: 'var(--Color, #FFF)',
             backgroundColor: 'white',
-            margin: '100px'
         }}>
             <div style={{
                 display: 'flex',
                 flexDirection: 'row',
-                gap: '128px',
-                margin: ' 72px 100px ',
-                textAlign:'center'
+                gap: '96px',
+                textAlign: 'center',
+                marginBottom:"24px"
             }}>
                 <FormButtons />
                 <Form />
+
             </div>
             <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
                 <ButtonsWithIcon onClick={nextStepInRedux} variant={"contained"}>
                     שלב הבא
                 </ButtonsWithIcon>
-                {/* <ButtonsWithIcon onClick={previousStepInRedux} variant={"outlined"}>
-                    שלב קודם
-                </ButtonsWithIcon> */}
+
             </Box>
-        </div>
+        </div >
     );
 }

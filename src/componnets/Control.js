@@ -7,10 +7,10 @@ import { Logo } from "./buttons/logo";
 const Control = () => {
     return (
         <div style={{
-            padding: '93px 72px ',
-            margin:'96px 99px 96px 36px',
+            padding: '54px 70px',
             justifyContent: 'center', 
-            alignItems: 'flex-start', 
+            gap:'27px',
+            alignItems: 'flex-end', 
             borderRadius: '40px', 
             background: 'var(--Color, #FFF)', 
         }}>
@@ -18,15 +18,14 @@ const Control = () => {
             <HeaderText placeholder={"הצטרפו כמשווק רשמי"} textAlign={"center"}/>
             <Typography
                 sx={{
-                    height: "117.881px",
                     alignSelf: "stretch",
                     color: "#000",
                     textAlign: "center",
                     fontFamily: "SimplerPro_HLAR",
-                    fontSize: "16px",
+                    fontSize: "13.5px",
                     fontStyle: "normal",
                     fontWeight: 400,
-                    lineHeight: "24px", // 150%
+                    lineHeight: "24px",
                 }}
             >
                

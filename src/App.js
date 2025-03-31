@@ -1,17 +1,14 @@
-// App.js
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import StepOne from './componnets/StepOne';
 import StepTwo from './componnets/StepTwo';
 import StepThree from './componnets/StepThree';
 import { nextStep, prevStep } from './redux/stepSlice.js'; // ייבוא הפעולות
-// import Stepper2 from './componnets/Stepper2.js';
 import Control from './componnets/Control.js';
 import StepZero from './componnets/stepZero.js';
 
 function App() {
   const activeStep = useSelector((state) => state.stepper.activeStep); // שליפת הסטפ הנוכחי מ-redux
-  // const
   const dispatch = useDispatch();
 
   const renderStepComponent = () => {
@@ -30,17 +27,15 @@ function App() {
   return (
     <div style={{
       display: 'flex',
-      gap: '30px',
+      gap: '18px',
       backgroundColor: '#F4F4F4',
-      // alignItems: 'center'
+      padding: "72px 74.25px 72px 75.75px",
+
     }}>
-      {renderStepComponent()}   
-      <Control />
-      
-      {/* <div>
-        <button onClick={() => dispatch(prevStep())}>שלב קודם</button>
-        <button onClick={() => dispatch(nextStep())}>שלב הבא</button>
-      </div> */}
+
+        {renderStepComponent()}
+        <Control />
+
     </div>
   );
 }

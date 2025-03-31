@@ -6,6 +6,7 @@ import HeaderText from "./HeaderText";
 import TextOnTextFiled from "./TextOnTextFiled";
 import CustomMarker from "./customMarketer";
 import Carusela from "./carusela";
+import PlaceIcon from '@mui/icons-material/Place';
 const GOOGLE_MAPS_API_KEY = "AIzaSyCd4oRcSJmbJQhcaEGsgwlNR5AgmvARYwM";
 
 const containerStyle = {
@@ -19,12 +20,24 @@ const containerStyle = {
 
 // הגדרת הנתיב של ה-SVG
 const customMarkerIcon = {
+  path: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 12 7 12s7-6.75 7-12c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z",
+  fillColor: "#F8BD00",  // צבע המילוי
+  fillOpacity: 1,        // שקיפות המילוי
+  strokeColor: "#FFFFFF", // צבע הגבול (לבן)
+  strokeWeight: 2,        // עובי הגבול
+  scale: 2,               // קנה מידה
+};
+
+
+const customMarkerIcon2 = {
   url: "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(`
-    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
-      <path d="M25.6136 14.0175C25.6136 23.3987 15.7622 28.7946 15.7622 28.7946C15.7622 28.7946 5.91083 23.3987 5.91083 14.0175C5.91083 11.4048 6.94874 8.89903 8.79623 7.05154C10.6437 5.20405 13.1495 4.16614 15.7622 4.16614C18.375 4.16614 20.8807 5.20405 22.7282 7.05154C24.5757 8.89903 25.6136 11.4048 25.6136 14.0175Z" fill="#F8BD00" stroke="white" stroke-width="1.31352" stroke-linecap="round" stroke-linejoin="round"/>
+    <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80" fill="none">
+      <circle cx="40" cy="40" r="35" fill="gold" stroke="white" stroke-width="3"/>
+      <path d="M40 20C33.92 20 29 24.92 29 31c0 7 11 18 11 18s11-11 11-18c0-6.08-4.92-11-11-11zm0 14.5c-2.07 0-3.75-1.68-3.75-3.75S37.93 27 40 27s3.75 1.68 3.75 3.75-1.68 3.75-3.75 3.75z" fill="white"/>
+      <text x="40" y="65" font-size="12" text-anchor="middle" fill="black" font-family="Arial">גבעת שאול</text>
     </svg>
   `),
-  scaledSize: { width: 32, height: 32 }, // התאמת גודל הסמן
+  // scaledSize: new window.google.maps.Size(80, 80), // כאן שינוי
 };
 
 
@@ -84,7 +97,6 @@ export default function AddressSearchMap({ brunch }) {
       }
     }
   };
-  console.log("typeMarketer:", typeMarketer);
 
   return typeMarketer === "חנות" ? (
     <div style={{
@@ -95,7 +107,7 @@ export default function AddressSearchMap({ brunch }) {
       alignItems: 'flex-start',
       gap: '24px',
       textAlign: "right",
-      margin: "auto",
+      // margin: "auto",
       direction: "rtl"
     }}>
       <HeaderText placeholder={" כתובת העסק"} style={{ marginBottom: '24px' }} />
@@ -107,54 +119,35 @@ export default function AddressSearchMap({ brunch }) {
             display: "flex", flexDirection: "column", gap: "10px"
           }}>
             <Autocomplete onLoad={handleLoad} onPlaceChanged={handlePlaceChanged}>
-              <div
+              <input
+                type="text"
+                placeholder="הכנס כתובת..."
+                value={address}
+                onChange={(e) => {
+                  dispatch(updateBrunchDetails({ id: brunch.id, address: e.target.value }));
+                }}
                 style={{
-                  display: 'flex',
-                  justifyContent: 'flex-end',
-                  alignItems: 'center',
-                  gap: '10px',
                   width: '100%',
-                  height: '46px',
-                  padding: '12px 16px 12px 20px',
+                  height: '40px',
+                  padding: '10px',
                   borderRadius: '6px',
                   border: '1px solid #DBDEDE',
+                  fontSize: '14px',
+                  textAlign: 'right',
                   backgroundColor: '#FFFFFF',
-                  boxSizing: 'border-box',
-                  marginBottom: '24px'
+                  direction: 'rtl',
                 }}
-              >
-                <input
-                  type="text"
-                  placeholder="הכנס כתובת..."
-                  value={address}
-                  onChange={(e) => {
-                    console.log("חיפוש", e)
-                    dispatch(updateBrunchDetails({ id: brunch.id, address: e.target.value }))
-                  }}
-                  style={{
-                    width: '100%',
-                    height: '22px',
-                    border: 'none',
-                    outline: 'none',
-                    fontFamily: 'SimplerPro_HLAR, sans-serif',
-                    fontSize: '16px',
-                    fontWeight: '400',
-                    color: '#4C585B',
-                    backgroundColor: 'transparent',
-                    textAlign: 'right',
-                  }}
-                />
-              </div>
+              />
             </Autocomplete>
+
 
             <GoogleMap
               mapContainerStyle={containerStyle}
               center={location || { lat: 32.0853, lng: 34.7818 }}
               zoom={location ? 15 : 10}
             >
-              {/* {address && */}
-              <Marker position={location} icon={customMarkerIcon} />
-              {/* //  } */}
+              <Marker position={location} icon={customMarkerIcon
+              } />
             </GoogleMap>
           </div>
         </LoadScript>
@@ -165,10 +158,9 @@ export default function AddressSearchMap({ brunch }) {
       width: '384px',
       height: '646px',
       flexDirection: 'column',
-      alignItems: 'flex-start',
+      alignItems: 'end',
       gap: '24px',
       textAlign: "right",
-      margin: "auto",
       direction: "rtl"
     }}>
       <HeaderText placeholder={"אזור פעילות"} style={{ marginBottom: '24px' }} />
@@ -182,35 +174,33 @@ export default function AddressSearchMap({ brunch }) {
             <Autocomplete onLoad={handleLoad} onPlaceChanged={handlePlaceChanged}>
               <div
                 style={{
-                  display: 'flex',
-                  justifyContent: 'flex-end',
-                  alignItems: 'center',
-                  gap: '10px',
-                  width: '100%',
-                  height: '46px',
-                  padding: '12px 16px 12px 20px',
+                  padding: '9px 12px 9px 15px',
                   borderRadius: '6px',
                   border: '1px solid #DBDEDE',
                   backgroundColor: '#FFFFFF',
                   boxSizing: 'border-box',
-                  marginBottom: '24px'
+                  textAlign: 'right',
+                  fontFamily: 'SimplerPro_HLAR, sans-serif',
+                  fontSize: '12px',
+                  fontWeight: '400',
+                  color: '#4C585B',
+                  width: '100%', // הרחבה לכל הרוחב
                 }}
               >
                 <input
                   type="text"
-                  placeholder="הכנס אזור פעילות..."
+                  placeholder="הכנס כתובת..."
                   value={address}
                   onChange={(e) => {
-                    console.log("חיפוש", e)
-                    dispatch(updateBrunchDetails({ id: brunch.id, address: e.target.value }))
+                    dispatch(updateBrunchDetails({ id: brunch.id, address: e.target.value }));
                   }}
                   style={{
-                    width: '100%',
+                    width: '100%',  // כדי שה- input יתפוס את כל הרוחב
                     height: '22px',
                     border: 'none',
                     outline: 'none',
                     fontFamily: 'SimplerPro_HLAR, sans-serif',
-                    fontSize: '16px',
+                    fontSize: '12px',
                     fontWeight: '400',
                     color: '#4C585B',
                     backgroundColor: 'transparent',
@@ -220,18 +210,17 @@ export default function AddressSearchMap({ brunch }) {
               </div>
             </Autocomplete>
 
+
             <GoogleMap
               mapContainerStyle={containerStyle}
               center={location || { lat: 32.0853, lng: 34.7818 }}
               zoom={location ? 15 : 10}
             >
-              {/* {address && */}
-              <Marker position={location} icon={<customMarkerIcon/>} />
-              {/* //  } */}
+              <Marker position={location} icon={<customMarkerIcon2 />} />
             </GoogleMap>
           </div>
-          
-        </LoadScript><Carusela/>
+          <Carusela />
+        </LoadScript>
       </div>
     </div>
   );

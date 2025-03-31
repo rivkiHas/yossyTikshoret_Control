@@ -43,25 +43,15 @@ export default function StepTwo() {
 
     return (
         <div style={{
-
             display: 'flex',
             flexDirection: 'column',
-            height: '888px',
-            padding: '78px 109px',
+            padding:" 54px 75px 54px 76.5px",
             borderRadius: '40px',
             background: 'var(--Color, #FFF)',
             backgroundColor: 'white',
-            margin: '97px 109px',
         }}>
             {lastBrunch && (
-                <div key={lastBrunch.id} style={{ display: 'flex', gap: '128px', backgroundColor: 'white' }}>
-                    {/* <HoursOpenEdit
-                        setIsEditing={setIsEditing}
-                        isEditing={isEditing}
-                        placeholder={"שעות פתיחה"}
-                        title={lastBrunch?.name || "לא נבחר סניף"}
-                        brunch={lastBrunch}
-                    /> */}
+                <div key={lastBrunch.id} style={{ display: 'flex', gap: '96px', backgroundColor: 'white' ,textAlign: 'center' , marginBottom:"24px"}}>
                     <BusinessHours2 brunch={lastBrunch} />
                     <AddressSearchMap brunch={lastBrunch} typeMarketer={typeMarketer} />
                 </div>
@@ -78,7 +68,7 @@ export default function StepTwo() {
                 </Box>
                 <Box sx={{ display: 'flex', justifyContent: 'flex-start', gap: '16px' }}>
                     {brunches.map((x, index) => (
-                        index > 0 && 
+                        index > 0 &&
                         <DeleteIcon functionName={"brunch"} placeholder={"?האם ברצונך למחוק סניף זה"} Id={lastBrunch.id} />
                     ))}
 

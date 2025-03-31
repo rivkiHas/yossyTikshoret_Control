@@ -8,7 +8,7 @@ const conectManSlice = createSlice({
     reducers: {
         setFormData: (state, action) => {
             const { name, value, contactId } = action.payload;
-            const contact = state.contactMans[contactId] || {}; // אם אין איש קשר, יצירת אובייקט ריק
+            const contact = state.contactMans[contactId]; // אם אין איש קשר, יצירת אובייקט ריק
             contact[name] = value; // עדכון שדה ספציפי
             state.contactMans[contactId] = contact; // עדכון המערך
         },

@@ -24,11 +24,10 @@ export default function Form() {
         <form style={{
             display: 'flex',
             flexDirection: 'column',
-            gap: '40px',
+            gap: '30px',
             color: '#000',
             textAlign: 'right',
             fontFamily: 'SimplerPro_HLAR',
-            fontSize: '28px',
             fontWeight: 700,
         }}>
             <HeaderText placeholder={"פרטים על העסק"} />

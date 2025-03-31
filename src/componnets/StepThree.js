@@ -50,7 +50,6 @@ export default function StepThree() {
 
     // פונקציה לפתיחת הפופאפ למחיקת איש קשר
     const handleDeleteClick = (contactId) => {
-        debugger;
         setContactToDelete(contactId); // הגדרת איש הקשר למחיקה
         setIsPopupOpen(true); // פתיחת הפופאפ
     };
@@ -67,14 +66,14 @@ export default function StepThree() {
     return (
         <div style={{
             display: 'flex',
-            flexDirection: 'row', // שינוי מ-'column' ל-'row' 
+            flexDirection: 'row', 
             justifyContent: 'flex-end',
             height: '888px',
             padding: '78px 109px',
             borderRadius: '40px',
             backgroundColor: 'white',
             margin: '77px 114px',
-            flexWrap: 'wrap' // במידה ויש יותר מדי אלמנטים לשורה אחת
+            flexWrap: 'wrap'
         }}>
             {contactMans.map((x, index) => (
                 <div key={index} style={{ display: 'flex', alignItems: 'flex-start', flexDirection:'row'}}>
@@ -97,11 +96,7 @@ export default function StepThree() {
                             onMouseLeave={() => setIsHovered(false)} // הסתרת הטקסט לאחר הריחוף
                         >
                              {isHovered && (
-                                <TextOnTextFiled
-
-                                    header={"מחיקה"}
-                                >
-                                </TextOnTextFiled>
+                                <TextOnTextFiled header={"מחיקה"}/>
                             )}
                             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="24" viewBox="0 0 25 24" fill="none">
                                 <path d="M15.0734 9.00003L14.7274 18M9.93937 18L9.59337 9.00003M19.5614 5.79003C19.9034 5.84203 20.2434 5.89703 20.5834 5.95603M19.5614 5.79003L18.4934 19.673C18.4498 20.2383 18.1944 20.7662 17.7784 21.1513C17.3624 21.5364 16.8163 21.7502 16.2494 21.75H8.41737C7.85047 21.7502 7.3044 21.5364 6.88835 21.1513C6.47231 20.7662 6.21696 20.2383 6.17337 19.673L5.10537 5.79003M19.5614 5.79003C18.4072 5.61555 17.2471 5.48313 16.0834 5.39303M5.10537 5.79003C4.76337 5.84103 4.42337 5.89603 4.08337 5.95503M5.10537 5.79003C6.25951 5.61555 7.41961 5.48313 8.58337 5.39303M16.0834 5.39303V4.47703C16.0834 3.29703 15.1734 2.31303 13.9934 2.27603C12.887 2.24067 11.7798 2.24067 10.6734 2.27603C9.49337 2.31303 8.58337 3.29803 8.58337 4.47703V5.39303M16.0834 5.39303C13.5871 5.20011 11.0797 5.20011 8.58337 5.39303" stroke="#F8BD00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -124,16 +119,13 @@ export default function StepThree() {
                     </ButtonsWithIcon>
                 </Box>
                 <Box sx={{ display: 'flex', justifyContent: 'flex-start', gap: '16px' }}>
-                    {/* {contactMans.length > 1 && (
-                       
-                    )} */}
+                   
                     <ButtonsWithIcon onClick={addContactManHandler} variant="contained" color={'#000'}>
                         הוספת איש קשר נוסף
                     </ButtonsWithIcon>
                 </Box>
             </div>
 
-            {/* הצגת הפופאפ למחיקה */}
             {isPopupOpen && (
                 <PopUpOkCencel
                     placeholder={"האם אתה בטוח שברצונך למחוק איש קשר זה?"}

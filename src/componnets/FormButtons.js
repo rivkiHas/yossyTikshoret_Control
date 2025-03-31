@@ -5,22 +5,19 @@ import CustomButtonRectangle from "./CustomButtonRectangle";
 import TextOnTextFiled from "./TextOnTextFiled";
 import { useDispatch, useSelector } from "react-redux";
 import { setFormData } from "../redux/formSlice";
-
 export default function FormButtons() {
     const dispatch = useDispatch();
-    const formData = useSelector((state) => state.form.pertip); // קבלת הנתונים מ-Redux
+    const formData = useSelector((state) => state.form.pertip);
 
     const handleSelectMarketer = (value) => {
-        // עדכון ה-state של typeMarketer ב-Redux
         dispatch(setFormData({ typeMarketer: value }));
     };
 
     const handleSelectSales = (value) => {
-        // עדכון ה-state של typeSales ב-Redux
         dispatch(setFormData({
             typeSales: formData.typeSales.includes(value)
-                ? formData.typeSales.filter((item) => item !== value) // אם נבחר, נמחק את הערך
-                : [...formData.typeSales, value] // אם לא נבחר, נוסיף את הערך
+                ? formData.typeSales.filter((item) => item !== value)
+                : [...formData.typeSales, value]
         }));
     };
 
@@ -30,18 +27,18 @@ export default function FormButtons() {
             flexDirection: 'column',
             justifyContent: 'flex-start',
             alignItems: 'flex-start',
-            gap: '24px',
+            gap: '12px',
         }}>
-            <HeaderText placeholder=" סוג משווק" />
+            <HeaderText placeholder=" סוג משווק" textAlign={"end"} />
             <div style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '36px',
+                gap: '27px',
                 alignSelf: 'stretch',
-                marginBottom: '60px'
+                marginBottom: '52px'
             }}>
                 <CustomButton
-                    item={{ value: "סוכן", image: "https://www.yaelyaniv.com/cdn/shop/products/73_large.jpg?v=1494952095", label: "סוכן" }}
+                    item={{ value: "סוכן", image: "", label: "סוכן" }}
                     selected={formData.typeMarketer === "סוכן"}
                     handleSelect={() => handleSelectMarketer("סוכן")}
                 />
@@ -56,17 +53,17 @@ export default function FormButtons() {
                 display: 'flex',
                 flexDirection: 'row',
                 alignItems: 'flex-end',
-                gap: '170px',
+                gap: '80px',
                 alignSelf: 'stretch',
-                justifyContent:'flex-end'
+                // justifyContent:'center'
             }}>
-                <TextOnTextFiled header="אפשר לבחור יותר מאפשרות אחת" />
-                <HeaderText placeholder="סוג המכירות " />
+                <TextOnTextFiled header="אפשר לבחור יותר מאפשרות אחת" textAlign="left" />
+                <HeaderText placeholder="סוג המכירות " textAlign={"end"} />
             </div>
             <div style={{
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '24px',
+                gap: '18px',
             }}>
                 <CustomButtonRectangle
                     item={{ value: "3", image: "https://www.yaelyaniv.com/cdn/shop/products/73_large.jpg?v=1494952095", label: "קווי" }}

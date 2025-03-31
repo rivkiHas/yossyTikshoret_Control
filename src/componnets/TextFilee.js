@@ -17,19 +17,16 @@ const TextFilee = ({ header, type, placeholder, value, onChange, name, error, op
         <Box
             sx={{
                 display: 'flex',
-                padding:'8px',
                 flexDirection: 'column',
                 alignItems: 'flex-end',
-                gap: '10px',
                 flexShrink: 0,
                 alignSelf: 'stretch',
+                width: '100%', // מבטיח שהקומפוננטה תתפוס את כל הרוחב
             }}
         >
-            {/* כותרת השדה */}
             <TextOnTextFiled header={header} />
 
-            <Box sx={{ position: 'relative', }}>
-                {/* שדה הקלט */}
+            <Box sx={{ position: 'relative', width: '100%' }}> {/* הוספת רוחב מלא */}
                 {type === 'file' ? (
                     <>
                         <input
@@ -40,12 +37,9 @@ const TextFilee = ({ header, type, placeholder, value, onChange, name, error, op
                             style={{ display: 'none' }}
                             id={name}
                         />
-                        {/* לחצן העלאה */}
                         <label
                             htmlFor={name}
                             style={{
-                                // width: '100%',
-                                height: '46px',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'space-between',
@@ -53,16 +47,16 @@ const TextFilee = ({ header, type, placeholder, value, onChange, name, error, op
                                 border: '1px solid #DBDEDE',
                                 backgroundColor: '#FFFFFF',
                                 cursor: 'pointer',
-                                padding: '12px 16px',
+                                padding: '9px 12px 9px 15px',
                                 boxSizing: 'border-box',
                                 fontFamily: 'SimplerPro_HLAR, sans-serif',
-                                fontSize: '16px',
+                                fontSize: '12px',
                                 fontWeight: '400',
                                 color: '#4C585B',
                                 textAlign: 'right',
+                                width: '100%', // הרחבה לכל הרוחב
                             }}
                         >
-                            {/* אייקון העלאה */}
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="16"
@@ -88,18 +82,17 @@ const TextFilee = ({ header, type, placeholder, value, onChange, name, error, op
                         value={value}
                         onChange={onChange}
                         style={{
-                            // width: '100%',
-                            height: '46px',
-                            padding: '12px 16px',
+                            padding: '9px 12px 9px 15px',
                             borderRadius: '6px',
                             border: '1px solid #DBDEDE',
                             backgroundColor: '#FFFFFF',
                             boxSizing: 'border-box',
                             textAlign: 'right',
                             fontFamily: 'SimplerPro_HLAR, sans-serif',
-                            fontSize: '16px',
+                            fontSize: '12px',
                             fontWeight: '400',
                             color: '#4C585B',
+                            width: '100%', // הרחבה לכל הרוחב
                         }}
                     >
                         <option value="">{placeholder}</option>
@@ -117,25 +110,23 @@ const TextFilee = ({ header, type, placeholder, value, onChange, name, error, op
                         value={value}
                         onChange={onChange}
                         style={{
-                            // width: '100%',
-                            height: '46px',
-                            padding: '12px 16px',
+                            padding: '9px 12px 9px 15px',
                             borderRadius: '6px',
                             border: '1px solid #DBDEDE',
                             backgroundColor: '#FFFFFF',
                             boxSizing: 'border-box',
                             textAlign: 'right',
                             fontFamily: 'SimplerPro_HLAR, sans-serif',
-                            fontSize: '16px',
+                            fontSize: '12px',
                             fontWeight: '400',
                             color: '#4C585B',
+                            width: '100%', // הרחבה לכל הרוחב
                         }}
                     />
                 )}
-                {/* הודעת שגיאה */}
-                {/* {error && <TooltipValidation title="זהו שדה חובה" />} */}
             </Box>
         </Box>
+
     );
 };
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box } from "@mui/material";
+import HeaderText from './HeaderText';
 
 export default function CustomButton({ item, selected, handleSelect }) {
     if (!item) return null; // בדיקה אם item לא קיים
@@ -9,9 +10,9 @@ export default function CustomButton({ item, selected, handleSelect }) {
             onClick={() => handleSelect(item.value)}
             sx={{
                 position: "relative",
-                width: '227px',
-                height: '146px',
-                borderRadius: "40px",
+                width: '170px',
+                height: '109px',
+                borderRadius: "30px",
                 overflow: "hidden",
                 backgroundImage: `url(${item.image})`,
                 backgroundSize: "cover",
@@ -27,17 +28,20 @@ export default function CustomButton({ item, selected, handleSelect }) {
         >
             <Box
                 sx={{
+                    width:"59.25px",
+                    height:"29.25px",
                     position: "absolute",
-                    bottom: 16,
+                    bottom: 14,
                     left: 16,
                     backgroundColor: "white",
-                    padding: "8px 16px",
-                    borderRadius: "20px",
-                    fontWeight: "bold",
+                    borderRadius: "15px",
+                    fontSize:"16px",
+
                     boxShadow: 1,
                 }}
             >
                 {item.label}
+
             </Box>
         </Box>
     );

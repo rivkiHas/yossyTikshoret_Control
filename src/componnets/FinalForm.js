@@ -68,9 +68,8 @@ export default function FinalForm({ contactId }) {
             justifyContent: 'center',
             alignItems: 'flex-end',
             marginLeft: 'auto',
-            height: '700px',
         }}>
-            <HeaderText placeholder={`איש קשר ${contactId + 1}`} />
+            <HeaderText placeholder={`איש קשר ${contactId }`} />
 
             <TextFilee
                 header={"שם מלא"}
