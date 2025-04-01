@@ -98,7 +98,7 @@ export default function FinalForm({ contactId }) {
                         flexDirection: "row",
                         width: "384px",
                         height: "46px",
-                        padding: "12px 16px 12px 20px",
+                        // padding: "12px 16px 12px 20px",
                         justifyContent: "flex-end",
                         alignItems: "center",
                         gap: "10px",

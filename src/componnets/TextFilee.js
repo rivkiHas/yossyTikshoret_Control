@@ -1,32 +1,30 @@
-import React, { useState } from 'react'; // יש לוודא ש-importת את useState
-import Box from '@mui/material/Box'; // יש לוודא ש-importת את Box
-import TextOnTextFiled from './TextOnTextFiled'; // יש לוודא ש-importת את TextOnTextFiled
+import React, { useState } from 'react';
+import Box from '@mui/material/Box';
+import TextOnTextFiled from './TextOnTextFiled';
 
 const TextFilee = ({ header, type, placeholder, value, onChange, name, error, options }) => {
-    const [fileName, setFileName] = useState(''); // עדכון ה-state של שם הקובץ
+    const [fileName, setFileName] = useState('');
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
         if (file) {
-            setFileName(file.name); // עדכון שם הקובץ בתצוגה
-            onChange && onChange(event); // קריאה ל-onChange אם הוא קיים
+            setFileName(file.name); // עדכון שם הקובץ
+            onChange && onChange(event);
         }
     };
 
+    const handleFileReset = (event) => {
+        event.stopPropagation(); // מונע מהאייקון לגרום לפתיחת העלאת קבצים
+        setFileName('');
+        document.getElementById(name).value = ''; // איפוס קלט הקובץ
+    };
+    
+
     return (
-        <Box
-            sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'flex-end',
-                flexShrink: 0,
-                alignSelf: 'stretch',
-                width: '100%', // מבטיח שהקומפוננטה תתפוס את כל הרוחב
-            }}
-        >
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', flexShrink: 0, alignSelf: 'stretch' }}>
             <TextOnTextFiled header={header} />
 
-            <Box sx={{ position: 'relative', width: '100%' }}> {/* הוספת רוחב מלא */}
+            <Box sx={{ position: 'relative', width: '100%' }}>
                 {type === 'file' ? (
                     <>
                         <input
@@ -54,25 +52,45 @@ const TextFilee = ({ header, type, placeholder, value, onChange, name, error, op
                                 fontWeight: '400',
                                 color: '#4C585B',
                                 textAlign: 'right',
-                                width: '100%', // הרחבה לכל הרוחב
+                                width: '100%',
                             }}
                         >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="16"
-                                height="16"
-                                viewBox="0 0 16 17"
-                                fill="none"
-                                style={{ marginRight: '8px' }}
-                            >
-                                <path
-                                    d="M2 11.4277V12.9277C2 13.3256 2.15804 13.7071 2.43934 13.9884C2.72064 14.2697 3.10218 14.4277 3.5 14.4277H12.5C12.8978 14.4277 13.2794 14.2697 13.5607 13.9884C13.842 13.7071 14 13.3256 14 12.9277V11.4277M5 5.42773L8 2.42773M8 2.42773L11 5.42773M8 2.42773V11.4277"
-                                    stroke="#6B7280"
+                            {fileName ? (
+                                // אייקון למחיקה (איקס)
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="16"
+                                    height="16"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
                                     strokeWidth="1.5"
                                     strokeLinecap="round"
                                     strokeLinejoin="round"
-                                />
-                            </svg>
+                                    onClick={handleFileReset} // מחיקת הקובץ
+                                    style={{ marginRight: '8px', cursor: 'pointer' }}
+                                >
+                                    <path d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            ) : (
+                                // אייקון העלאת קובץ (ברירת מחדל)
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="16"
+                                    height="16"
+                                    viewBox="0 0 16 17"
+                                    fill="none"
+                                    style={{ marginRight: '8px', cursor: 'pointer' }}
+                                >
+                                    <path
+                                        d="M2 11.4277V12.9277C2 13.3256 2.15804 13.7071 2.43934 13.9884C2.72064 14.2697 3.10218 14.4277 3.5 14.4277H12.5C12.8978 14.4277 13.2794 14.2697 13.5607 13.9884C13.842 13.7071 14 13.3256 14 12.9277V11.4277M5 5.42773L8 2.42773M8 2.42773L11 5.42773M8 2.42773V11.4277"
+                                        stroke="#6B7280"
+                                        strokeWidth="1.5"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                    />
+                                </svg>
+                            )}
                             {fileName || placeholder}
                         </label>
                     </>
@@ -92,7 +110,7 @@ const TextFilee = ({ header, type, placeholder, value, onChange, name, error, op
                             fontSize: '12px',
                             fontWeight: '400',
                             color: '#4C585B',
-                            width: '100%', // הרחבה לכל הרוחב
+                            width: '100%',
                         }}
                     >
                         <option value="">{placeholder}</option>
@@ -120,13 +138,12 @@ const TextFilee = ({ header, type, placeholder, value, onChange, name, error, op
                             fontSize: '12px',
                             fontWeight: '400',
                             color: '#4C585B',
-                            width: '100%', // הרחבה לכל הרוחב
+                            width: '100%',
                         }}
                     />
                 )}
             </Box>
         </Box>
-
     );
 };
 

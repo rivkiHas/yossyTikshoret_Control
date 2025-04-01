@@ -23,7 +23,7 @@ const CustomConnector = styled(StepConnector)({
 
 
 // עיצוב כל שלב
-const StepContainer = styled("div")(({ isActive }) => ({
+const StepContainer = styled("Box")(({ isActive }) => ({
   display: "flex",
   alignItems: "center",
   // gap: "12px",
@@ -49,9 +49,9 @@ const steps = [
 export default function Stepper2() {
   const activeStep = useSelector((state) => state.stepper.activeStep);
   const brunchNames = useSelector((state) =>
-    (state.brunches || []).map(brunch => brunch.name) || ["אפס"]
+    (state.brunch.brunches || []).map(brunch => brunch.name) || ["אפס"]
   );
-  console.log("brunches", brunchNames)
+
   useEffect(() => {
     console.log(brunchNames);  // ראה אם יש עדכון למערך ברנץ'
   }, [brunchNames]);  // המערך יתעדכן בכל פעם ש-brunchNames משתנה
@@ -71,16 +71,7 @@ export default function Stepper2() {
         const isActive = index === activeStep;
         return (
           <Step key={index} completed={index < activeStep}>
-            
-            {/* {index === 1 && brunchNames.length > 1 && (
-              <div>
-                <ul>
-                  {brunchNames.map((name, idx) => (
-                    <li key={idx}>{name}</li>
-                  ))}
-                </ul>
-              </div>
-            )} */}
+
             <StepContainer isActive={isActive}>
               {isActive ? step.icon : index < activeStep ? <CompletedIcon /> : <CircleIcon />}
               <StepText>
@@ -89,6 +80,15 @@ export default function Stepper2() {
               </StepText>
             </StepContainer>
 
+            {index === 1 && brunchNames.length > 1 && (
+              <div>
+                <ul>
+                  {brunchNames.map((name, idx) => (
+                    <li key={idx}>{name}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </Step>
         );
       })}

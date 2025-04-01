@@ -4,10 +4,8 @@ import { Box } from "@mui/material";
 export const Logo = () => (
     <Box
         component="svg"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
         height="36px"
-        padding={"18px"}
+        
     >
 
         <path d="M0.613647 6.72998H12.239C16.6227 6.72998 19.0741 9.40024 19.0741 14.1842V26.3598H0.613647V6.72998ZM14.1713 22.2637V14.2592C14.1713 11.9892 13.1082 10.8198 11.0633 10.8198H5.51016V22.2637H14.1713Z" fill="#F8BD03" />

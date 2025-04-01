@@ -23,7 +23,6 @@ const conectManSlice = createSlice({
         },
 
         deleteContactMan: (state, action) => {
-            debugger;
             state.contactMans = state.contactMans.filter(contact => contact.id !== action.payload); // מחיקת איש קשר לפי מזהה
         },
         

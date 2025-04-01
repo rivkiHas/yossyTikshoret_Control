@@ -9,14 +9,15 @@ export default function CustomButton({ item, selected, handleSelect }) {
             onClick={() => handleSelect(item.value)}
             sx={{
                 display: 'flex',
-                height: '62px', // גובה הקומפוננטה
+                // height: '62px', // גובה הקומפוננטה
+                padding:'26px 34px',
                 flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'flex-start',
-                gap: '5px',
+                // gap: '5px',
                 alignSelf: 'stretch',
-                aspectRatio: '368.00 /62', // יחס הרוחב לגובה
-                borderRadius: '75px',
+                // aspectRatio: '368.00 /62', // יחס הרוחב לגובה
+                borderRadius: '100px',
                 backgroundImage: `url(${item.image})`,
                 boxShadow: 3,
                 cursor: 'pointer',
@@ -34,7 +35,7 @@ export default function CustomButton({ item, selected, handleSelect }) {
                     bottom: 14,
                     left: 16,
                     backgroundColor: "white",
-                    padding: "4px 8px",
+                    padding: "10px",
                     borderRadius: "20px",
                     fontSize: "16px",
                     boxShadow: 1,

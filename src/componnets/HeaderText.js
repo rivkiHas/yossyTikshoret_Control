@@ -1,21 +1,19 @@
 import React from 'react';
 import Typography from '@mui/material/Typography';
 
-function HeaderText({ placeholder, color ,textAlign}) {
+function HeaderText({ placeholder, color }) {
   return (
     <Typography
-      style={{
-        // height: '31.928px',  // גובה של הטקסט
+      sx={{
         flexShrink: 0,  // מונע מהאלמנט להתכווץ
         alignSelf: 'stretch',  // משתרע על כל הרוחב
         color: color,  // צבע הטקסט
-        textAlign:textAlign,  // מיישר את הטקסט לימין
         fontFamily: 'SimplerPro_HLAR',  // הגדרת הגופן המותאם אישית
-        fontSize: '20px',  // גודל הגופן
+        fontSize: '28px',  // גודל הגופן
         fontStyle: 'normal',  // סגנון גופן רגיל
         fontWeight: 700,  // משקל הגופן
         lineHeight: 'normal',  // גובה שורה רגיל
-        gap:'12px'
+        justifyContent:'end'
       }}
     >
       {placeholder} </Typography>

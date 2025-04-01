@@ -24,31 +24,23 @@ export default function StepOne() {
     };
 
     return (
-        <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            padding:" 54px 75px 54px 76.5px",
-            borderRadius: '40px',
-            background: 'var(--Color, #FFF)',
-            backgroundColor: 'white',
-        }}>
-            <div style={{
+        <>
+            <Box sx={{
                 display: 'flex',
                 flexDirection: 'row',
-                gap: '96px',
-                textAlign: 'center',
-                marginBottom:"24px"
+                gap: '128px',
+                textAlign: 'right',
             }}>
                 <FormButtons />
                 <Form />
 
-            </div>
+            </Box>
             <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
                 <ButtonsWithIcon onClick={nextStepInRedux} variant={"contained"}>
                     שלב הבא
                 </ButtonsWithIcon>
 
             </Box>
-        </div >
+        </>
     );
 }

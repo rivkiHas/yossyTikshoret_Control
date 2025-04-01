@@ -50,8 +50,8 @@ const brunchSlice = createSlice({
             state.activeBrunch = action.payload;  // הגדרת הסניף הפעיל
         },
         removeBrunch: (state, action) => {
-            state.activeBrunch = state.brunches.filter(brunch => brunch.id !== action.payload); // מחיקת איש קשר לפי מזהה
-
+            state.brunches = state.brunches.filter(brunch => brunch.id !== action.payload); // מחיקת איש קשר לפי מזהה
+          
         },
         updateBrunchDetails: (state, action) => {
             debugger;

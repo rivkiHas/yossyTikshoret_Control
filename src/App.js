@@ -3,9 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import StepOne from './componnets/StepOne';
 import StepTwo from './componnets/StepTwo';
 import StepThree from './componnets/StepThree';
-import { nextStep, prevStep } from './redux/stepSlice.js'; // ייבוא הפעולות
 import Control from './componnets/Control.js';
-import StepZero from './componnets/stepZero.js';
+import { Box } from '@mui/material'; // במקום lucide-react
 
 function App() {
   const activeStep = useSelector((state) => state.stepper.activeStep); // שליפת הסטפ הנוכחי מ-redux
@@ -25,18 +24,33 @@ function App() {
   };
 
   return (
-    <div style={{
+    <Box sx={{
       display: 'flex',
       gap: '18px',
       backgroundColor: '#F4F4F4',
-      padding: "72px 74.25px 72px 75.75px",
+      padding: "96px 100px 96px 100px",
 
     }}>
-
+      <Box sx={{
+        backgroundColor: '#FFFFFF',
+        padding: '78px 109px',
+        borderRadius: '40px',
+        gap: '36px',
+        flexShrink: "0"
+      }}>
         {renderStepComponent()}
+      </Box>
+      <Box sx={{
+        backgroundColor: '#FFFFFF',
+        padding: '62px 83px',
+        borderRadius: '40px',
+        justifyContent: '10px',
+        flexShrink: "1"
+      }}>
         <Control />
+      </Box>
 
-    </div>
+    </Box>
   );
 }
 

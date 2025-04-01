@@ -10,8 +10,9 @@ export default function CustomButton({ item, selected, handleSelect }) {
             onClick={() => handleSelect(item.value)}
             sx={{
                 position: "relative",
-                width: '170px',
-                height: '109px',
+                // width: '170px',
+                // height: '109px',
+                padding: '26px 34px',
                 borderRadius: "30px",
                 overflow: "hidden",
                 backgroundImage: `url(${item.image})`,
@@ -20,7 +21,7 @@ export default function CustomButton({ item, selected, handleSelect }) {
                 boxShadow: 3,
                 cursor: "pointer",
                 transition: "0.3s",
-                border: selected ? "4px solid #FFC107" : "4px solid transparent",
+                border: selected ? "2px solid #FFC107" : "2px solid transparent",
                 "&:hover": {
                     opacity: 0.9,
                 },
@@ -28,15 +29,16 @@ export default function CustomButton({ item, selected, handleSelect }) {
         >
             <Box
                 sx={{
-                    width:"59.25px",
-                    height:"29.25px",
+                    // width:"59.25px",
+                    // height:"29.25px",
                     position: "absolute",
                     bottom: 14,
                     left: 16,
                     backgroundColor: "white",
                     borderRadius: "15px",
-                    fontSize:"16px",
-
+                    fontSize: "16px",
+                    padding: '10px',
+                    gap:'10px',
                     boxShadow: 1,
                 }}
             >

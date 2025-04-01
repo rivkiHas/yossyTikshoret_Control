@@ -50,7 +50,6 @@ export default function AddressSearchMap({ brunch }) {
       state.brunch.brunches.find(b => b.id === brunch.id)?.address || ""
   );
   const location = useSelector(
-
     state =>
       state.brunch.brunches.find(b => b.id === brunch.id)?.location || { lat: 32.0853, lng: 34.7818 }
   );
@@ -107,7 +106,6 @@ export default function AddressSearchMap({ brunch }) {
       alignItems: 'flex-start',
       gap: '24px',
       textAlign: "right",
-      // margin: "auto",
       direction: "rtl"
     }}>
       <HeaderText placeholder={" כתובת העסק"} style={{ marginBottom: '24px' }} />
@@ -127,15 +125,17 @@ export default function AddressSearchMap({ brunch }) {
                   dispatch(updateBrunchDetails({ id: brunch.id, address: e.target.value }));
                 }}
                 style={{
-                  width: '100%',
-                  height: '40px',
-                  padding: '10px',
+                  padding: '9px 12px 9px 15px',
                   borderRadius: '6px',
                   border: '1px solid #DBDEDE',
-                  fontSize: '14px',
-                  textAlign: 'right',
                   backgroundColor: '#FFFFFF',
-                  direction: 'rtl',
+                  boxSizing: 'border-box',
+                  textAlign: 'right',
+                  fontFamily: 'SimplerPro_HLAR, sans-serif',
+                  fontSize: '12px',
+                  fontWeight: '400',
+                  color: '#4C585B',
+                  width: '100%', // הרחבה לכל הרוחב
                 }}
               />
             </Autocomplete>

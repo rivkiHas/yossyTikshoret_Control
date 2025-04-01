@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import HoursOpen from "./HoursOpen";
-import HoursOpenEdit from "./HoursOpenedit";
 import AddressSearchMap from "./AddressSearchMap";
 import { ButtonsWithIcon } from "./buttons/ButtonswithIcon";
 import { Box } from "@mui/material";
@@ -13,12 +11,10 @@ import BusinessHours2 from "./BusinessHours2.js"
 
 export default function StepTwo() {
     const dispatch = useDispatch();
-    const [isEditing, setIsEditing] = useState(false);
     const [isPopUpOpen, setIsPopUpOpen] = useState(false); // סטייט לניהול פתיחת הפופאפ
 
     const brunches = useSelector((state) => state.brunch.brunches);
     const typeMarketer = useSelector((state) => state.typeMarketer);
-    const activeBrunchId = useSelector((state) => state.brunch.activeBrunch?.id);
 
     const nextStepInRedux = () => {
         dispatch(nextStep());
@@ -36,28 +32,32 @@ export default function StepTwo() {
         }));
         setIsPopUpOpen(true); // פתיחת הפופאפ לאחר הוספת סניף חדש
     };
+
     const closePopup = () => {
         setIsPopUpOpen(false); // סגירת הפופאפ
     };
+
     const lastBrunch = brunches[brunches.length - 1];
 
     return (
-        <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            padding:" 54px 75px 54px 76.5px",
-            borderRadius: '40px',
-            background: 'var(--Color, #FFF)',
-            backgroundColor: 'white',
-        }}>
+        <>
+
             {lastBrunch && (
-                <div key={lastBrunch.id} style={{ display: 'flex', gap: '96px', backgroundColor: 'white' ,textAlign: 'center' , marginBottom:"24px"}}>
+                <Box
+                    key={lastBrunch.id} sx={{
+                        display: 'flex',
+                        gap: '128px',
+                        backgroundColor: 'white',
+                        textAlign: 'center',
+                        marginBottom: "24px",
+                        flexShrink:'1'
+                    }}>
                     <BusinessHours2 brunch={lastBrunch} />
                     <AddressSearchMap brunch={lastBrunch} typeMarketer={typeMarketer} />
-                </div>
+                </Box>
             )}
 
-            <div style={{ display: 'flex', flexDirection: 'row', gap: '620px', marginTop: '72px' }}>
+            <Box sx={{ display: 'flex', flexDirection: 'row', gap: '620px', marginTop: '72px' }}>
                 <Box sx={{ display: 'flex', justifyContent: 'flex-start', gap: '16px' }}>
                     <ButtonsWithIcon onClick={nextStepInRedux} variant="contained" color={"#F8BD03"}>
                         שלב הבא
@@ -67,7 +67,7 @@ export default function StepTwo() {
                     </ButtonsWithIcon>
                 </Box>
                 <Box sx={{ display: 'flex', justifyContent: 'flex-start', gap: '16px' }}>
-                    {brunches.map((x, index) => (
+                    {brunches.map((brunch, index) => (
                         index > 0 &&
                         <DeleteIcon functionName={"brunch"} placeholder={"?האם ברצונך למחוק סניף זה"} Id={lastBrunch.id} />
                     ))}
@@ -76,10 +76,9 @@ export default function StepTwo() {
                         הוספת סניף נוסף
                     </ButtonsWithIcon>
                 </Box>
-            </div>
+            </Box>
             {/* הצגת פופאפ אם הפופאפ פתוח */}
             {isPopUpOpen && <PopUpNameBrunch closePopup={closePopup} activeBrunch={lastBrunch} />}
-
-        </div>
+        </>
     );
 }

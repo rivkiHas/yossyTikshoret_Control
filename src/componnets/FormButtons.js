@@ -5,6 +5,8 @@ import CustomButtonRectangle from "./CustomButtonRectangle";
 import TextOnTextFiled from "./TextOnTextFiled";
 import { useDispatch, useSelector } from "react-redux";
 import { setFormData } from "../redux/formSlice";
+import { Box } from '@mui/material';
+
 export default function FormButtons() {
     const dispatch = useDispatch();
     const formData = useSelector((state) => state.form.pertip);
@@ -22,18 +24,17 @@ export default function FormButtons() {
     };
 
     return (
-        <div style={{
+        <Box sx={{
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'flex-start',
             alignItems: 'flex-start',
-            gap: '12px',
         }}>
             <HeaderText placeholder=" סוג משווק" textAlign={"end"} />
-            <div style={{
+            <Box sx={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '27px',
+                gap: '36px',
                 alignSelf: 'stretch',
                 marginBottom: '52px'
             }}>
@@ -47,23 +48,22 @@ export default function FormButtons() {
                     selected={formData.typeMarketer === "חנות"}
                     handleSelect={() => handleSelectMarketer("חנות")}
                 />
-            </div>
+            </Box>
 
-            <div style={{
+            <Box sx={{
                 display: 'flex',
                 flexDirection: 'row',
                 alignItems: 'flex-end',
-                gap: '80px',
                 alignSelf: 'stretch',
-                // justifyContent:'center'
+                justifyContent: 'center'
             }}>
                 <TextOnTextFiled header="אפשר לבחור יותר מאפשרות אחת" textAlign="left" />
                 <HeaderText placeholder="סוג המכירות " textAlign={"end"} />
-            </div>
-            <div style={{
+            </Box>
+            <Box sx={{
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '18px',
+                gap: '24px',
             }}>
                 <CustomButtonRectangle
                     item={{ value: "3", image: "https://www.yaelyaniv.com/cdn/shop/products/73_large.jpg?v=1494952095", label: "קווי" }}
@@ -80,7 +80,7 @@ export default function FormButtons() {
                     selected={formData.typeSales.includes("5")}
                     handleSelect={() => handleSelectSales("5")}
                 />
-            </div>
-        </div>
+            </Box>
+        </Box>
     );
 }
