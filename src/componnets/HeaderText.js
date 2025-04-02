@@ -13,7 +13,7 @@ function HeaderText({ placeholder, color }) {
         fontStyle: 'normal',  // סגנון גופן רגיל
         fontWeight: 700,  // משקל הגופן
         lineHeight: 'normal',  // גובה שורה רגיל
-        justifyContent:'end'
+        alignItems:'end'
       }}
     >
       {placeholder} </Typography>

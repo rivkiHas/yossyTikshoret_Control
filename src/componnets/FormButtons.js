@@ -27,7 +27,7 @@ export default function FormButtons() {
         <Box sx={{
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'flex-start',
+            justifyContent: 'space-between',
             alignItems: 'flex-start',
         }}>
             <HeaderText placeholder=" סוג משווק" textAlign={"end"} />
@@ -36,7 +36,8 @@ export default function FormButtons() {
                 alignItems: 'center',
                 gap: '36px',
                 alignSelf: 'stretch',
-                marginBottom: '52px'
+                marginBottom: '52px',
+                justifyContent:'space-between'
             }}>
                 <CustomButton
                     item={{ value: "סוכן", image: "", label: "סוכן" }}
@@ -55,7 +56,7 @@ export default function FormButtons() {
                 flexDirection: 'row',
                 alignItems: 'flex-end',
                 alignSelf: 'stretch',
-                justifyContent: 'center'
+                justifyContent: 'space-between'
             }}>
                 <TextOnTextFiled header="אפשר לבחור יותר מאפשרות אחת" textAlign="left" />
                 <HeaderText placeholder="סוג המכירות " textAlign={"end"} />
@@ -64,6 +65,7 @@ export default function FormButtons() {
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '24px',
+                justifyContent:'space-between'
             }}>
                 <CustomButtonRectangle
                     item={{ value: "3", image: "https://www.yaelyaniv.com/cdn/shop/products/73_large.jpg?v=1494952095", label: "קווי" }}

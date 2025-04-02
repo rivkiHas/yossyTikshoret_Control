@@ -24,23 +24,28 @@ export default function StepOne() {
     };
 
     return (
-        <>
+        <Box sx={{
+            display:'flex',
+            flexDirection:'column',
+            gap:'36px'
+        }}>
             <Box sx={{
                 display: 'flex',
                 flexDirection: 'row',
                 gap: '128px',
                 textAlign: 'right',
+               
             }}>
                 <FormButtons />
                 <Form />
 
             </Box>
-            <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <ButtonsWithIcon onClick={nextStepInRedux} variant={"contained"}>
                     שלב הבא
                 </ButtonsWithIcon>
 
             </Box>
-        </>
+        </Box>
     );
 }

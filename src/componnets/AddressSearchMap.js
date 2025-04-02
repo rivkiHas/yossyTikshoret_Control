@@ -100,11 +100,11 @@ export default function AddressSearchMap({ brunch }) {
   return typeMarketer === "חנות" ? (
     <div style={{
       display: 'flex',
-      width: '384px',
-      height: '646px',
+      // width: '384px',
+      // height: '646px',
       flexDirection: 'column',
       alignItems: 'flex-start',
-      gap: '24px',
+      // gap: '24px',
       textAlign: "right",
       direction: "rtl"
     }}>
@@ -135,7 +135,7 @@ export default function AddressSearchMap({ brunch }) {
                   fontSize: '12px',
                   fontWeight: '400',
                   color: '#4C585B',
-                  width: '100%', // הרחבה לכל הרוחב
+                  // width: '100%', // הרחבה לכל הרוחב
                 }}
               />
             </Autocomplete>
@@ -155,8 +155,8 @@ export default function AddressSearchMap({ brunch }) {
     </div>) : (
     <div style={{
       display: 'flex',
-      width: '384px',
-      height: '646px',
+      // width: '384px',
+      // height: '646px',
       flexDirection: 'column',
       alignItems: 'end',
       gap: '24px',
@@ -184,7 +184,7 @@ export default function AddressSearchMap({ brunch }) {
                   fontSize: '12px',
                   fontWeight: '400',
                   color: '#4C585B',
-                  width: '100%', // הרחבה לכל הרוחב
+                  // width: '100%', // הרחבה לכל הרוחב
                 }}
               >
                 <input
@@ -195,7 +195,7 @@ export default function AddressSearchMap({ brunch }) {
                     dispatch(updateBrunchDetails({ id: brunch.id, address: e.target.value }));
                   }}
                   style={{
-                    width: '100%',  // כדי שה- input יתפוס את כל הרוחב
+                    // width: '100%',  // כדי שה- input יתפוס את כל הרוחב
                     height: '22px',
                     border: 'none',
                     outline: 'none',

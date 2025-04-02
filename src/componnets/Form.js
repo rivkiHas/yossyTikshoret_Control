@@ -21,7 +21,7 @@ export default function Form() {
     };
 
     return (
-        <form sx={{
+        <form style={{
             display: 'flex',
             flexDirection: 'column',
             gap: '24px',
@@ -29,10 +29,15 @@ export default function Form() {
             textAlign: 'right',
             fontFamily: 'SimplerPro_HLAR',
             fontWeight: 700,
+            justifyContent:'space-between'
+
         }}>
             <HeaderText placeholder={"פרטים על העסק"} />
             <Box sx={{
-                gap:'40px'
+                gap:'40px',
+                display:'flex',
+                flexDirection:'column',
+                justifyContent:'space-between'
             }}>
                 <TextFilee header={"שם העסק"} type="text" name="name" placeholder={"יש להזין את שם העסק"} onChange={handleChange} />
 
@@ -50,7 +55,7 @@ export default function Form() {
                         placeholder={"יש לבחור קבצים"}
                         onChange={handleChange}
                     />
-                    <MiniHeader placeholder={"בלבד JPG, PNG ו-PDF ניתן להעלות קבצים בפורמטים"} />
+                    <MiniHeader placeholder={"בלבד JPG, PNG ו-2PDF ניתן להעלות קבצים בפורמטים"} />
                 </Box>
             </Box>
         </form>

@@ -9,20 +9,20 @@ export default function CustomButton({ item, selected, handleSelect }) {
             onClick={() => handleSelect(item.value)}
             sx={{
                 display: 'flex',
-                // height: '62px', // גובה הקומפוננטה
-                padding:'26px 34px',
+                height: '62px', // גובה הקומפוננטה
+                // padding:'26px 34px',
                 flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'flex-start',
                 // gap: '5px',
                 alignSelf: 'stretch',
-                // aspectRatio: '368.00 /62', // יחס הרוחב לגובה
+                aspectRatio: '368.00 /62', // יחס הרוחב לגובה
                 borderRadius: '100px',
                 backgroundImage: `url(${item.image})`,
                 boxShadow: 3,
                 cursor: 'pointer',
                 transition: '0.3s',
-                border: selected ? '4px solid #FFC107' : '4px solid transparent',
+                border: selected ? '2px solid #FFC107' : '2px solid transparent',
                 position: "relative", // תיקון חשוב
                 "&:hover": {
                     opacity: 0.9,

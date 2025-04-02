@@ -10,9 +10,9 @@ export default function CustomButton({ item, selected, handleSelect }) {
             onClick={() => handleSelect(item.value)}
             sx={{
                 position: "relative",
-                // width: '170px',
-                // height: '109px',
-                padding: '26px 34px',
+                width: '170px',
+                height: '109px',
+                // padding: '26px 34px',
                 borderRadius: "30px",
                 overflow: "hidden",
                 backgroundImage: `url(${item.image})`,

@@ -6,14 +6,19 @@ import { Logo } from "./buttons/logo";
 
 const Control = () => {
     return (
-        <Box >
+        <Box sx={{
+             display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+
+        }} >
             <Logo />
             <HeaderText placeholder={"הצטרפו כמשווק רשמי"} textAlign={"center"} />
             <Typography
                 sx={{
                     alignSelf: "stretch",
                     color: "#000",
-                    textAlign: "center",
+                    textAlign: "right",
                     fontFamily: "SimplerPro_HLAR",
                     fontSize: "16px",
                     fontStyle: "normal",

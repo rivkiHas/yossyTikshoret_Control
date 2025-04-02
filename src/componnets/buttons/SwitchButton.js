@@ -43,11 +43,13 @@ const AntSwitch = styled(Switch)(({ theme }) => ({
 
 export default function SwitchButton({ checked, onChange }) {
     return (
-        <FormGroup>
+        <FormGroup sx={{
+            alignItems:'end'
+        }}>
             <Stack 
                 direction="row" 
                 spacing={1} 
-                sx={{ alignItems: 'center', backgroundColor: '#F4F4F4', borderRadius: '40px', padding: '5px 10px' }}
+                sx={{  backgroundColor: '#F4F4F4', borderRadius: '40px', padding: '5px 10px' }}
             >
                 <TextOnTextFiled header={"שעות בתיאום מראש"} />
                 <AntSwitch checked={checked} onChange={onChange} />

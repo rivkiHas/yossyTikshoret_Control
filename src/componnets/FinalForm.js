@@ -59,13 +59,13 @@ export default function FinalForm({ contactId }) {
         <form style={{
             display: 'flex',
             flexDirection: 'column',
-            gap: '40px',
+            gap: '16px',
             color: '#000',
             textAlign: 'right',
             fontFamily: 'SimplerPro_HLAR',
             fontSize: '28px',
             fontWeight: 700,
-            justifyContent: 'center',
+            justifyContent: 'space-between',
             alignItems: 'flex-end',
             marginLeft: 'auto',
         }}>

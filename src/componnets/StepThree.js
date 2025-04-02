@@ -64,13 +64,17 @@ export default function StepThree() {
     };
 
     return (
-        <>
+        <Box sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '36px'
+        }}>
             <Box sx={{
                 display: 'flex',
                 flexDirection: 'row',
-                flexWrap: 'wrap',
-                gap: '16px',
-                alignItems: 'flex-start'
+                gap: '128px',
+                alignItems: 'end',
+                overflowY: 'auto',
             }}>
                 {contactMans.map((x, index) => (
                     <Box key={index} sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'row' }}>
@@ -105,8 +109,8 @@ export default function StepThree() {
 
 
 
-            <Box sx={{ display: 'flex', flexDirection: 'row', gap: '500px', marginTop: '72px' }}>
-                <Box sx={{ display: 'flex', justifyContent: 'flex-start', gap: '16px' }}>
+            <Box sx={{ display: 'flex', flexDirection: 'row',  justifyContent:'space-between'}}>
+                <Box sx={{display: 'flex', justifyContent: 'flex-start', gap:'16px'}}>
                     <ButtonsWithIcon onClick={nextStepInRedux} variant="outlined" color={'#FFF'}>
                         סיימתי אפשר לשלוח
                     </ButtonsWithIcon>
@@ -122,18 +126,20 @@ export default function StepThree() {
                 </Box>
             </Box>
 
-            {isPopupOpen && (
-                <PopUpOkCencel
-                    placeholder={"האם אתה בטוח שברצונך למחוק איש קשר זה?"}
-                    functionName={"contactMans"}
-                    closePopup={closePopup}
-                    OkFunction={handleDeleteConfirmation}
-                    contactId={contactToDelete} // שליחה של המזהה של איש הקשר האחרון
-                />
-            )}
+            {
+                isPopupOpen && (
+                    <PopUpOkCencel
+                        placeholder={"האם אתה בטוח שברצונך למחוק איש קשר זה?"}
+                        functionName={"contactMans"}
+                        closePopup={closePopup}
+                        OkFunction={handleDeleteConfirmation}
+                        contactId={contactToDelete} // שליחה של המזהה של איש הקשר האחרון
+                    />
+                )
+            }
 
             {showPopup && <PopUpEnd onClose={() => setShowPopup(false)} />}
-        </>
+        </Box >
     );
 }
 

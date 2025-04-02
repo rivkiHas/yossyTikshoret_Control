@@ -4,10 +4,10 @@ import StepOne from './componnets/StepOne';
 import StepTwo from './componnets/StepTwo';
 import StepThree from './componnets/StepThree';
 import Control from './componnets/Control.js';
-import { Box } from '@mui/material'; // במקום lucide-react
+import { Box } from '@mui/material';
 
 function App() {
-  const activeStep = useSelector((state) => state.stepper.activeStep); // שליפת הסטפ הנוכחי מ-redux
+  const activeStep = useSelector((state) => state.stepper.activeStep); 
   const dispatch = useDispatch();
 
   const renderStepComponent = () => {
@@ -26,25 +26,24 @@ function App() {
   return (
     <Box sx={{
       display: 'flex',
-      gap: '18px',
       backgroundColor: '#F4F4F4',
-      padding: "96px 100px 96px 100px",
-
+      padding: '96px 99px 96px 101px',
+      justifyContent: 'space-between'
     }}>
       <Box sx={{
         backgroundColor: '#FFFFFF',
-        padding: '78px 109px',
+        padding: '56.5px 72.25px',
         borderRadius: '40px',
-        gap: '36px',
         flexShrink: "0"
+
       }}>
         {renderStepComponent()}
       </Box>
       <Box sx={{
         backgroundColor: '#FFFFFF',
-        padding: '62px 83px',
+        padding: '46.5px 62.25px',
         borderRadius: '40px',
-        justifyContent: '10px',
+        justifyContent: 'space-between',
         flexShrink: "1"
       }}>
         <Control />

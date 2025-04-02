@@ -5,9 +5,9 @@ import { borderRight, styled } from "@mui/system";
 import { CompletedIcon, StepOneIcon, StepTwoIcon, StepThreeIcon, CircleIcon } from "./IconsStepper.js";
 import HeaderText from "./HeaderText.js";
 import TextOnTextFiled from "./TextOnTextFiled.js";
-import { Leaf, MoveRight } from "lucide-react";
+import {  Leaf, MoveRight } from "lucide-react";
 import { useEffect } from "react";
-
+import { Box } from "@mui/material";
 
 const CustomConnector = styled(StepConnector)({
   "&.MuiStepConnector-root": {
@@ -62,6 +62,7 @@ export default function Stepper2() {
       sx={{
         direction: "rtl",
         backgroundColor: "white",
+
       }}
       activeStep={activeStep}
       orientation="vertical"
@@ -81,13 +82,19 @@ export default function Stepper2() {
             </StepContainer>
 
             {index === 1 && brunchNames.length > 1 && (
-              <div>
-                <ul>
+              <Box>
+                <ul >
                   {brunchNames.map((name, idx) => (
-                    <li key={idx}>{name}</li>
+                    <li key={idx}
+                      sx={{
+                        color:'#F8BD00',
+                        backgroundColor:'#FDEBB2'
+                        
+                        
+                      }}>{name}</li>
                   ))}
                 </ul>
-              </div>
+              </Box>
             )}
           </Step>
         );

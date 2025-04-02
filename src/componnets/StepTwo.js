@@ -40,25 +40,28 @@ export default function StepTwo() {
     const lastBrunch = brunches[brunches.length - 1];
 
     return (
-        <>
+        <Box
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '36px'
+            }}>
 
             {lastBrunch && (
                 <Box
                     key={lastBrunch.id} sx={{
                         display: 'flex',
+                        flexDirection: 'row',
                         gap: '128px',
-                        backgroundColor: 'white',
-                        textAlign: 'center',
-                        marginBottom: "24px",
-                        flexShrink:'1'
+                        textAlign: 'right',
                     }}>
                     <BusinessHours2 brunch={lastBrunch} />
                     <AddressSearchMap brunch={lastBrunch} typeMarketer={typeMarketer} />
                 </Box>
             )}
 
-            <Box sx={{ display: 'flex', flexDirection: 'row', gap: '620px', marginTop: '72px' }}>
-                <Box sx={{ display: 'flex', justifyContent: 'flex-start', gap: '16px' }}>
+            <Box sx={{ display: 'flex', flexDirection: 'row',  justifyContent:'space-between'}}>
+                <Box sx={{ display: 'flex', justifyContent: 'flex-start', gap:'16px' }}>
                     <ButtonsWithIcon onClick={nextStepInRedux} variant="contained" color={"#F8BD03"}>
                         שלב הבא
                     </ButtonsWithIcon>
@@ -79,6 +82,6 @@ export default function StepTwo() {
             </Box>
             {/* הצגת פופאפ אם הפופאפ פתוח */}
             {isPopUpOpen && <PopUpNameBrunch closePopup={closePopup} activeBrunch={lastBrunch} />}
-        </>
+        </Box>
     );
 }
