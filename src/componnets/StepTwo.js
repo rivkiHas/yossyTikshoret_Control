@@ -44,7 +44,9 @@ export default function StepTwo() {
             sx={{
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '36px'
+                // gap: '36px'
+                alignItems:'normal'
+
             }}>
 
             {lastBrunch && (
@@ -52,8 +54,9 @@ export default function StepTwo() {
                     key={lastBrunch.id} sx={{
                         display: 'flex',
                         flexDirection: 'row',
-                        gap: '128px',
-                        textAlign: 'right',
+                        // gap: '128px',
+                        // textAlign: 'right',
+                        justifyContent:'space-around'
                     }}>
                     <BusinessHours2 brunch={lastBrunch} />
                     <AddressSearchMap brunch={lastBrunch} typeMarketer={typeMarketer} />

@@ -67,17 +67,24 @@ export default function StepThree() {
         <Box sx={{
             display: 'flex',
             flexDirection: 'column',
-            gap: '36px'
+            gap: '36px',
+            alignItems: 'normal'
         }}>
             <Box sx={{
                 display: 'flex',
                 flexDirection: 'row',
-                gap: '128px',
+                // gap: '128px',
                 alignItems: 'end',
                 overflowY: 'auto',
             }}>
                 {contactMans.map((x, index) => (
-                    <Box key={index} sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'row' }}>
+                    <Box key={index} sx={{
+                        maxWidth:'200px',
+                        display: 'flex',
+                        alignItems: 'flex-end',
+                        flexDirection: 'row',
+                        "&::-webkit-scrollbar": { display: "none" },
+                    }}>
                         {index > 0 && (
                             <Box
                                 onClick={() => {
@@ -102,15 +109,21 @@ export default function StepThree() {
                                 </svg>
                             </Box>
                         )}
-                        <FinalForm contactId={x.id} index={index} />
+                        <Box sx={{
+                            // maxWidth: '70%',
+                            // backdropFilter: isSwitchOn ? "blur(2px)" : "none",
+                            // "&::-webkit-scrollbar": { display: "none" },
+                        }}>
+                            <FinalForm contactId={x.id} index={index} />
+                        </Box>
                     </Box>
                 ))}
             </Box>
 
 
 
-            <Box sx={{ display: 'flex', flexDirection: 'row',  justifyContent:'space-between'}}>
-                <Box sx={{display: 'flex', justifyContent: 'flex-start', gap:'16px'}}>
+            <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                <Box sx={{ display: 'flex', justifyContent: 'flex-start', gap: '16px' }}>
                     <ButtonsWithIcon onClick={nextStepInRedux} variant="outlined" color={'#FFF'}>
                         סיימתי אפשר לשלוח
                     </ButtonsWithIcon>

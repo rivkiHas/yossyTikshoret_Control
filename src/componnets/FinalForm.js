@@ -57,15 +57,16 @@ export default function FinalForm({ contactId }) {
 
     return (
         <form style={{
+            height:'70vh',
             display: 'flex',
             flexDirection: 'column',
-            gap: '16px',
+            // gap: '16px',
             color: '#000',
             textAlign: 'right',
             fontFamily: 'SimplerPro_HLAR',
             fontSize: '28px',
             fontWeight: 700,
-            justifyContent: 'space-between',
+            // justifyContent: 'space-between',
             alignItems: 'flex-end',
             marginLeft: 'auto',
         }}>

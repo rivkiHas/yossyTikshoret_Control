@@ -7,7 +7,7 @@ import Control from './componnets/Control.js';
 import { Box } from '@mui/material';
 
 function App() {
-  const activeStep = useSelector((state) => state.stepper.activeStep); 
+  const activeStep = useSelector((state) => state.stepper.activeStep);
   const dispatch = useDispatch();
 
   const renderStepComponent = () => {
@@ -27,15 +27,16 @@ function App() {
     <Box sx={{
       display: 'flex',
       backgroundColor: '#F4F4F4',
-      padding: '96px 99px 96px 101px',
-      justifyContent: 'space-between'
+      padding:  '72px 74px 72px 76px',
+      justifyContent: 'space-around',
+      height: '100vh',
+      alignItems: 'stretch'
     }}>
       <Box sx={{
         backgroundColor: '#FFFFFF',
         padding: '56.5px 72.25px',
         borderRadius: '40px',
-        flexShrink: "0"
-
+        width: '58%'
       }}>
         {renderStepComponent()}
       </Box>
@@ -43,8 +44,7 @@ function App() {
         backgroundColor: '#FFFFFF',
         padding: '46.5px 62.25px',
         borderRadius: '40px',
-        justifyContent: 'space-between',
-        flexShrink: "1"
+        width: '18%'
       }}>
         <Control />
       </Box>

@@ -64,8 +64,8 @@ const BusinessHours2 = ({ brunch }) => {
         maxHeight: 400,
         overflowY: 'auto',
         gap: '16px',
-        background: isSwitchOn ? "rgba(213, 21, 21, 0.5)" : "rgba(255, 255, 255, 0.8)",
-        backdropFilter: isSwitchOn ? "blur(2px)" : "none",
+        // background: isSwitchOn ? "rgba(213, 21, 21, 0.5)" : "rgba(255, 255, 255, 0.8)",
+        // backdropFilter: isSwitchOn ? "blur(2px)" : "none",
         "&::-webkit-scrollbar": { display: "none" },
 
       }}>

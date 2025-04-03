@@ -7,6 +7,7 @@ import TextOnTextFiled from "./TextOnTextFiled";
 import CustomMarker from "./customMarketer";
 import Carusela from "./carusela";
 import PlaceIcon from '@mui/icons-material/Place';
+import { Box } from "@mui/material";
 const GOOGLE_MAPS_API_KEY = "AIzaSyCd4oRcSJmbJQhcaEGsgwlNR5AgmvARYwM";
 
 const containerStyle = {
@@ -98,23 +99,23 @@ export default function AddressSearchMap({ brunch }) {
   };
 
   return typeMarketer === "חנות" ? (
-    <div style={{
+    <Box sx={{
       display: 'flex',
-      // width: '384px',
-      // height: '646px',
+
       flexDirection: 'column',
       alignItems: 'flex-start',
-      // gap: '24px',
       textAlign: "right",
       direction: "rtl"
     }}>
       <HeaderText placeholder={" כתובת העסק"} style={{ marginBottom: '24px' }} />
-      <div>
+      <Box>
         <TextOnTextFiled header={"כתובת חנות"} style={{ marginBottom: '1px' }} />
 
         <LoadScript googleMapsApiKey={GOOGLE_MAPS_API_KEY} libraries={["places"]}>
-          <div style={{
-            display: "flex", flexDirection: "column", gap: "10px"
+          <Box sx={{
+            display: "flex",
+            flexDirection: "column",
+            //  gap: "10px"
           }}>
             <Autocomplete onLoad={handleLoad} onPlaceChanged={handlePlaceChanged}>
               <input
@@ -140,23 +141,26 @@ export default function AddressSearchMap({ brunch }) {
               />
             </Autocomplete>
 
+            <Box sx={{
+              background:'red',
+              width:'10%',
+              height:"70%"
+            }}>
+              <GoogleMap
+                mapContainerStyle={containerStyle}
+                center={location || { lat: 32.0853, lng: 34.7818 }}
+                zoom={location ? 15 : 10}
 
-            <GoogleMap
-              mapContainerStyle={containerStyle}
-              center={location || { lat: 32.0853, lng: 34.7818 }}
-              zoom={location ? 15 : 10}
-            >
-              <Marker position={location} icon={customMarkerIcon
-              } />
-            </GoogleMap>
-          </div>
+              >
+                <Marker position={location} icon={customMarkerIcon} />
+              </GoogleMap></Box>
+          </Box>
         </LoadScript>
-      </div>
-    </div>) : (
-    <div style={{
+      </Box>
+    </Box>) : (
+    <Box sx={{
       display: 'flex',
-      // width: '384px',
-      // height: '646px',
+
       flexDirection: 'column',
       alignItems: 'end',
       gap: '24px',
@@ -164,17 +168,19 @@ export default function AddressSearchMap({ brunch }) {
       direction: "rtl"
     }}>
       <HeaderText placeholder={"אזור פעילות"} style={{ marginBottom: '24px' }} />
-      <div>
+      <Box>
         <TextOnTextFiled header={"אדור פעילות"} style={{ marginBottom: '1px' }} />
 
         <LoadScript googleMapsApiKey={GOOGLE_MAPS_API_KEY} libraries={["places"]}>
-          <div style={{
-            display: "flex", flexDirection: "column", gap: "10px"
+          <Box sx={{
+            display: "flex",
+            flexDirection: "column",
+            // gap: "10px"
           }}>
             <Autocomplete onLoad={handleLoad} onPlaceChanged={handlePlaceChanged}>
-              <div
+              <Box
                 style={{
-                  padding: '9px 12px 9px 15px',
+                  // padding: '9px 12px 9px 15px',
                   borderRadius: '6px',
                   border: '1px solid #DBDEDE',
                   backgroundColor: '#FFFFFF',
@@ -207,7 +213,7 @@ export default function AddressSearchMap({ brunch }) {
                     textAlign: 'right',
                   }}
                 />
-              </div>
+              </Box>
             </Autocomplete>
 
 
@@ -218,10 +224,10 @@ export default function AddressSearchMap({ brunch }) {
             >
               <Marker position={location} icon={<customMarkerIcon2 />} />
             </GoogleMap>
-          </div>
+          </Box>
           <Carusela />
         </LoadScript>
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 }
