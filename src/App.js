@@ -30,6 +30,7 @@ function App() {
       padding:  '72px 74px 72px 76px',
       justifyContent: 'space-around',
       height: '100vh',
+
       alignItems: 'stretch'
     }}>
       <Box sx={{

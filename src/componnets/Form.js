@@ -24,20 +24,21 @@ export default function Form() {
         <form style={{
             display: 'flex',
             flexDirection: 'column',
-            gap: '24px',
+            gap: '5px',
             color: '#000',
             textAlign: 'right',
             fontFamily: 'SimplerPro_HLAR',
             fontWeight: 700,
-            justifyContent:'space-between'
-
+            justifyContent: 'space-around',
+            height: '80vh',
+            width: '35%'
         }}>
             <HeaderText placeholder={"פרטים על העסק"} />
             <Box sx={{
-                gap:'40px',
-                display:'flex',
-                flexDirection:'column',
-                justifyContent:'space-between'
+                gap: '40px',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-around'
             }}>
                 <TextFilee header={"שם העסק"} type="text" name="name" placeholder={"יש להזין את שם העסק"} onChange={handleChange} />
 

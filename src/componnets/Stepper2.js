@@ -2,10 +2,9 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { Stepper, Step, StepConnector } from "@mui/material";
 import { borderRight, styled } from "@mui/system";
-import { CompletedIcon, StepOneIcon, StepTwoIcon, StepThreeIcon, CircleIcon } from "./IconsStepper.js";
+import { CompletedIcon, StepOneIcon, StepTwoIcon, StepThreeIcon, CircleIcon, MiniCompletedIcon } from "./IconsStepper.js";
 import HeaderText from "./HeaderText.js";
 import TextOnTextFiled from "./TextOnTextFiled.js";
-import {  Leaf, MoveRight } from "lucide-react";
 import { useEffect } from "react";
 import { Box } from "@mui/material";
 
@@ -82,16 +81,13 @@ export default function Stepper2() {
             </StepContainer>
 
             {index === 1 && brunchNames.length > 1 && (
-              <Box>
+              <Box> 
                 <ul >
                   {brunchNames.map((name, idx) => (
-                    <li key={idx}
-                      sx={{
-                        color:'#F8BD00',
-                        backgroundColor:'#FDEBB2'
-                        
-                        
-                      }}>{name}</li>
+                    <li key={idx} style={{ display: 'flex', alignItems: 'center', gap: '0.5px', marginBottom: '4px' }}>
+                      <MiniCompletedIcon />
+                      <TextOnTextFiled header={name} />
+                    </li>
                   ))}
                 </ul>
               </Box>

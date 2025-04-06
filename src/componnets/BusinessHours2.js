@@ -48,6 +48,8 @@ const BusinessHours2 = ({ brunch }) => {
     <Box sx={{
       display: 'flex',
       flexDirection: 'column',
+      width: '48%',
+      height: '80vh'
     }}>
       <Box sx={{
         display: 'flex',
@@ -56,7 +58,6 @@ const BusinessHours2 = ({ brunch }) => {
       }}>
         <EditIcon setIsEditing={setIsGrouped} />
         <HeaderText placeholder={'שעות פתיחה'} />
-
       </Box>
       <SwitchButton checked={isSwitchOn} onChange={handleSwitchChange} />
 
@@ -64,8 +65,6 @@ const BusinessHours2 = ({ brunch }) => {
         maxHeight: 400,
         overflowY: 'auto',
         gap: '16px',
-        // background: isSwitchOn ? "rgba(213, 21, 21, 0.5)" : "rgba(255, 255, 255, 0.8)",
-        // backdropFilter: isSwitchOn ? "blur(2px)" : "none",
         "&::-webkit-scrollbar": { display: "none" },
 
       }}>
@@ -120,6 +119,7 @@ const DayRow = ({ day, label, hours, handleChange, hover, index }) => {
     <Box sx={{
       display: "flex",
       flexDirection: 'column',
+
     }}>
       <Box sx={{
         display: "flex",
@@ -131,7 +131,8 @@ const DayRow = ({ day, label, hours, handleChange, hover, index }) => {
 
           <Fab size="small" color="black" aria-label="add" onClick={handleEveningClick}>
             <AddIcon />
-          </Fab>)}
+          </Fab>
+        )}
         <Box sx={{
           display: 'flex',
           flexDirection: 'row',

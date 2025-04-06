@@ -27,14 +27,17 @@ export default function FormButtons() {
         <Box sx={{
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'space-between',
-            alignItems: 'flex-start',
+            justifyContent: 'space-around',
+            alignItems: 'flex-start',     
+            height:'80vh',
+            width:'48%'
+
         }}>
             <HeaderText placeholder=" סוג משווק" textAlign={"end"} />
             <Box sx={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '36px',
+                // gap: '36px',
                 alignSelf: 'stretch',
                 marginBottom: '52px',
                 justifyContent:'space-between'

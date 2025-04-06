@@ -57,7 +57,7 @@ export default function FinalForm({ contactId }) {
 
     return (
         <form style={{
-            height:'70vh',
+            height:'80vh',
             display: 'flex',
             flexDirection: 'column',
             // gap: '16px',
@@ -97,7 +97,7 @@ export default function FinalForm({ contactId }) {
                     <div style={{
                         display: "flex",
                         flexDirection: "row",
-                        width: "384px",
+                        // width: "384px",
                         height: "46px",
                         // padding: "12px 16px 12px 20px",
                         justifyContent: "flex-end",
@@ -128,7 +128,7 @@ export default function FinalForm({ contactId }) {
                     <div style={{
                         display: "flex",
                         flexDirection: "row",
-                        width: "384px",
+                        // width: "384px",
                         height: "46px",
                         padding: "12px 16px 12px 20px",
                         justifyContent: "flex-end",

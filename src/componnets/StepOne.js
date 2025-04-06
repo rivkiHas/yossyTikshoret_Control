@@ -27,7 +27,6 @@ export default function StepOne() {
         <Box sx={{
             display: 'flex',
             flexDirection: 'column',
-            // gap:'36px'
             alignItems:'normal'
 
         }}>
@@ -35,7 +34,7 @@ export default function StepOne() {
                 display: 'flex',
                 flexDirection: 'row',
                 textAlign: 'right',
-                justifyContent: 'space-around'
+                justifyContent: 'space-between'
             }}>
                 <FormButtons />
                 <Form />

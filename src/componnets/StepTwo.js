@@ -44,8 +44,8 @@ export default function StepTwo() {
             sx={{
                 display: 'flex',
                 flexDirection: 'column',
-                // gap: '36px'
-                alignItems:'normal'
+                // gap: '36px',
+                alignItems: 'normal'
 
             }}>
 
@@ -56,15 +56,15 @@ export default function StepTwo() {
                         flexDirection: 'row',
                         // gap: '128px',
                         // textAlign: 'right',
-                        justifyContent:'space-around'
+                        justifyContent: 'space-around'
                     }}>
                     <BusinessHours2 brunch={lastBrunch} />
                     <AddressSearchMap brunch={lastBrunch} typeMarketer={typeMarketer} />
                 </Box>
             )}
 
-            <Box sx={{ display: 'flex', flexDirection: 'row',  justifyContent:'space-between'}}>
-                <Box sx={{ display: 'flex', justifyContent: 'flex-start', gap:'16px' }}>
+            <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                <Box sx={{ display: 'flex', justifyContent: 'flex-start', gap: '16px' }}>
                     <ButtonsWithIcon onClick={nextStepInRedux} variant="contained" color={"#F8BD03"}>
                         שלב הבא
                     </ButtonsWithIcon>
@@ -72,11 +72,14 @@ export default function StepTwo() {
                         שלב קודם
                     </ButtonsWithIcon>
                 </Box>
+
                 <Box sx={{ display: 'flex', justifyContent: 'flex-start', gap: '16px' }}>
-                    {brunches.map((brunch, index) => (
-                        index > 0 &&
-                        <DeleteIcon functionName={"brunch"} placeholder={"?האם ברצונך למחוק סניף זה"} Id={lastBrunch.id} />
-                    ))}
+                    {typeMarketer === 'חנות' &&
+                        brunches.map((brunch, index) => (
+                            index > 0 &&
+                            <DeleteIcon functionName={"brunch"} placeholder={"?האם ברצונך למחוק סניף זה"} Id={lastBrunch.id} />
+                        ))
+                    }
 
                     <ButtonsWithIcon onClick={AddMoreBrunch} variant="contained" color={'#000'}>
                         הוספת סניף נוסף

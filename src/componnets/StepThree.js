@@ -65,26 +65,31 @@ export default function StepThree() {
 
     return (
         <Box sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '36px',
-            alignItems: 'normal'
+            // display: 'flex',
+            // flexDirection: 'column',
+            // gap: '36px',
+            // alignItems: 'normal'
         }}>
             <Box sx={{
                 display: 'flex',
-                flexDirection: 'row',
-                // gap: '128px',
-                alignItems: 'end',
-                overflowY: 'auto',
+                flexDirection: 'row-reverse',
+                gap: '128px',
+                justifyContent: 'space-between',
+                overflowX: contactMans.length > 2 ? 'auto' : 'visible',
+                whiteSpace: contactMans.length > 2 ? 'nowrap' : 'normal',
+                '&::-webkit-scrollbar': {
+                    display: 'none', // מסתיר סרגל בגלישה מבוססת וובקיט (Chrome, Safari)
+                },
+                '-ms-overflow-style': 'none', // מסתיר ב־IE ו־Edge הישן
+                'scrollbar-width': 'none', // מסתיר בפיירפוקס
+
             }}>
                 {contactMans.map((x, index) => (
                     <Box key={index} sx={{
-                        maxWidth:'200px',
                         display: 'flex',
-                        alignItems: 'flex-end',
-                        flexDirection: 'row',
-                        "&::-webkit-scrollbar": { display: "none" },
+                        flexDirection: 'row-reverse',
                     }}>
+                        <FinalForm contactId={x.id} index={index} />
                         {index > 0 && (
                             <Box
                                 onClick={() => {
@@ -109,13 +114,7 @@ export default function StepThree() {
                                 </svg>
                             </Box>
                         )}
-                        <Box sx={{
-                            // maxWidth: '70%',
-                            // backdropFilter: isSwitchOn ? "blur(2px)" : "none",
-                            // "&::-webkit-scrollbar": { display: "none" },
-                        }}>
-                            <FinalForm contactId={x.id} index={index} />
-                        </Box>
+
                     </Box>
                 ))}
             </Box>

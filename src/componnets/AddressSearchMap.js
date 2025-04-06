@@ -10,15 +10,17 @@ import PlaceIcon from '@mui/icons-material/Place';
 import { Box } from "@mui/material";
 const GOOGLE_MAPS_API_KEY = "AIzaSyCd4oRcSJmbJQhcaEGsgwlNR5AgmvARYwM";
 
-const containerStyle = {
-  height: "478.43px",
-  flexShrink: 0,
-  alignSelf: 'stretch',
-  aspectRatio: "384 / 478.43",
-  borderRadius: '8px',
-  background: "url(<path-to-image>) lightgray -212.782px -5.3px / 237.14% 102.469% no-repeat",
-};
 
+const containerStyle = {
+  height: "60vh",
+  width: "100%",
+  flexShrink: 0,
+  alignSelf: "stretch",
+  borderRadius: "8px",
+  background: "url('<path-to-image>') -212.782px -5.3px / 237.14% 102.469% no-repeat lightgray",
+  position: "relative",
+  overflow: "hidden",
+};
 // הגדרת הנתיב של ה-SVG
 const customMarkerIcon = {
   path: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 12 7 12s7-6.75 7-12c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z",
@@ -101,11 +103,13 @@ export default function AddressSearchMap({ brunch }) {
   return typeMarketer === "חנות" ? (
     <Box sx={{
       display: 'flex',
-
       flexDirection: 'column',
       alignItems: 'flex-start',
       textAlign: "right",
-      direction: "rtl"
+      direction: "rtl",
+      width:'48%',
+      height:'80vh',
+
     }}>
       <HeaderText placeholder={" כתובת העסק"} style={{ marginBottom: '24px' }} />
       <Box>
@@ -115,7 +119,8 @@ export default function AddressSearchMap({ brunch }) {
           <Box sx={{
             display: "flex",
             flexDirection: "column",
-            //  gap: "10px"
+             gap: "10px",
+            
           }}>
             <Autocomplete onLoad={handleLoad} onPlaceChanged={handlePlaceChanged}>
               <input
@@ -136,16 +141,12 @@ export default function AddressSearchMap({ brunch }) {
                   fontSize: '12px',
                   fontWeight: '400',
                   color: '#4C585B',
-                  // width: '100%', // הרחבה לכל הרוחב
+                  width: '100%', // הרחבה לכל הרוחב
                 }}
               />
             </Autocomplete>
 
-            <Box sx={{
-              background:'red',
-              width:'10%',
-              height:"70%"
-            }}>
+           
               <GoogleMap
                 mapContainerStyle={containerStyle}
                 center={location || { lat: 32.0853, lng: 34.7818 }}
@@ -154,12 +155,13 @@ export default function AddressSearchMap({ brunch }) {
               >
                 <Marker position={location} icon={customMarkerIcon} />
               </GoogleMap></Box>
-          </Box>
+          
         </LoadScript>
       </Box>
     </Box>) : (
     <Box sx={{
       display: 'flex',
+      height:'80vh',
 
       flexDirection: 'column',
       alignItems: 'end',

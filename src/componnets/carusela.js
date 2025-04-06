@@ -32,7 +32,7 @@ export default function Carousela() {
       ref={scrollRef}
       sx={{
         position: 'relative',
-        width: '100%',
+        width: '58%',
         overflowX: 'auto',
         overflowY: 'hidden',
         whiteSpace: 'nowrap',

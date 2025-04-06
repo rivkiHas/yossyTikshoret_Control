@@ -15,7 +15,20 @@ export const CompletedIcon = () => (
     </div>
 );
 
-
+export const MiniCompletedIcon = () => (
+    <div style={{ width: "25px", height: "25px", display: "flex", alignItems: "center", justifyContent: "center", padding: "15px" }}>
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 42 42" fill="none">
+            <circle cx="21" cy="21" r="20" fill="#F8BD00" stroke="#F8BD00" strokeWidth="2.4" />
+            <path
+                d="M17 21.5L19.5 24L25 17M31 21C31 22.5403 30.7078 24.0608 30.1418 25.4827C29.5758 26.9046 28.7477 28.1998 27.7071 29.2404C26.6665 30.281 25.3714 31.1091 23.9495 31.6751C22.5276 32.2411 21.0072 32.5333 19.4669 32.5333C17.9266 32.5333 16.4061 32.2411 14.9842 31.6751C13.5623 31.1091 12.2671 30.281 11.2265 29.2404C10.1859 28.1998 9.3578 26.9046 8.79178 25.4827C8.22577 24.0608 7.93359 22.5403 7.93359 21C7.93359 18.0294 9.13906 15.1848 11.2265 13.0974C13.3139 11.0099 16.1585 9.80444 19.1291 9.80444C22.0997 9.80444 24.9443 11.0099 27.0317 13.0974C29.1192 15.1848 30.3246 18.0294 30.3246 21Z"
+                stroke="white"
+                strokeWidth="1.1"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            />
+        </svg>
+    </div>
+);
 export const StepOneIcon = () => (
     <div style={{ width: "42px", height: "42px", display: "flex", alignItems: "center", justifyContent: "center", padding: "15px" }}>
         <svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 42 42" fill="none">
