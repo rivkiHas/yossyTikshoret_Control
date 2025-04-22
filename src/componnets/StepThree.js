@@ -6,11 +6,10 @@ import { useDispatch } from "react-redux";
 import { nextStep, prevStep } from "../redux/stepSlice.js"; // ייבוא הפעולה מרדקס
 import { addContactMan, deleteContactMan } from "../redux/conectManSlice.js"; // ייבוא הפונקציה לעדכון הנתונים
 import { useSelector } from "react-redux";
-import DeleteIcon from "./buttons/DeleteIcon.js";
 import PopUpEnd from "./popups/PopUpEnd.js";
 import PopUpOkCencel from "./popups/PopUpOkCencel";
-import { Edit, Edit2 } from "lucide-react";
 import TextOnTextFiled from "./TextOnTextFiled.js";
+import api from './api'; // נתיב לקובץ axios שלך
 
 export default function StepThree() {
 
@@ -21,23 +20,49 @@ export default function StepThree() {
     const [showPopup, setShowPopup] = useState(false);
     const [isPopupOpen, setIsPopupOpen] = useState(false); // מצב לניהול פתיחת הפופאפ
     const [contactToDelete, setContactToDelete] = useState(null); // מזהה איש קשר למחיקה
-    const contactId = contactMans.length - 1;
+    // const contactId = contactMans.length - 1;
     const [isHovered, setIsHovered] = useState(false);
 
 
-    // פונקציה להעברת השלב הבא
-    const nextStepInRedux = () => {
-        if (validateFunction()) {
-            if (activeStep === 2) {
-                setShowPopup(true); // הצגת הפופאפ במקום לעבור שלב
-            } else {
-                dispatch(nextStep()); // אם זה לא השלב האחרון - מעבר לשלב הבא
-            }
-        } else {
-            console.log("יש שגיאות בטופס");
-        }
+    const sendDataToServer = async () => {
+      try {
+        const response = await api.post('/api/contactMans', { contactMans }); // שימי לב לנתיב המתאים לפי השרת שלך
+        console.log('נשמר בהצלחה:', response.data);
+      } catch (error) {
+        console.error('שגיאה בשליחת הנתונים:', error);
+      }
     };
+ 
+    // // פונקציה להעברת השלב הבא
+    // const nextStepInRedux = () => {
+    //     if (validateFunction()) {
+    //         if (activeStep === 2) {
+    //             setShowPopup(true); // הצגת הפופאפ במקום לעבור שלב
+    //         } else {
+    //             dispatch(nextStep()); // אם זה לא השלב האחרון - מעבר לשלב הבא
+    //         }
+    //     } else {
+    //         console.log("יש שגיאות בטופס");
+    //     }
+    // };
 
+    const nextStepInRedux = async () => {
+        if (validateFunction()) {
+          if (activeStep === 2) {
+            try {
+              await sendDataToServer(); // שליחת הדאטה לפני המעבר
+              setShowPopup(true); // הצגת הפופאפ
+            } catch (error) {
+              console.log("שגיאה בשליחה");
+            }
+          } else {
+            dispatch(nextStep());
+          }
+        } else {
+          console.log("יש שגיאות בטופס");
+        }
+      };
+      
     // פונקציה להוספת איש קשר חדש
     const addContactManHandler = () => {
         dispatch(addContactMan()); // קריאה לפעולה להוספת אובייקט ריק
@@ -64,12 +89,7 @@ export default function StepThree() {
     };
 
     return (
-        <Box sx={{
-            // display: 'flex',
-            // flexDirection: 'column',
-            // gap: '36px',
-            // alignItems: 'normal'
-        }}>
+        <Box >
             <Box sx={{
                 display: 'flex',
                 flexDirection: 'row-reverse',

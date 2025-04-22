@@ -1,5 +1,5 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Stepper, Step, StepConnector } from "@mui/material";
 import { borderRight, styled } from "@mui/system";
 import { CompletedIcon, StepOneIcon, StepTwoIcon, StepThreeIcon, CircleIcon, MiniCompletedIcon } from "./IconsStepper.js";
@@ -7,6 +7,11 @@ import HeaderText from "./HeaderText.js";
 import TextOnTextFiled from "./TextOnTextFiled.js";
 import { useEffect } from "react";
 import { Box } from "@mui/material";
+import useStepValidation from "./useStepValidation.js";
+import { setActiveStep } from "../redux/stepSlice"; // שימי לב לנתיב הנכון אצלך
+
+
+
 
 const CustomConnector = styled(StepConnector)({
   "&.MuiStepConnector-root": {
@@ -50,6 +55,8 @@ export default function Stepper2() {
   const brunchNames = useSelector((state) =>
     (state.brunch.brunches || []).map(brunch => brunch.name) || ["אפס"]
   );
+  const { isStepValid } = useStepValidation();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     console.log(brunchNames);  // ראה אם יש עדכון למערך ברנץ'
@@ -69,11 +76,22 @@ export default function Stepper2() {
     >
       {steps.map((step, index) => {
         const isActive = index === activeStep;
-        return (
-          <Step key={index} completed={index < activeStep}>
+        const isCompleted = isStepValid(index);
+        const isDisabled = index === 1 && brunchNames.length > 1;
 
-            <StepContainer isActive={isActive}>
-              {isActive ? step.icon : index < activeStep ? <CompletedIcon /> : <CircleIcon />}
+        const handleClick = () => {
+          if (!isDisabled) dispatch(setActiveStep(index));
+        };
+
+        let icon;
+        if (isActive) icon = step.icon;
+        else if (isCompleted) icon = <CompletedIcon />;
+        else if (index < activeStep) icon = <CircleIcon />;
+        else icon = <MiniCompletedIcon />;
+        return (
+          <Step key={index}>
+            <StepContainer isActive={isActive} onClick={handleClick} style={{ cursor: isDisabled ? "default" : "pointer" }}>
+              {icon}
               <StepText>
                 <HeaderText placeholder={step.label} color={"#333"} />
                 <TextOnTextFiled header={step.description} />
@@ -81,10 +99,10 @@ export default function Stepper2() {
             </StepContainer>
 
             {index === 1 && brunchNames.length > 1 && (
-              <Box> 
-                <ul >
+              <Box>
+                <ul>
                   {brunchNames.map((name, idx) => (
-                    <li key={idx} style={{ display: 'flex', alignItems: 'center', gap: '0.5px', marginBottom: '4px' }}>
+                    <li key={idx} style={{ display: "flex", alignItems: "center", gap: "0.5px", marginBottom: "4px" }}>
                       <MiniCompletedIcon />
                       <TextOnTextFiled header={name} />
                     </li>

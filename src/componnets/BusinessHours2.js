@@ -48,7 +48,7 @@ const BusinessHours2 = ({ brunch }) => {
     <Box sx={{
       display: 'flex',
       flexDirection: 'column',
-      width: '48%',
+      // width: '48%',
       height: '80vh'
     }}>
       <Box sx={{
@@ -107,56 +107,38 @@ const BusinessHours2 = ({ brunch }) => {
     </Box >
   );
 };
-
 const DayRow = ({ day, label, hours, handleChange, hover, index }) => {
-  const [isEveningVisible, setIsEveningVisible] = useState(false); // מצב למעקב אם ה-Box מוצג
+  const [isEveningVisible, setIsEveningVisible] = useState(false);
 
   const handleEveningClick = () => {
-    setIsEveningVisible((prev) => !prev); // משנה את מצב הצגת ה-Box
+    setIsEveningVisible((prev) => !prev);
   };
-  return (
 
+  return (
     <Box sx={{
       display: "flex",
       flexDirection: 'column',
-
+      gap: '10px',
     }}>
       <Box sx={{
         display: "flex",
-        flexDirection: "columm",
-        gap: '20px',
-        justifyContent: 'space-between'
+        flexDirection: "row",
+        justifyContent: "space-between",
+        gap: "20px",
       }}>
         {hover && (
-
           <Fab size="small" color="black" aria-label="add" onClick={handleEveningClick}>
             <AddIcon />
           </Fab>
         )}
-        <Box sx={{
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'start',
-          gap: '16px'
-        }}>
-          <Box >
+        <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'start', gap: '16px' }}>
+          <Box>
             <TextOnTextFiled header={"שעת סגירה"} />
             <input
               type="time"
               value={hours?.morning?.close || ""}
               onChange={(e) => handleChange(day, "morning", "close", e.target.value, index)}
-              style={{
-                padding: '12px 16px 12px 20px',
-                borderRadius: '6px',
-                border: '1px solid #DBDEDE',
-                backgroundColor: '#FFFFFF',
-                boxSizing: 'border-box',
-                textAlign: 'right',
-                fontFamily: 'SimplerPro_HLAR, sans-serif',
-                fontSize: '12px',
-                fontWeight: '400',
-                color: '#4C585B',
-              }}
+              style={inputStyle}
             />
           </Box>
           <Box>
@@ -165,82 +147,55 @@ const DayRow = ({ day, label, hours, handleChange, hover, index }) => {
               type="time"
               value={hours?.morning?.open || ""}
               onChange={(e) => handleChange(day, "morning", "open", e.target.value, index)}
-              style={{
-                padding: '12px 16px 12px 20px',
-                borderRadius: '6px',
-                border: '1px solid #DBDEDE',
-                backgroundColor: '#FFFFFF',
-                boxSizing: 'border-box',
-                textAlign: 'right',
-                fontFamily: 'SimplerPro_HLAR, sans-serif',
-                fontSize: '12px',
-                fontWeight: '400',
-                color: '#4C585B',
-              }}
+              style={inputStyle}
             />
           </Box>
         </Box>
         <HeaderText placeholder={label} color={"#F8BD00"} />
+      </Box>
 
-        {isEveningVisible && (<Box sx={{
+      {isEveningVisible && (
+        <Box sx={{
           display: "flex",
-          flexDirection: "columm",
-          gap: '20px'
+          flexDirection: "row",
+          gap: '16px',
+          marginRight: '40px',
         }}>
-          <Box sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'start',
-            gap: '16px'
-          }} >
-            <Box>
-              <TextOnTextFiled header={"שעת פתיחה"} />
-              <input
-                type="time"
-                value={hours?.evening?.open || ""}
-                onChange={(e) => handleChange(day, "evening", "open", e.target.value, index)}
-                style={{
-                  padding: '12px 16px 12px 20px',
-                  borderRadius: '6px',
-                  border: '1px solid #DBDEDE',
-                  backgroundColor: '#FFFFFF',
-                  boxSizing: 'border-box',
-                  textAlign: 'right',
-                  fontFamily: 'SimplerPro_HLAR, sans-serif',
-                  fontSize: '12px',
-                  fontWeight: '400',
-                  color: '#4C585B',
-                  width: '100%', // הרחבה לכל הרוחב
-                }}
-              />
-
-            </Box>
-            <Box>
-              <TextOnTextFiled header={"שעת סגירה"} />
-              <input
-                type="time"
-                value={hours?.evening?.close || ""}
-                onChange={(e) => handleChange(day, "evening", "close", e.target.value, index)}
-                style={{
-                  padding: '12px 16px 12px 20px',
-                  borderRadius: '6px',
-                  border: '1px solid #DBDEDE',
-                  backgroundColor: '#FFFFFF',
-                  boxSizing: 'border-box',
-                  textAlign: 'right',
-                  fontFamily: 'SimplerPro_HLAR, sans-serif',
-                  fontSize: '12px',
-                  fontWeight: '400',
-                  color: '#4C585B',
-                  width: '100%', // הרחבה לכל הרוחב
-                }}
-              />
-            </Box>
+          <Box>
+            <TextOnTextFiled header={"שעת פתיחה"} />
+            <input
+              type="time"
+              value={hours?.evening?.open || ""}
+              onChange={(e) => handleChange(day, "evening", "open", e.target.value, index)}
+              style={inputStyle}
+            />
+          </Box>
+          <Box>
+            <TextOnTextFiled header={"שעת סגירה"} />
+            <input
+              type="time"
+              value={hours?.evening?.close || ""}
+              onChange={(e) => handleChange(day, "evening", "close", e.target.value, index)}
+              style={inputStyle}
+            />
           </Box>
         </Box>
-        )}
-      </Box>
-    </Box >)
-}
+      )}
+    </Box>
+  );
+};
+
+const inputStyle = {
+  padding: '12px 16px 12px 20px',
+  borderRadius: '6px',
+  border: '1px solid #DBDEDE',
+  backgroundColor: '#FFFFFF',
+  boxSizing: 'border-box',
+  textAlign: 'right',
+  fontFamily: 'SimplerPro_HLAR, sans-serif',
+  fontSize: '12px',
+  fontWeight: '400',
+  color: '#4C585B',
+};
 
 export default BusinessHours2;

@@ -13,7 +13,7 @@ export default function FinalForm({ contactId }) {
     const dispatch = useDispatch();
     const contactMans = useSelector(state => state.conectMan.contactMans || []);
     const brunches = useSelector(state => state.brunch.brunches || []);
-    const contact = contactMans[contactId] || {};
+    const contact = contactMans.find(contact => contact.id === contactId) || {};
 
     // פונקציית בדיקת תקינות טלפון (מספרים בלבד, 9-10 ספרות)
     const validatePhone = (phone) => {
@@ -60,13 +60,11 @@ export default function FinalForm({ contactId }) {
             height:'80vh',
             display: 'flex',
             flexDirection: 'column',
-            // gap: '16px',
             color: '#000',
             textAlign: 'right',
             fontFamily: 'SimplerPro_HLAR',
             fontSize: '28px',
             fontWeight: 700,
-            // justifyContent: 'space-between',
             alignItems: 'flex-end',
             marginLeft: 'auto',
         }}>

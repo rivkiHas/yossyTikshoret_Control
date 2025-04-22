@@ -34,7 +34,6 @@ export default function EditIcon({ setIsEditing, functionName, placeholder, Id }
             >
                 {isHovered && (
                     <TextOnTextFiled
-
                         header={"מחיקה"}
                     >
                     </TextOnTextFiled>

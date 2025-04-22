@@ -8,6 +8,7 @@ import { addBrunch, setActiveBrunch, updateBrunchDetails } from "../redux/brunch
 import DeleteIcon from "./buttons/DeleteIcon.js";
 import PopUpNameBrunch from "./popups/PopUpNameBrunch.js"; // יבוא של הפופאפ
 import BusinessHours2 from "./BusinessHours2.js"
+import Address from "./adress.js";
 
 export default function StepTwo() {
     const dispatch = useDispatch();
@@ -59,7 +60,8 @@ export default function StepTwo() {
                         justifyContent: 'space-around'
                     }}>
                     <BusinessHours2 brunch={lastBrunch} />
-                    <AddressSearchMap brunch={lastBrunch} typeMarketer={typeMarketer} />
+                    {/* <AddressSearchMap brunch={lastBrunch} typeMarketer={typeMarketer} /> */}
+                    <Address brunch={lastBrunch} typeMarketer={typeMarketer} />
                 </Box>
             )}
 

@@ -3,14 +3,23 @@ import { createSlice } from '@reduxjs/toolkit';
 const conectManSlice = createSlice({
     name: "conectManSlice",
     initialState: {
-        contactMans: [{ id: 1, brunch: '', role: '' }],  // הוספת מזהה לכל איש קשר
+        contactMans:
+            [{
+                id: 1,
+                name: '',
+                phone: '',
+                email: '',
+                brunch: '',
+                role: ''
+            }],  // הוספת מזהה לכל איש קשר
     },
     reducers: {
         setFormData: (state, action) => {
             const { name, value, contactId } = action.payload;
-            const contact = state.contactMans[contactId]; // אם אין איש קשר, יצירת אובייקט ריק
-            contact[name] = value; // עדכון שדה ספציפי
-            state.contactMans[contactId] = contact; // עדכון המערך
+            const contactIndex = state.contactMans.findIndex(contact => contact.id === contactId);
+            if (contactIndex !== -1) {
+                state.contactMans[contactIndex][name] = value;
+            }
         },
 
         addContactMan: (state) => {
@@ -25,7 +34,7 @@ const conectManSlice = createSlice({
         deleteContactMan: (state, action) => {
             state.contactMans = state.contactMans.filter(contact => contact.id !== action.payload); // מחיקת איש קשר לפי מזהה
         },
-        
+
         removeLastContactMan: (state) => {
             if (state.contactMans.length > 1) {
                 state.contactMans.splice(-1, 1); // מחיקת האובייקט האחרון במערך

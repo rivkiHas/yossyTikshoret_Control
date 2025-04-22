@@ -9,7 +9,7 @@ import { Box } from "@mui/material";
 export default function Form() {
 
     const dispatch = useDispatch();
-
+    const user = useSelector(st => st.form.pertip)
 
     const handleChange = (e) => {
         const { name, value, files } = e.target;
@@ -40,13 +40,14 @@ export default function Form() {
                 flexDirection: 'column',
                 justifyContent: 'space-around'
             }}>
-                <TextFilee header={"שם העסק"} type="text" name="name" placeholder={"יש להזין את שם העסק"} onChange={handleChange} />
+                <TextFilee header={"שם העסק"} type="text" name="name" placeholder={"יש להזין את שם העסק"} onChange={handleChange} value={user?.name || ''} />
 
-                <TextFilee header={"אימייל"} type="email" name="email" placeholder={"יש להזין את אימייל העסק"} onChange={handleChange} />
+                <TextFilee header={"אימייל"} type="email" name="email" placeholder={"יש להזין את אימייל העסק"} onChange={handleChange} value={user?.email || ''} />
 
-                <TextFilee header={".ח.פ. / ע.מ"} type="text" name="id" placeholder={".יש להזין ח.פ. /ע.מ"} onChange={handleChange} />
+                <TextFilee header={".ח.פ. / ע.מ"} type="text" name="id" placeholder={".יש להזין ח.פ. /ע.מ"} onChange={handleChange} value={user?.id || ''} />
 
-                <TextFilee header={"טלפון"} type="tel" name="phone" placeholder={"יש להזין את טלפון העסק"} onChange={handleChange} />
+                <TextFilee header={"טלפון"} type="tel" name="phone" placeholder={"יש להזין את טלפון העסק"} onChange={handleChange}
+                    value={user?.phone || ''} />
 
                 <Box>
                     <TextFilee

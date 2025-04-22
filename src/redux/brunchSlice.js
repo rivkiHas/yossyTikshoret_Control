@@ -54,7 +54,7 @@ const brunchSlice = createSlice({
           
         },
         updateBrunchDetails: (state, action) => {
-            debugger;
+            
             const { id, address, hoursOpen, location, name, weekday } = action.payload;
             console.log("before update: ", state.brunches);  // לראות את הסטייט לפני העדכון
             const brunch = state.brunches.find(b => b.id === id);

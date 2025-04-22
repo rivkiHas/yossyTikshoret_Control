@@ -162,7 +162,6 @@ export default function AddressSearchMap({ brunch }) {
     <Box sx={{
       display: 'flex',
       height:'80vh',
-
       flexDirection: 'column',
       alignItems: 'end',
       gap: '24px',
@@ -171,7 +170,7 @@ export default function AddressSearchMap({ brunch }) {
     }}>
       <HeaderText placeholder={"אזור פעילות"} style={{ marginBottom: '24px' }} />
       <Box>
-        <TextOnTextFiled header={"אדור פעילות"} style={{ marginBottom: '1px' }} />
+        <TextOnTextFiled header={"אזור פעילות"} style={{ marginBottom: '1px' }} />
 
         <LoadScript googleMapsApiKey={GOOGLE_MAPS_API_KEY} libraries={["places"]}>
           <Box sx={{
