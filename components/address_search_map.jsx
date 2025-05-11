@@ -43,7 +43,7 @@ export default function AddressSearchMap() {
 
     return (
         <div className="flex justify-center  ">
-            <div className=" bg-white rounded-xl shadow-md p-8 w-full max-w-md">
+            <div className=" bg-white  p-8 w-full max-w-md">
                 <div className='flex flex-col'>
                     <Typography className="text-[24px] font-bold mb-6 block w-100%">כתובת העסק</Typography>
                     <Typography className="text-sm text-gray-600 mb-4 text-right">כתובת חנות</Typography>

@@ -28,7 +28,7 @@ export default function StepOne() {
           </div>
         </div>
 
-        <div className="w-full flex justify-end">
+        <div className="w-full flex justify-between">
           <Button
             onClick={nextStepInRedux}
             className="bg-yellow-400 hover:bg-yellow-500 text-black px-6 py-2 rounded-full"

@@ -7,11 +7,14 @@ const stepperSlice = createSlice({
   },
   reducers: {
     nextStep: (state) => {
-      if (state.activeStep < 2) { // assuming you have 3 steps
+      console.log("nextStep")
+      if (state.activeStep < 2) { 
         state.activeStep += 1;
       }
     },
     prevStep: (state) => {
+      console.log("prevStep")
+
       if (state.activeStep > 0) {
         state.activeStep -= 1;
       }

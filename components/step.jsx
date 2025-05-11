@@ -13,7 +13,9 @@ import { useSelector } from 'react-redux'
 import StepOne from './step1'
 import StepTwo from './step2'
 import StepThree from './step3'
-
+import { useDispatch } from 'react-redux'
+import { useEffect } from 'react'
+import { setActiveStep } from '../store/step_store'
 const icons = {
   default: `
     <svg xmlns="http://www.w3.org/2000/svg" width="43" height="42" viewBox="0 0 43 42" fill="none">
@@ -23,35 +25,58 @@ const icons = {
   active: `
     <svg xmlns="http://www.w3.org/2000/svg" width="43" height="42" viewBox="0 0 43 42" fill="none">
       <circle cx="21.5" cy="21" r="20" fill="#FEF8E5" stroke="#F8BD00" stroke-width="1.5"/>
+      
     </svg>
   `,
   completed: `
-    <svg xmlns="http://www.w3.org/2000/svg" width="43" height="42" viewBox="0 0 43 42" fill="none">
-      <circle cx="21.5" cy="21" r="20" fill="#DCF4E2" stroke="#00A36C" stroke-width="1.5"/>
-      <path d="M15 21.5L19.5 26L28.5 17" stroke="#00A36C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
+  <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" viewBox="0 0 33 33" fill="none">
+  <circle cx="16.4009" cy="16.9897" r="14.81" fill="#F8BD00" stroke="#F8BD00" stroke-width="2.37993"/>
+  <path d="M10.2799 13.7699L12.6206 16.1105L16.5217 10.649M22.7635 12.9896C22.7635 14.2192 22.5213 15.4367 22.0508 16.5726C21.5803 17.7085 20.8906 18.7407 20.0212 19.6101C19.1518 20.4795 18.1197 21.1691 16.9837 21.6396C15.8478 22.1102 14.6303 22.3523 13.4008 22.3523C12.1713 22.3523 10.9538 22.1102 9.81783 21.6396C8.6819 21.1691 7.64976 20.4795 6.78036 19.6101C5.91095 18.7407 5.2213 17.7085 4.75078 16.5726C4.28026 15.4367 4.03809 14.2192 4.03809 12.9896C4.03809 10.5065 5.02451 8.12507 6.78036 6.36922C8.5362 4.61338 10.9176 3.62695 13.4008 3.62695C15.8839 3.62695 18.2654 4.61338 20.0212 6.36922C21.777 8.12507 22.7635 10.5065 22.7635 12.9896Z" stroke="white" stroke-width="1.11233" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
   `,
+  brunch: `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none">
+  <circle cx="7.26746" cy="7.49991" r="6.77185" fill="#F8BD00"/>
+ </svg>`
 }
+
+
 
 
 export default function Step({ className, ...props }) {
   const brunches = useSelector((state) => state.brunch.brunches || [])
   const [selectedIndex, setSelectedIndex] = useState(0)
+  const activeStep = useSelector(state => state.stepper.active);
+  const dispatch = useDispatch();
 
   const handleTabClick = (index) => {
-    if (index === 1 && brunches.length > 1) return
-    setSelectedIndex(index)
-  }
+    if (index === 1 && brunches.length > 1) return;
+    dispatch(setActiveStep(index));
+    setSelectedIndex(index);
+  };
 
   const allTabs = [
     { title: 'שלב ראשון', subtitle: 'פרטים על העסק' },
     { title: 'שלב שני', subtitle: 'כתובת ושעות פתיחה' },
-    ...brunches.length > 1 ? brunches.slice(1).map(b => ({ title: b.name, subtitle: 'סניף נוסף' })) : [],
+    ...brunches.length > 1
+      ? brunches.slice(1).map(b => ({
+        subtitle: b.name || 'סניף ללא שם',
+      }))
+      : [],
+
     { title: 'שלב שלישי', subtitle: 'פרטי איש קשר' },
   ]
+  useEffect(() => {
+    setSelectedIndex(activeStep);
+  }, [activeStep]);
 
   return (
-    <TabGroup selectedIndex={selectedIndex} onChange={setSelectedIndex} vertical>
+    <TabGroup selectedIndex={selectedIndex} onChange={(index) => {
+      if (index === 1 && brunches.length > 1) return;
+      dispatch(setActiveStep(index)); // עדכון ב־Redux
+      setSelectedIndex(index); // עדכון מקומי
+    }}
+      vertical
+    >
       <div className={cn('flex min-h-[888px] space-x-[36px]', className)} {...props}>
         <div className="w-[360px] flex-none rounded-[40px] bg-white p-10 ps-20">
           <div className="relative border-s-2 border-amber-300">
