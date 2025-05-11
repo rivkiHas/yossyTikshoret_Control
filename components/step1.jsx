@@ -17,8 +17,8 @@ export default function StepOne() {
 
 
   return (
-    <div className="w-full flex justify-center">
-      <div className="flex flex-col items-end w-full max-w-[1440px] px-[100px] py-[72px] gap-10">
+    <div className="flex justify-center">
+      <div className="flex flex-col items-end w-full max-w-[1440px] px-[80px] py-[60px] gap-15">
         <div className="flex w-full items-start">
           <div className="flex flex-col w-1/2 text-right">
             <RegisterForm1 />
@@ -28,7 +28,7 @@ export default function StepOne() {
           </div>
         </div>
 
-        <div className="w-full flex justify-between">
+        <div >
           <Button
             onClick={nextStepInRedux}
             className="bg-yellow-400 hover:bg-yellow-500 text-black px-6 py-2 rounded-full"

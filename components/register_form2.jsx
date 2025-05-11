@@ -71,9 +71,9 @@ export function RegisterForm2({ OkFunction, contactId, canDelete }) {
 
 
   return (
-    <div className="w-full relative">
+    <div className="">
       <div className="flex justify-between items-center mb-6">
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex flex-row justify-between items-center mb-4">
           <Typography className="text-2xl font-bold">איש קשר</Typography>
           {canDelete &&
             <IconButton text="מחיקה" onConfirm={(co) => { OkFunction(co) }} contactId={contactId} />

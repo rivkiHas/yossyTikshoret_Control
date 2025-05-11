@@ -25,7 +25,7 @@ const icons = {
   active: `
     <svg xmlns="http://www.w3.org/2000/svg" width="43" height="42" viewBox="0 0 43 42" fill="none">
       <circle cx="21.5" cy="21" r="20" fill="#FEF8E5" stroke="#F8BD00" stroke-width="1.5"/>
-      
+     
     </svg>
   `,
   completed: `
@@ -77,7 +77,7 @@ export default function Step({ className, ...props }) {
     }}
       vertical
     >
-      <div className={cn('flex min-h-[888px] space-x-[36px]', className)} {...props}>
+      <div className={cn('flex  space-x-[36px]', className)} {...props}>
         <div className="w-[360px] flex-none rounded-[40px] bg-white p-10 ps-20">
           <div className="relative border-s-2 border-amber-300">
             <TabList className="flex translate-x-6 flex-col space-y-10">

@@ -16,7 +16,6 @@ import { useState } from 'react';
 export default function IconButton({ text, onConfirm ,contactId}) {
   const [open, setOpen] = useState(false);
   const handleConfirm = () => {
-    console.log(contactId, "contactId in registerform2")
     onConfirm(contactId); // קריאה למחיקה
     setOpen(false);    // סגירה ידנית
   };
