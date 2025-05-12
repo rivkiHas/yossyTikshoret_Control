@@ -25,17 +25,27 @@ export default function StepTwo({ brunch }) {
   };
 
   const AddMoreBrunch = () => {
-    const newId = brunches.length + 1
+    const newId = brunches.length + 1;
     const newBrunch = {
-      newId,
+      id: newId,
       address: '',
+      location: { lat: 32.0853, lng: 34.7818 },
+      hoursOpen: [
+        { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
+        { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
+        { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
+        { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
+        { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
+        { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
+      ],
+      weekday: { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
       name: "סניף חדש",
-    }
-    dispatch(
-      addBrunch({ newBrunch }),
-      setActiveBrunch(newBrunch)
-    )
+    };
+
+    dispatch(addBrunch(newBrunch));
+    dispatch(setActiveBrunch(newBrunch));
   };
+
   return (
 
 

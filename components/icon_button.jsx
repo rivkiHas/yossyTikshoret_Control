@@ -13,7 +13,7 @@ import {
 import { Trash2 } from 'lucide-react';
 import { useState } from 'react';
 
-export default function IconButton({ text, onConfirm ,contactId}) {
+export default function IconButton({ text, onConfirm, contactId }) {
   const [open, setOpen] = useState(false);
   const handleConfirm = () => {
     onConfirm(contactId); // קריאה למחיקה
@@ -23,11 +23,12 @@ export default function IconButton({ text, onConfirm ,contactId}) {
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
-        <button className="group relative flex items-center justify-center w-10 h-10 rounded-full bg-yellow-100 text-yellow-500 hover:w-auto px-3 transition-all duration-300 overflow-hidden">
-          <Trash2 className="w-4 h-4" />
-          <span className="ml-2 text-sm font-bold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            {text}
-          </span>
+        <button
+          type="button"
+          className="group flex h-[40px] w-[40px] items-center justify-center rounded-full bg-[#FEF2CC] text-[#F8BD00] transition-[width] delay-150 duration-700 ease-in-out hover:w-auto hover:rounded-3xl hover:px-3 hover:flex-row-reverse"
+        >
+          <span className="hidden group-hover:inline-block text-black text-base font-bold">{text}</span>
+          <Trash2 className="w-5 h-5" />
         </button>
       </AlertDialogTrigger>
       <AlertDialogContent>

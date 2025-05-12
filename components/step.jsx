@@ -16,6 +16,7 @@ import StepThree from './step3'
 import { useDispatch } from 'react-redux'
 import { useEffect } from 'react'
 import { setActiveStep } from '../store/step_store'
+import { Typography } from './typhography'
 const icons = {
   default: `
     <svg xmlns="http://www.w3.org/2000/svg" width="43" height="42" viewBox="0 0 43 42" fill="none">
@@ -70,69 +71,74 @@ export default function Step({ className, ...props }) {
   }, [activeStep]);
 
   return (
-    <TabGroup selectedIndex={selectedIndex} onChange={(index) => {
-      if (index === 1 && brunches.length > 1) return;
-      dispatch(setActiveStep(index)); // עדכון ב־Redux
-      setSelectedIndex(index); // עדכון מקומי
-    }}
-      vertical
-    >
-      <div className={cn('flex  space-x-[36px]', className)} {...props}>
-        <div className="w-[360px] flex-none rounded-[40px] bg-white p-10 ps-20">
-          <div className="relative border-s-2 border-amber-300">
-            <TabList className="flex translate-x-6 flex-col space-y-10">
-              {allTabs.map((tab, index) => {
-                const isCompleted = index < selectedIndex
-                const isActive = index === selectedIndex
-                const icon = isActive
-                  ? icons.active
-                  : isCompleted
-                    ? icons.completed
-                    : icons.default
+    <>
+      
 
-                return (
-                  <Tab key={index} as={Fragment}>
-                    {({ selected }) => (
-                      <button onClick={() => handleTabClick(index)}>
-                        <StepTab
-                          selected={selected}
-                          icon={icon}
-                          title={tab.title}
-                          subtitle={tab.subtitle}
-                        />
-                      </button>
-                    )}
-                  </Tab>
-                )
-              })}
-            </TabList>
+      <TabGroup selectedIndex={selectedIndex} onChange={(index) => {
+        if (index === 1 && brunches.length > 1) return;
+        dispatch(setActiveStep(index)); // עדכון ב־Redux
+        setSelectedIndex(index); // עדכון מקומי
+      }}
+        vertical
+      >
+        <div className={cn('flex  space-x-[36px]', className)} {...props}>
+          <div className="w-[360px] flex-none rounded-[40px] bg-white p-10 ps-20">
+            <div className="relative border-s-2 border-amber-300">
+       
+              <TabList className="flex translate-x-6 flex-col space-y-10">
+                {allTabs.map((tab, index) => {
+                  const isCompleted = index < selectedIndex
+                  const isActive = index === selectedIndex
+                  const icon = isActive
+                    ? icons.active
+                    : isCompleted
+                      ? icons.completed
+                      : icons.default
+
+                  return (
+                    <Tab key={index} as={Fragment}>
+                      {({ selected }) => (
+                        <button onClick={() => handleTabClick(index)}>
+                          <StepTab
+                            selected={selected}
+                            icon={icon}
+                            title={tab.title}
+                            subtitle={tab.subtitle}
+                          />
+                        </button>
+                      )}
+                    </Tab>
+                  )
+                })}
+              </TabList>
+            </div>
+          </div>
+
+          <div className="w-[980px] flex-none rounded-[40px] bg-white">
+            <TabPanels>
+              <TabPanel className="rounded-xl bg-white/5 p-3">
+                <StepOne />
+              </TabPanel>
+
+              <TabPanel className="rounded-xl bg-white/5 p-3">
+                <StepTwo brunch={brunches[0]} />
+              </TabPanel>
+
+              {brunches.length > 1 &&
+                brunches.slice(1).map((brunch) => (
+                  <TabPanel key={brunch.id} className="rounded-xl bg-white/5 p-3">
+                    <StepTwo brunch={brunch} />
+                  </TabPanel>
+                ))}
+
+              <TabPanel className="rounded-xl bg-white/5 p-3">
+                <StepThree />
+              </TabPanel>
+            </TabPanels>
           </div>
         </div>
-
-        <div className="w-[980px] flex-none rounded-[40px] bg-white">
-          <TabPanels>
-            <TabPanel className="rounded-xl bg-white/5 p-3">
-              <StepOne />
-            </TabPanel>
-
-            <TabPanel className="rounded-xl bg-white/5 p-3">
-              <StepTwo brunch={brunches[0]} />
-            </TabPanel>
-
-            {brunches.length > 1 &&
-              brunches.slice(1).map((brunch) => (
-                <TabPanel key={brunch.id} className="rounded-xl bg-white/5 p-3">
-                  <StepTwo brunch={brunch} />
-                </TabPanel>
-              ))}
-
-            <TabPanel className="rounded-xl bg-white/5 p-3">
-              <StepThree />
-            </TabPanel>
-          </TabPanels>
-        </div>
-      </div>
-    </TabGroup>
+      </TabGroup>
+    </>
   )
 }
 
