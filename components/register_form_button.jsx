@@ -56,7 +56,7 @@ export function RegisterFormButton() {
             {/* סוג משווק */}
             <Typography className="text-[24px] font-bold mb-4">סוג משווק</Typography>
 
-            <div className="flex items-center justify-between w-full gap-4 mb-[52px]">
+            <div className="flex items-center justify-between w-full gap-4 mb-[30px]">
                 {marketerOptions.map((item) => (
                     <CustomButton
                         key={item.value}

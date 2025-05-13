@@ -1,77 +1,151 @@
-'use client';
-import React, { useState, useRef } from 'react';
-import { GoogleMap, Marker, useJsApiLoader, Autocomplete } from '@react-google-maps/api';
-import { Typography } from './typhography';
+import { useRef, useEffect } from "react";
+import { GoogleMap, LoadScript, Marker, Autocomplete } from "@react-google-maps/api";
+import { useSelector, useDispatch } from 'react-redux';
+import { updateBrunchDetails } from "../store/brunch_store"
+import { Typography } from "./typhography";
+import { useState } from "react";
+
+const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+const GOOGLE_LIBRARIES = ["places"];
 
 const containerStyle = {
-    width: '100%',
-    height: '300px',
+    height: "60vh",
+    width: "100%",
+    flexShrink: 0,
+    alignSelf: "stretch",
+    borderRadius: "8px",
+    background: "url('<path-to-image>') -212.782px -5.3px / 237.14% 102.469% no-repeat lightgray",
+    position: "relative",
+    overflow: "hidden",
 };
 
-const centerDefault = {
-    lat: 32.0853, // ברירת מחדל - תל אביב
-    lng: 34.7818,
+const customMarkerIcon = {
+    path: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 12 7 12s7-6.75 7-12c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z",
+    fillColor: "#F8BD00",
+    fillOpacity: 1,
+    strokeColor: "#FFFFFF",
+    strokeWeight: 2,
+    scale: 2,
 };
 
-export default function AddressSearchMap() {
-    const [map, setMap] = useState(null);
-    const [center, setCenter] = useState(centerDefault);
-    const [markerPosition, setMarkerPosition] = useState(centerDefault);
+export default function AddressSearchMap({ brunch }) {
+    const dispatch = useDispatch();
     const autocompleteRef = useRef(null);
+    const typeMarketer = useSelector((state) => state.form.pertip.typeMarketer);
+    const address = brunch.address;
+    const location = brunch.location
+    const [localInputValue, setLocalInputValue] = useState(address || "");
 
-    const { isLoaded } = useJsApiLoader({
-        googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
-        libraries: ['places'],
-    });
-    console.log(process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY)
-    const onPlaceChanged = () => {
-        if (autocompleteRef.current !== null) {
+    console.log(location, "location");
+
+    useEffect(() => {
+        console.log("adress", address);
+
+        if (address.trim() !== "" && window.google) {
+            const geocoder = new window.google.maps.Geocoder();
+            console.log("geocoder", geocoder);
+            geocoder.geocode({ address }, (results, status) => {
+                if (status === "OK" && results[0]?.geometry?.location) {
+                    const newLocation = {
+                        lat: results[0].geometry.location.lat(),
+                        lng: results[0].geometry.location.lng(),
+                    };
+
+                    if (newLocation.lat !== location.lat || newLocation.lng !== location.lng) {
+                        dispatch(updateBrunchDetails({ id: brunch.id, location: newLocation }));
+                    }
+                }
+            });
+        }
+    }, [address]);
+
+    const handleLoad = (autocomplete) => {
+        autocompleteRef.current = autocomplete;
+    };
+
+    const handlePlaceChanged = () => {
+        if (autocompleteRef.current) {
             const place = autocompleteRef.current.getPlace();
             if (place.geometry) {
-                const location = {
+                const newLocation = {
                     lat: place.geometry.location.lat(),
                     lng: place.geometry.location.lng(),
                 };
-                setCenter(location);
-                setMarkerPosition(location);
-                map.panTo(location);
+
+                dispatch(updateBrunchDetails({
+                    id: brunch.id,
+                    address: place.formatted_address,
+                    location: newLocation
+                }));
             }
         }
     };
 
-    if (!isLoaded) return <div className="text-center py-4">טוען מפה...</div>;
 
-    return (
-        <div className="flex justify-center  ">
-            <div className=" bg-white  p-8 w-full max-w-md">
-                <div className='flex flex-col'>
-                    <Typography className="text-[24px] font-bold mb-6 block w-100%">כתובת העסק</Typography>
-                    <Typography className="text-sm text-gray-600 mb-4 text-right">כתובת חנות</Typography>
-                </div>
-                <div className="mb-4">
-                    <Autocomplete
-                        onLoad={(ref) => (autocompleteRef.current = ref)}
-                        onPlaceChanged={onPlaceChanged}
-                    > 
+    return typeMarketer === "חנות" ? (
+        <div>
+            <Typography className="text-[24px] font-bold mb-6 block w-full" >כתובת פעילות</Typography>
+            <Typography className="text-[16px] font-medium mb-1" >כתובת פעילות</Typography>
+
+            <LoadScript googleMapsApiKey={GOOGLE_MAPS_API_KEY} libraries={GOOGLE_LIBRARIES}>
+                <div className="w-5/6 space-y-6 flex flex-col">
+                    <Autocomplete onLoad={handleLoad} onPlaceChanged={handlePlaceChanged}>
                         <input
                             type="text"
-                            placeholder="הכנס כתובת"
-                            className="w-full p-3 border border-gray-300 rounded-md shadow-sm text-right focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="הכנס כתובת..."
+                            value={localInputValue}
+
+                            onChange={(e) => {
+                                setLocalInputValue(e.target.value);
+                                // console.log(e.target.value, "target")
+                                // console.log(brunch, "brunch")
+                                // dispatch(updateBrunchDetails({ id: brunch.id, address: e.target.value }));
+                            }}
+                            className="p-3 rounded-lg border border-gray-300 bg-white text-right font-sans text-sm text-gray-700 w-full"
                         />
                     </Autocomplete>
-                </div>
 
-                <div className="rounded-xl overflow-hidden border border-gray-300 shadow-sm">
                     <GoogleMap
                         mapContainerStyle={containerStyle}
-                        center={center}
-                        zoom={15}
-                        onLoad={(map) => setMap(map)}
+                        center={location || { lat: 32.0853, lng: 34.7818 }}
+                        zoom={location ? 15 : 10}
                     >
-                        <Marker position={markerPosition} />
+                        <Marker position={location} icon={customMarkerIcon} />
                     </GoogleMap>
                 </div>
-            </div>
+            </LoadScript>
+        </div>
+    ) : (
+        <div className="flex flex-col items-end gap-6 text-right rtl w-full h-[80vh]">
+            <Typography className="text-[24px] font-bold mb-6 block w-full" >אזור פעילות</Typography>
+            <Typography className="text-[16px] font-medium mb-1" >אזור פעילות</Typography>
+
+            <LoadScript googleMapsApiKey={GOOGLE_MAPS_API_KEY} libraries={["places"]}>
+                <div className="w-5/6 space-y-6 flex flex-col">
+                    <Autocomplete onLoad={handleLoad} onPlaceChanged={handlePlaceChanged}>
+                        <div className="border border-gray-300 rounded-lg bg-white">
+                            <input
+                                type="text"
+                                placeholder="הכנס כתובת..."
+                                value={address}
+                                onChange={(e) => {
+                                    dispatch(updateBrunchDetails({ id: brunch.id, address: e.target.value }));
+                                }}
+                                className="h-6 border-none outline-none text-right font-sans text-sm text-gray-700 bg-transparent"
+                            />
+                        </div>
+                    </Autocomplete>
+
+                    <GoogleMap
+                        mapContainerStyle={containerStyle}
+                        center={location || { lat: 32.0853, lng: 34.7818 }}
+                        zoom={location ? 15 : 10}
+                    >
+                        <Marker position={location} icon={<customMarkerIcon />} />
+                    </GoogleMap>
+                </div>
+                {/* <Carusela /> */}
+            </LoadScript>
         </div>
     );
 }

@@ -105,8 +105,11 @@ const DayRow = ({ day, label, hours, handleChange, hover, index }) => {
 
     return (
         <div className="flex flex-col gap-2">
-            <div className="flex flex-row justify-between items-center px-2 py-3 bg-[#F4F4F4] rounded-xl">
-                <div className="flex flex-col gap-2 w-1/2">
+            <div className="flex flex-row justify-between items-center px-2 py-3 rounded-xl">
+                <div className="pr-3">
+                    <Typography className="text-[18px] font-bold text-[#F8BD00]">{label}</Typography>
+                </div>
+                <div className="flex flex-row gap-2 ">
                     <div className="flex flex-col">
                         <Typography className='text-sm text-[#111928] font-semibold'>שעת פתיחה</Typography>
                         <input
@@ -114,7 +117,7 @@ const DayRow = ({ day, label, hours, handleChange, hover, index }) => {
                             dir="ltr"
                             value={hours?.morning?.open || ""}
                             onChange={(e) => handleChange(day, "morning", "open", e.target.value, index)}
-                            className="w-full border border-gray-300 rounded-md px-2 py-1 text-center"
+                            className="w-[100px] border border-gray-300 rounded-md px-2 py-1 text-center"
                         />
                     </div>
                     <div className="flex flex-col">
@@ -124,14 +127,12 @@ const DayRow = ({ day, label, hours, handleChange, hover, index }) => {
                             dir="ltr"
                             value={hours?.morning?.close || ""}
                             onChange={(e) => handleChange(day, "morning", "close", e.target.value, index)}
-                            className="w-full border border-gray-300 rounded-md px-2 py-1 text-center"
+                            className="w-[100px] border border-gray-300 rounded-md px-2 py-1 text-center"
                         />
                     </div>
                 </div>
 
-                <div className="flex items-center w-1/2 justify-end pr-3">
-                    <h3 className="text-[18px] font-bold text-[#F8BD00]">{label}</h3>
-                </div>
+
             </div>
 
             {isEveningVisible && (
@@ -144,7 +145,7 @@ const DayRow = ({ day, label, hours, handleChange, hover, index }) => {
                                 dir="ltr"
                                 value={hours?.evening?.open || ""}
                                 onChange={(e) => handleChange(day, "evening", "open", e.target.value, index)}
-                                className="w-full border border-gray-300 rounded-md px-2 py-1 text-center"
+                                className=" border border-gray-300 rounded-md px-2 py-1 text-center"
                             />
                         </div>
                         <div className="flex flex-col">

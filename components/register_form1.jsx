@@ -50,7 +50,7 @@ export function RegisterForm1() {
             <Form {...form}>
                 <form
                     onSubmit={form.handleSubmit(onSubmit)}
-                    className="w-5/6 space-y-6 flex flex-col"
+                    className="w-5/6 space-y-7.5 flex flex-col"
                 >
                     {[
                         { name: "username", label: "שם העסק", placeholder: "יש להזין שם העסק" },

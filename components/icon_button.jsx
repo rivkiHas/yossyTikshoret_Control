@@ -36,8 +36,13 @@ export default function IconButton({ text, onConfirm, contactId }) {
           <AlertDialogTitle>האם למחוק את איש הקשר?</AlertDialogTitle>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>ביטול</AlertDialogCancel>
-          <AlertDialogAction onClick={handleConfirm}>אישור</AlertDialogAction>
+          <AlertDialogCancel >
+            ביטול
+          </AlertDialogCancel>
+          <AlertDialogAction
+            onClick={handleConfirm}>
+            אישור
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

@@ -3,6 +3,15 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
+
+import { Input } from "@/components/ui/input"
+import { Typography } from "./typhography"
+import { CodeVerificationFlow } from "./code_verification_flow"
+import IconButton from './icon_button'
+import { useSelector, useDispatch } from "react-redux"
+import { setFormData } from "@/store/contact_man_store"
+
+import Link from "next/link"
 import {
   Form,
   FormControl,
@@ -12,15 +21,14 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Typography } from "./typhography"
-import { CodeVerificationFlow } from "./code_verification_flow"
-import IconButton from './icon_button'
-import { useSelector, useDispatch } from "react-redux"
-import { setFormData } from "@/store/contact_man_store"
-import { Combobox, ComboboxButton, ComboboxInput, ComboboxOption, ComboboxOptions } from '@headlessui/react'
-import { CheckIcon, ChevronDownIcon } from '@heroicons/react/20/solid'
-import clsx from 'clsx'
+
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { useState } from "react"
 
 const FormSchema = z.object({
@@ -34,7 +42,13 @@ const FormSchema = z.object({
       message: "יש להזין מספר טלפון תקני בפורמט ישראלי.",
     }),
   contactManEmail: z.string().email({ message: "יש להזין כתובת אימייל תקינה." }),
+  email: z
+    .string({
+      required_error: "",
+    })
+    .email(),
 })
+
 
 export function RegisterForm2({ OkFunction, contactId, canDelete }) {
 
@@ -54,14 +68,12 @@ export function RegisterForm2({ OkFunction, contactId, canDelete }) {
   const form = useForm({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      defaultValues: {
-        contactManName: contactMan?.contactManName || "",
-        contactManPhone: contactMan?.contactManPhone || "",
-        contactManEmail: contactMan?.contactManEmail || "",
-        contactManOption1: "",
-        contactManOption2: "",
-      },
 
+      contactManName: contactMan?.contactManName || "",
+      contactManPhone: contactMan?.contactManPhone || "",
+      contactManEmail: contactMan?.contactManEmail || "",
+      brunchNames: "",
+      owner: "",
     },
   })
 
@@ -86,16 +98,16 @@ export function RegisterForm2({ OkFunction, contactId, canDelete }) {
 
 
   return (
-    <div className="">
+    <div >
       <div className="flex justify-between items-center mb-6">
-        <div className="flex flex-row justify-between items-center mb-4">
+        <div className="flex flex-row justify-between items-center mb-4 w-full">
           <Typography className="text-2xl font-bold">איש קשר</Typography>
-          {canDelete &&
-            <IconButton text="מחיקה" onConfirm={(co) => { OkFunction(co) }} contactId={contactId} />
-          }
-
+          <div>
+            {canDelete &&
+              <IconButton text="מחיקה" onConfirm={(co) => { OkFunction(co) }} contactId={contactId} />
+            }
+          </div>
         </div>
-
       </div>
 
       <Form {...form}>
@@ -127,7 +139,6 @@ export function RegisterForm2({ OkFunction, contactId, canDelete }) {
                 <FormControl>
                   <Input placeholder="יש להזין מספר טלפון אישי" {...field}
                     name={field.name}
-
                     value={field.value}
                     onChange={handleInputChange(field)} />
                 </FormControl>
@@ -146,7 +157,6 @@ export function RegisterForm2({ OkFunction, contactId, canDelete }) {
                 <FormControl>
                   <Input placeholder="יש להזין אימייל אישי" {...field}
                     name={field.name}
-
                     value={field.value}
                     onChange={handleInputChange(field)} />
                 </FormControl>
@@ -157,65 +167,52 @@ export function RegisterForm2({ OkFunction, contactId, canDelete }) {
             )}
           />
           {contactMans?.length > 1 && (
-            <FormField
-              control={form.control}
-              name="brunchId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>סניף</FormLabel>
-                  <Combobox
-                    value={field.value}
-                    onChange={(value) => {
-                      field.onChange(value)
-                      dispatch(setFormData({ name: "brunchId", value, contactId }))
-                      setOpen(false)
-                    }}
-                  >
-                    <div className="relative">
-                      <ComboboxInput
-                        className="w-full rounded border p-2"
-                        onFocus={() => setOpen(true)}
-                        onChange={(e) => {
-                          field.onChange(e.target.value)
-                          setQuery(e.target.value)
-                        }}
-                        displayValue={(id) =>
-                          brunches.find((br) => br.id === id)?.name || ""
-                        }
-                        placeholder="בחר סניף"
-                      />
-                      <ComboboxButton
-                        className="absolute inset-y-0 right-0 flex items-center pr-2"
-                        onClick={() => setOpen((prev) => !prev)}
-                      >
-                        <ChevronDownIcon className="h-4 w-4 text-gray-400" />
-                      </ComboboxButton>
-                    </div>
-                    {open && (
-                      <ComboboxOptions className="border mt-1 rounded bg-white shadow max-h-60 overflow-y-auto z-10">
+            <>
+              <FormField
+                control={form.control}
+                name="brunchNames"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>סניף</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
                         {brunches.map((brunch) => (
-                          <ComboboxOption
-                            key={brunch.id}
-                            value={brunch.id}
-                            className={({ active, selected }) =>
-                              clsx(
-                                "cursor-pointer px-4 py-2",
-                                active && "bg-gray-100",
-                                selected && "font-semibold"
-                              )
-                            }
-                          >
+                          <SelectItem key={brunch.id} value={brunch.id}>
                             {brunch.name}
-                          </ComboboxOption>
+                          </SelectItem>
                         ))}
-                      </ComboboxOptions>
-                    )}
-                  </Combobox>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
+                      </SelectContent>
+                    </Select>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="owner"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>תפקיד</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="בחר תפקיד" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="owner">בעלים</SelectItem>
+                        <SelectItem value="seller">מוכר</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </>
           )}
 
         </form>

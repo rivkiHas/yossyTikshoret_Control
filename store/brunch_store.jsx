@@ -21,9 +21,10 @@ const initialState = {
             name: "סניף מספר 01"
         }
     ],
+
     activeBrunch: {
-        id: "",
-        address: "",
+        id: 1,
+        address: "hbg",
         location: { lat: "", lng: "" },
         hoursOpen: [
             { morning: { open: "", close: "" }, evening: { open: "", close: "" } },

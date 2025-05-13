@@ -6,6 +6,7 @@ import { nextStep, prevStep } from "../store/step_store";
 import { addContactMan, deleteContactMan } from "../store/contact_man_store";
 import { Button } from "./ui/button";
 import { RegisterForm2 } from "./register_form2";
+import { ArrowLongLeftIcon, PlusCircleIcon, ArrowLongRightIcon } from '@heroicons/react/24/outline'
 
 export default function StepThree() {
   const dispatch = useDispatch();
@@ -77,7 +78,9 @@ export default function StepThree() {
         <div>
           <Button onClick={addContactManHandler}
             className="bg-black hover:bg-gray-800 text-white px-6 py-2 rounded-full"
-          >הוספת איש קשר נוסף
+          >
+            <PlusCircleIcon />
+            הוספת איש קשר נוסף
           </Button>
         </div>
 
@@ -85,19 +88,13 @@ export default function StepThree() {
           <Button onClick={previousStepInRedux}
             className="flex items-center gap-1 bg-white text-black border border-[#F8BD00] px-6 py-2 rounded-full hover:bg-white hover:text-black hover:border-[#F8BD00]"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 20 21" fill="none">
-              <path d="M14.375 7.625L17.5 10.75L14.375 7.625ZM17.5 10.75L14.375 13.875L17.5 10.75ZM17.5 10.75H2.5H17.5Z" fill="black" />
-              <path d="M14.375 7.625L17.5 10.75M17.5 10.75L14.375 13.875M17.5 10.75H2.5" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
+            <ArrowLongRightIcon />
             שלב קודם
           </Button>
           <Button onClick={nextStepInRedux}
             className="lex item-center gap-1 bg-yellow-400 hover:bg-yellow-500 text-black px-6 py-2 rounded-full">
             שלב הבא
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 20 21" fill="none">
-              <path d="M5.625 13.875L2.5 10.75L5.625 13.875ZM2.5 10.75L5.625 7.625L2.5 10.75ZM2.5 10.75H17.5H2.5Z" fill="black" />
-              <path d="M5.625 13.875L2.5 10.75M2.5 10.75L5.625 7.625M2.5 10.75H17.5" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
+            <ArrowLongLeftIcon/>
           </Button>
         </div>
       </div>
