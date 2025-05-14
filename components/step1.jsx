@@ -31,7 +31,7 @@ export default function StepOne({index}) {
         <div >
           <Button
             onClick={nextStepInRedux}
-            className="flex items-center gap-1 bg-yellow-400 hover:bg-yellow-500 text-black p-6 rounded-full">
+            className="flex items-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-black p-5 rounded-full">
               שלב הבא
               <ArrowLongLeftIcon/>
           </Button>

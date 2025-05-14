@@ -47,7 +47,7 @@ export default function StepThree() {
   };
 
   return (
-    <div className="flex flex-col gap-6 justify-center max-w-[1440px] px-[100px] py-[72px] gap-15 ">
+    <div className="flex flex-col gap-6 justify-centermax-w-[1440px] px-[50px] py-[30px] gap-10 ">
       <div
         className={`flex flex-row-reserve gap-10 text-right 
           ${contactMans.length > 2 ? 'overflow-x-auto whitespace-nowrap scrollbar-hide ' : 'justify-end'}
@@ -77,22 +77,22 @@ export default function StepThree() {
 
         <div>
           <Button onClick={addContactManHandler}
-            className="bg-black hover:bg-gray-800 text-white px-6 py-2 rounded-full"
+            className="bg-black hover:bg-gray-800 text-white  p-5 gap-2 rounded-full"
           >
             <PlusCircleIcon />
             הוספת איש קשר נוסף
           </Button>
         </div>
 
-        <div className="flex gap-4">
+        <div className="flex ">
           <Button onClick={previousStepInRedux}
-            className="flex items-center gap-1 bg-white text-black border border-[#F8BD00] px-6 py-2 rounded-full hover:bg-white hover:text-black hover:border-[#F8BD00]"
+            className="flex items-center gap-1 bg-white text-black border border-[#F8BD00]  p-5 gap-2 rounded-full hover:bg-white hover:text-black hover:border-[#F8BD00]"
           >
             <ArrowLongRightIcon />
             שלב קודם
           </Button>
           <Button onClick={nextStepInRedux}
-            className="lex item-center gap-1 bg-yellow-400 hover:bg-yellow-500 text-black px-6 py-2 rounded-full">
+            className="lex item-center gap-1 bg-yellow-400 hover:bg-yellow-500 text-black  p-5 gap-2 rounded-full">
             שלב הבא
             <ArrowLongLeftIcon/>
           </Button>

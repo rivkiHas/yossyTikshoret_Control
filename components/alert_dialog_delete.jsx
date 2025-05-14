@@ -11,16 +11,20 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 
-export function AlertDialogDelete() {
+export function AlertDialog({ updateName }) {
   return (
     <AlertDialog>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>?האם ברצונך למחוק איש קשר זה</AlertDialogTitle>
+          <AlertDialogTitle>כינוי שם לסניף</AlertDialogTitle>
         </AlertDialogHeader>
         <AlertDialogFooter>
+          <AlertDialogDescription>כדי לשמור על סדר במערכת הקונטרול,איזה שם תרצה לתת לסניף הזה?
+            
+          </AlertDialogDescription>
+          
           <AlertDialogCancel>ביטול</AlertDialogCancel>
-          <AlertDialogAction>אישור</AlertDialogAction>
+          <AlertDialogAction onClick={updateName}>אישור</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

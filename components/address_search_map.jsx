@@ -39,6 +39,7 @@ export default function AddressSearchMap({ brunch }) {
     console.log(location, "location");
 
     useEffect(() => {
+        
         console.log("adress", address);
 
         if (address.trim() !== "" && window.google) {
@@ -65,13 +66,13 @@ export default function AddressSearchMap({ brunch }) {
 
     const handlePlaceChanged = () => {
         if (autocompleteRef.current) {
+        
             const place = autocompleteRef.current.getPlace();
             if (place.geometry) {
                 const newLocation = {
                     lat: place.geometry.location.lat(),
                     lng: place.geometry.location.lng(),
                 };
-
                 dispatch(updateBrunchDetails({
                     id: brunch.id,
                     address: place.formatted_address,
@@ -94,12 +95,9 @@ export default function AddressSearchMap({ brunch }) {
                             type="text"
                             placeholder="הכנס כתובת..."
                             value={localInputValue}
-
                             onChange={(e) => {
                                 setLocalInputValue(e.target.value);
-                                // console.log(e.target.value, "target")
-                                // console.log(brunch, "brunch")
-                                // dispatch(updateBrunchDetails({ id: brunch.id, address: e.target.value }));
+                                console.log(e.target.value, "target")
                             }}
                             className="p-3 rounded-lg border border-gray-300 bg-white text-right font-sans text-sm text-gray-700 w-full"
                         />
@@ -116,24 +114,23 @@ export default function AddressSearchMap({ brunch }) {
             </LoadScript>
         </div>
     ) : (
-        <div className="flex flex-col items-end gap-6 text-right rtl w-full h-[80vh]">
-            <Typography className="text-[24px] font-bold mb-6 block w-full" >אזור פעילות</Typography>
-            <Typography className="text-[16px] font-medium mb-1" >אזור פעילות</Typography>
+        <div>
+            <Typography className="text-[24px] font-bold mb-6 block w-full" >כתובת פעילות</Typography>
+            <Typography className="text-[16px] font-medium mb-1" >כתובת פעילות</Typography>
 
-            <LoadScript googleMapsApiKey={GOOGLE_MAPS_API_KEY} libraries={["places"]}>
+            <LoadScript googleMapsApiKey={GOOGLE_MAPS_API_KEY} libraries={GOOGLE_LIBRARIES}>
                 <div className="w-5/6 space-y-6 flex flex-col">
                     <Autocomplete onLoad={handleLoad} onPlaceChanged={handlePlaceChanged}>
-                        <div className="border border-gray-300 rounded-lg bg-white">
-                            <input
-                                type="text"
-                                placeholder="הכנס כתובת..."
-                                value={address}
-                                onChange={(e) => {
-                                    dispatch(updateBrunchDetails({ id: brunch.id, address: e.target.value }));
-                                }}
-                                className="h-6 border-none outline-none text-right font-sans text-sm text-gray-700 bg-transparent"
-                            />
-                        </div>
+                        <input
+                            type="text"
+                            placeholder="הכנס כתובת..."
+                            value={localInputValue}
+                            onChange={(e) => {
+                                setLocalInputValue(e.target.value);
+                                console.log(e.target.value, "target")
+                            }}
+                            className="p-3 rounded-lg border border-gray-300 bg-white text-right font-sans text-sm text-gray-700 w-full"
+                        />
                     </Autocomplete>
 
                     <GoogleMap
@@ -141,10 +138,9 @@ export default function AddressSearchMap({ brunch }) {
                         center={location || { lat: 32.0853, lng: 34.7818 }}
                         zoom={location ? 15 : 10}
                     >
-                        <Marker position={location} icon={<customMarkerIcon />} />
+                        <Marker position={location} icon={customMarkerIcon} />
                     </GoogleMap>
                 </div>
-                {/* <Carusela /> */}
             </LoadScript>
         </div>
     );

@@ -6,7 +6,7 @@ import { Fragment } from 'react'
 import StepOne from './step1'
 import StepTwo from './step2'
 import StepThree from './step3'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import icons from './icons'
 import { useState } from 'react'
 import { Header } from './header'
@@ -15,7 +15,10 @@ export function Tabs({ className, ...props }) {
 
     const brunches = useSelector((state) => state.brunch.brunches || [])
     const [selectedIndex, setSelectedIndex] = useState(() => brunches.length > 1 ? 1 : 0)
-    const step=useSelector((state)=>state.step)
+    const activeStep = useSelector((state) => state.activeStep)
+    const activeBrunch = useSelector((state) => state.brunch.activeBrunch)
+
+    const dispatch=useDispatch()
     return (
         <TabGroup selectedIndex={selectedIndex} onChange={setSelectedIndex} vertical>
             <div className={cn('flex space-x-[36px]', className)} {...props}>
@@ -105,7 +108,7 @@ export function Tabs({ className, ...props }) {
                                             <div>
                                                 {selected
                                                     ? icons.active_step_Three
-                                                    : selectedIndex > brunches.length+2
+                                                    : selectedIndex > brunches.length + 2
                                                         ? icons.complete
                                                         : icons.default}
                                             </div>
@@ -130,9 +133,9 @@ export function Tabs({ className, ...props }) {
                             <StepTwo brunch={brunches[0]} />
                         </TabPanel>
 
-                        {brunches.slice(1).map((brunch) => (
+                        {brunches.slice(1).map((brunch, index) => (
                             <TabPanel key={brunch.id} className="rounded-xl bg-white/5 p-3">
-                                <StepTwo brunch={brunch} />
+                                <StepTwo brunch={brunches.find(x=>x.id==index)} />
                             </TabPanel>
                         ))}
 

@@ -22,21 +22,8 @@ const initialState = {
         }
     ],
 
-    activeBrunch: {
-        id: 1,
-        address: "hbg",
-        location: { lat: "", lng: "" },
-        hoursOpen: [
-            { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
-            { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
-            { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
-            { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
-            { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
-            { morning: { open: "", close: "" }, evening: { open: "", close: "" } }
-        ],
-        weekday: { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
-        name: "סניף מספר 01"
-    }
+    activeBrunch: 0
+    
 };
 
 
@@ -52,12 +39,11 @@ const brunchSlice = createSlice({
         },
         removeBrunch: (state, action) => {
             state.brunches = state.brunches.filter(brunch => brunch.id !== action.payload); // מחיקת איש קשר לפי מזהה
-          
+
         },
         updateBrunchDetails: (state, action) => {
-            
+
             const { id, address, hoursOpen, location, name, weekday } = action.payload;
-            console.log("before update: ", state.brunches);  // לראות את הסטייט לפני העדכון
             const brunch = state.brunches.find(b => b.id === id);
             if (brunch) {
                 if (address !== undefined) brunch.address = address;
@@ -72,7 +58,6 @@ const brunchSlice = createSlice({
                     brunch.hoursOpen[day][period][type] = value;
                 }
             }
-            console.log("after update: ", state.brunches);  // לראות את הסטייט אחרי העדכון
         }
 
     }

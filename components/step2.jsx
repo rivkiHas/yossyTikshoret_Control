@@ -7,6 +7,7 @@ import { nextStep, prevStep } from "../store/step_store";
 import { addBrunch, setActiveBrunch } from "../store/brunch_store";
 import { Button } from "./ui/button";
 import { ArrowLongLeftIcon, PlusCircleIcon, ArrowLongRightIcon } from '@heroicons/react/24/outline'
+import { AlertDialog } from './ui/alert-dialog';
 
 
 export default function StepTwo({ brunch }) {
@@ -26,6 +27,7 @@ export default function StepTwo({ brunch }) {
   };
 
   const AddMoreBrunch = () => {
+    
     const newId = brunches.length + 1;
     const newBrunch = {
       id: newId,
@@ -41,30 +43,32 @@ export default function StepTwo({ brunch }) {
       ],
       weekday: { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
       name: "סניף חדש",
+
     };
 
     dispatch(addBrunch(newBrunch));
-    dispatch(setActiveBrunch(newBrunch));
+    dispatch(setActiveBrunch(newBrunch.id));
+    
   };
-  console.log("ActiveBrunch", activeBrunch);
+  console.log(activeBrunch);
+  
   return (
-
-
+   
     <div className="flex justify-center">
-      <div className="flex flex-col items-end w-full max-w-[1440px] px-[80px] py-[60px] gap-15">
+      <div className="flex flex-col items-end w-full max-w-[1440px] px-[50px] py-[30px] gap-10">
         <div className="flex w-full items-start">
           <div className="flex flex-col w-1/2 text-right">
-            <AddressSearchMap brunch={activeBrunch} />
+            <AddressSearchMap brunch={brunches.find(x=>x.id==activeBrunch)} />
           </div>
           <div className="flex flex-col w-1/2 text-right">
-            <HoursOpen brunch={activeBrunch} />
+            <HoursOpen brunch={brunches.find(x=>x.id==activeBrunch)} />
           </div>
         </div>
 
         <div className='flex flex-row w-full justify-between'>
           <div>
             <Button onClick={AddMoreBrunch}
-              className="bg-black hover:bg-gray-800 text-white px-6 py-2 rounded-full"
+              className="bg-black hover:bg-gray-800 text-white p-5 gap-2 rounded-full"
             >
               <PlusCircleIcon />
               הוספת סניף נוסף
@@ -72,13 +76,13 @@ export default function StepTwo({ brunch }) {
           </div>
           <div className="flex gap-4">
             <Button onClick={previousStepInRedux}
-              className="flex items-center gap-1 bg-white text-black border border-[#F8BD00] px-6 py-2 rounded-full hover:bg-white hover:text-black hover:border-[#F8BD00]"
+              className="flex items-center gap-1 bg-white text-black border border-[#F8BD00]  p-5 gap-2 rounded-full hover:bg-white hover:text-black hover:border-[#F8BD00]"
             >
              <ArrowLongRightIcon/>
               שלב קודם
             </Button>
             <Button onClick={nextStepInRedux}
-              className="lex item-center gap-1 bg-yellow-400 hover:bg-yellow-500 text-black px-6 py-2 rounded-full">
+              className="lex item-center gap-1 bg-yellow-400 hover:bg-yellow-500 text-black  p-5 gap-2 rounded-full">
               שלב הבא
               <ArrowLongLeftIcon/>
             </Button>
