@@ -98,8 +98,8 @@ export function RegisterForm2({ OkFunction, contactId, canDelete }) {
 
 
   return (
-    <div >
-      <div className="flex justify-between items-center mb-6">
+    <div className="w-85">
+      <div className="flex justify-between items-center">
         <div className="flex flex-row justify-between items-center mb-4 w-full">
           <Typography className="text-2xl font-bold">איש קשר</Typography>
           <div>
@@ -174,36 +174,40 @@ export function RegisterForm2({ OkFunction, contactId, canDelete }) {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>סניף</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select onValueChange={field.onChange} value={field.value} dir="rtl">
                       <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="" />
+                        <SelectTrigger className="w-full text-right">
+                          {
+                            brunches.find((b) => b.id === Number(field.value))?.name || "בחר סניף"
+                          }
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent>
+                      <SelectContent className="w-full text-right">
                         {brunches.map((brunch) => (
-                          <SelectItem key={brunch.id} value={brunch.id}>
+                          <SelectItem key={brunch.id} value={String(brunch.id)}>
                             {brunch.name}
                           </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
+
                   </FormItem>
                 )}
               />
               <FormField
                 control={form.control}
                 name="owner"
+
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>תפקיד</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select onValueChange={field.onChange} defaultValue={field.value} dir="rtl">
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger className={'w-full text-right'}>
                           <SelectValue placeholder="בחר תפקיד" />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent>
+                      <SelectContent className={'w-full text-right'}>
                         <SelectItem value="owner">בעלים</SelectItem>
                         <SelectItem value="seller">מוכר</SelectItem>
                       </SelectContent>

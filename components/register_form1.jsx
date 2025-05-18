@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Typography } from "./typhography";
 import { setFormData } from "../store/form_store";
 import { useDispatch, useSelector } from "react-redux";
+import { ArrowUpTrayIcon } from '@heroicons/react/24/outline'
 
 export function RegisterForm1() {
     const dispatch = useDispatch();
@@ -33,12 +34,12 @@ export function RegisterForm1() {
         console.log("Form Data:", formData);
         dispatch(setFormData(formData));
     };
-    
+
 
     const handleInputChange = (field) => (e) => {
         const { name, value, files } = e.target;
         const newValue = files ? files[0] : value;
-        field.onChange(e); 
+        field.onChange(e);
         dispatch(setFormData({ [name]: newValue }));
     };
 
@@ -78,33 +79,63 @@ export function RegisterForm1() {
                         />
                     ))}
 
+
                     <FormField
                         control={form.control}
                         name="userlogo"
-                        render={() => (
-                            <FormItem>
-                                <FormLabel>לוגו העסק</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        name="userlogo"
-                                        type="file"
-                                        accept=".jpg,.png,.pdf"
-                                        onChange={(e) => {
-                                            const file = e.target.files?.[0];
-                                            form.setValue("userlogo", file);
-                                            dispatch(setFormData({ userlogo: file.name }));
-                                        }}
-                                    />
-                                </FormControl>
-                                <FormDescription>
-                                    ניתן להעלות קבצים בפורמטים JPG, PNG ו-PDF בלבד.
-                                </FormDescription>
-                            </FormItem>
-                        )}
+                        render={({ field }) => {
+                            const file = form.watch("userlogo");
+
+                            return (
+                                <FormItem>
+                                    <FormLabel>לוגו העסק</FormLabel>
+                                    <FormControl>
+                                        <div className="relative">
+                                            <input
+                                                id="upload"
+                                                type="file"
+                                                accept=".jpg,.png,.pdf"
+                                                className="peer absolute inset-0 z-10 opacity-0 cursor-pointer"
+                                                onChange={(e) => {
+                                                    const selectedFile = e.target.files?.[0];
+                                                    form.setValue("userlogo", selectedFile);
+                                                    dispatch(setFormData({ userlogo: selectedFile.name }));
+                                                }}
+                                            />
+                                            <div className="flex justify-between items-center h-9 px-4 border border-input rounded-md bg-background text-sm text-muted-foreground peer-hover:border-primary peer-focus-visible:ring-1 peer-focus-visible:ring-ring transition-colors">
+
+                                                <span className="truncate">
+                                                    {file?.name || "יש לבחור קובץ"}
+                                                </span>
+
+                                                {file ? (
+                                                    <button
+                                                        type="button"
+                                                        className="text-gray-500 hover:text-red-500"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            form.setValue("userlogo", null);
+                                                            dispatch(setFormData({ userlogo: null }));
+                                                        }}
+                                                    >
+                                                        ✕
+                                                    </button>
+                                                ) : (
+                                                    <ArrowUpTrayIcon className="w-5 h-5 text-gray-500" />
+                                                )}
+                                            </div>
+                                        </div>
+                                    </FormControl>
+                                    <FormDescription>
+                                        ניתן להעלות קבצים בפורמטים JPG, PNG ו-PDF בלבד.
+                                    </FormDescription>
+                                </FormItem>
+                            );
+                        }}
                     />
 
-                </form>
-            </Form>
-        </div>
+                </form >
+            </Form >
+        </div >
     );
 }

@@ -19,21 +19,20 @@ export default function StepTwo({ brunch }) {
   const dispatch = useDispatch();
   const brunches = useSelector((state) => state.brunch.brunches);
   const activeBrunch = useSelector((state) => state.brunch.activeBrunch)
+  const selectedIndex = brunches.findIndex(b => b.id === activeBrunchId)
 
   const nextStepInRedux = () => {
-    dispatch(setActiveStep(selectedIndex + 1));
+    dispatch(nextStep());
+
   };
 
   const previousStepInRedux = () => {
-    dispatch(setActiveStep(selectedIndex - 1));
+    dispatch(prevStep());
   };
 
-
-
-
   const handleDeleteConfirmation = (brunch) => {
-    if (brunches.length > 1) {
-      dispatch(removeBrunch(brunch));
+    if (brunch.length > 1) {
+      dispatch(removeBrunch(brunch.id));
     } else {
       console.log("לא ניתן למחוק, חייב להיות לפחות איש קשר אחד");
     }
@@ -71,7 +70,7 @@ export default function StepTwo({ brunch }) {
         <div className="flex w-full items-start">
           <div className="flex flex-col w-1/2 text-right">
             <LoadScript googleMapsApiKey={GOOGLE_MAPS_API_KEY} libraries={GOOGLE_LIBRARIES}>
-              <AddressSearchMap brunch={brunches.find(x => x.id == activeBrunch)} canEdit={brunches.length>1}/>
+              <AddressSearchMap brunch={brunches.find(x => x.id == activeBrunch)} />
             </LoadScript>
           </div>
           <div className="flex flex-col w-1/2 text-right">

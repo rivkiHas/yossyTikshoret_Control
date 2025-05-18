@@ -10,15 +10,15 @@ import { useDispatch, useSelector } from 'react-redux'
 import icons from './icons'
 import { useState } from 'react'
 import { Header } from './header'
+import { setActiveBrunch } from '@/store/brunch_store'
 
 export function Tabs({ className, ...props }) {
 
     const brunches = useSelector((state) => state.brunch.brunches || [])
-    const [selectedIndex, setSelectedIndex] = useState(() => brunches.length > 1 ? 1 : 0)
-    const activeStep = useSelector((state) => state.activeStep)
     const activeBrunch = useSelector((state) => state.brunch.activeBrunch)
+    const [selectedIndex, setSelectedIndex] = useState(() => brunches.find(x => x.id == activeBrunch))
 
-    const dispatch=useDispatch()
+    const dispatch = useDispatch()
     return (
         <TabGroup selectedIndex={selectedIndex} onChange={setSelectedIndex} vertical>
             <div className={cn('flex space-x-[36px]', className)} {...props}>
@@ -133,9 +133,10 @@ export function Tabs({ className, ...props }) {
                             <StepTwo brunch={brunches[0]} />
                         </TabPanel>
 
-                        {brunches.slice(1).map((brunch, index) => (
-                            <TabPanel key={brunch.id} className="rounded-xl bg-white/5 p-3">
-                                <StepTwo brunch={brunches.find(x=>x.id==index)} />
+                        {brunches.slice(1).map((brunch) => (
+                            <TabPanel key={brunch.id} className="rounded-xl bg-white/5 p-3" onClick={() => dispatch(setActiveBrunch(brunch))}>
+                                <StepTwo brunch={brunch} />
+
                             </TabPanel>
                         ))}
 

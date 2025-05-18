@@ -1,12 +1,11 @@
-import { useRef, useEffect } from "react";
-import { GoogleMap, LoadScript, Marker, Autocomplete } from "@react-google-maps/api";
-import { useSelector, useDispatch } from 'react-redux';
-import { updateBrunchDetails } from "../store/brunch_store"
-import { Typography } from "./typhography";
-import { useState } from "react";
+"use client";
 
-const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
-const GOOGLE_LIBRARIES = ["places"];
+import { useRef, useEffect, useState } from "react";
+import { GoogleMap, Marker, Autocomplete } from "@react-google-maps/api";
+import { useSelector, useDispatch } from "react-redux";
+import { updateBrunchDetails } from "../store/brunch_store";
+import { Typography } from "./typhography";
+import { PencilSquareIcon } from "@heroicons/react/24/outline";
 
 const containerStyle = {
     height: "60vh",
@@ -28,45 +27,52 @@ const customMarkerIcon = {
     scale: 2,
 };
 
-export default function AddressSearchMap({ brunch }) {
+export default function AddressSearchMap({ brunch, canEdit }) {
     const dispatch = useDispatch();
     const autocompleteRef = useRef(null);
     const typeMarketer = useSelector((state) => state.form.pertip.typeMarketer);
     const address = brunch.address;
-    const location = brunch.location
+    const location = brunch.location;
     const [localInputValue, setLocalInputValue] = useState(address || "");
 
-    console.log(location, "location");
-
     useEffect(() => {
-        
-        console.log("adress", address);
+        if (!address.trim()) return;
 
-        if (address.trim() !== "" && window.google) {
-            const geocoder = new window.google.maps.Geocoder();
-            console.log("geocoder", geocoder);
-            geocoder.geocode({ address }, (results, status) => {
-                if (status === "OK" && results[0]?.geometry?.location) {
-                    const newLocation = {
-                        lat: results[0].geometry.location.lat(),
-                        lng: results[0].geometry.location.lng(),
-                    };
+        const interval = setInterval(() => {
+            if (window.google && window.google.maps) {
+                clearInterval(interval);
 
-                    if (newLocation.lat !== location.lat || newLocation.lng !== location.lng) {
-                        dispatch(updateBrunchDetails({ id: brunch.id, location: newLocation }));
+                const geocoder = new window.google.maps.Geocoder();
+                geocoder.geocode({ address }, (results, status) => {
+                    if (status === "OK" && results[0]?.geometry?.location) {
+                        const newLocation = {
+                            lat: results[0].geometry.location.lat(),
+                            lng: results[0].geometry.location.lng(),
+                        };
+
+                        if (
+                            newLocation.lat !== location.lat ||
+                            newLocation.lng !== location.lng
+                        ) {
+                            dispatch(updateBrunchDetails({ id: brunch.id, location: newLocation }));
+                        }
                     }
-                }
-            });
-        }
+                });
+            }
+        }, 300);
+
+        return () => clearInterval(interval);
     }, [address]);
 
     const handleLoad = (autocomplete) => {
         autocompleteRef.current = autocomplete;
     };
 
+    const editNameBrunch = () => {
+
+    }
     const handlePlaceChanged = () => {
         if (autocompleteRef.current) {
-        
             const place = autocompleteRef.current.getPlace();
             if (place.geometry) {
                 const newLocation = {
@@ -76,72 +82,37 @@ export default function AddressSearchMap({ brunch }) {
                 dispatch(updateBrunchDetails({
                     id: brunch.id,
                     address: place.formatted_address,
-                    location: newLocation
+                    location: newLocation,
                 }));
             }
         }
     };
 
-
     return typeMarketer === "חנות" ? (
         <div>
-            <Typography className="text-[24px] font-bold mb-6 block w-full" >כתובת פעילות</Typography>
-            <Typography className="text-[16px] font-medium mb-1" >כתובת פעילות</Typography>
+            {canEdit && <button onClick={editNameBrunch}>
+                <PencilSquareIcon /> </button>}
+            <Typography className="text-[24px] font-bold mb-4 block w-full"> כתובת העסק</Typography>
+            <Typography className="text-[16px] font-medium mb-1">כתובת חנות</Typography>
 
-            <LoadScript googleMapsApiKey={GOOGLE_MAPS_API_KEY} libraries={GOOGLE_LIBRARIES}>
-                <div className="w-5/6 space-y-6 flex flex-col">
-                    <Autocomplete onLoad={handleLoad} onPlaceChanged={handlePlaceChanged}>
-                        <input
-                            type="text"
-                            placeholder="הכנס כתובת..."
-                            value={localInputValue}
-                            onChange={(e) => {
-                                setLocalInputValue(e.target.value);
-                                console.log(e.target.value, "target")
-                            }}
-                            className="p-3 rounded-lg border border-gray-300 bg-white text-right font-sans text-sm text-gray-700 w-full"
-                        />
-                    </Autocomplete>
+            <div className="w-5/6 space-y-6 flex flex-col">
+                <Autocomplete onLoad={handleLoad} onPlaceChanged={handlePlaceChanged}>
+                    <input
+                        type="text"
+                        placeholder="הכנס כתובת..."
+                        value={localInputValue}
+                        onChange={(e) => setLocalInputValue(e.target.value)}
+                        className="w-6/6 flex justify-between items-center h-9 px-4 border border-input rounded-md bg-background text-sm text-muted-foreground peer-hover:border-primary peer-focus-visible:ring-1 peer-focus-visible:ring-ring transition-colors" />
+                </Autocomplete>
 
-                    <GoogleMap
-                        mapContainerStyle={containerStyle}
-                        center={location || { lat: 32.0853, lng: 34.7818 }}
-                        zoom={location ? 15 : 10}
-                    >
-                        <Marker position={location} icon={customMarkerIcon} />
-                    </GoogleMap>
-                </div>
-            </LoadScript>
+                <GoogleMap
+                    mapContainerStyle={containerStyle}
+                    center={location || { lat: 32.0853, lng: 34.7818 }}
+                    zoom={location ? 15 : 10}
+                >
+                    <Marker position={location} icon={customMarkerIcon} />
+                </GoogleMap>
+            </div>
         </div>
-    ) : (
-        <div>
-            <Typography className="text-[24px] font-bold mb-6 block w-full" >כתובת פעילות</Typography>
-            <Typography className="text-[16px] font-medium mb-1" >כתובת פעילות</Typography>
-
-            <LoadScript googleMapsApiKey={GOOGLE_MAPS_API_KEY} libraries={GOOGLE_LIBRARIES}>
-                <div className="w-5/6 space-y-6 flex flex-col">
-                    <Autocomplete onLoad={handleLoad} onPlaceChanged={handlePlaceChanged}>
-                        <input
-                            type="text"
-                            placeholder="הכנס כתובת..."
-                            value={localInputValue}
-                            onChange={(e) => {
-                                setLocalInputValue(e.target.value);
-                                console.log(e.target.value, "target")
-                            }}
-                            className="p-3 rounded-lg border border-gray-300 bg-white text-right font-sans text-sm text-gray-700 w-full"
-                        />
-                    </Autocomplete>
-
-                    <GoogleMap
-                        mapContainerStyle={containerStyle}
-                        center={location || { lat: 32.0853, lng: 34.7818 }}
-                        zoom={location ? 15 : 10}
-                    >
-                        <Marker position={location} icon={customMarkerIcon} />
-                    </GoogleMap>
-                </div>
-            </LoadScript>
-        </div>
-    );
+    ) : null;
 }

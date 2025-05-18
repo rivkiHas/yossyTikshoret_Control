@@ -5,15 +5,16 @@ import { RegisterForm1 } from "./register_form1";
 import { RegisterFormButton } from "./register_form_button";
 import { Button } from "./ui/button";
 import { useDispatch } from "react-redux";
-import {nextStep} from '../store/step_store';
+import { nextStep } from '../store/step_store';
 import { ArrowLongLeftIcon } from '@heroicons/react/24/outline'
-export default function StepOne({index}) {
+export default function StepOne({ index }) {
   const dispatch = useDispatch();
   const [isEditing, setIsEditing] = useState(false);
 
   const nextStepInRedux = () => {
-   
+    dispatch(nextStep());
   };
+
 
 
   return (
@@ -32,8 +33,8 @@ export default function StepOne({index}) {
           <Button
             onClick={nextStepInRedux}
             className="flex items-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-black p-5 rounded-full">
-              שלב הבא
-              <ArrowLongLeftIcon/>
+            שלב הבא
+            <ArrowLongLeftIcon />
           </Button>
         </div>
       </div>
