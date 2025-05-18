@@ -28,7 +28,7 @@ export function Tabs({ className, ...props }) {
                     </div>
                     <div className='ps-12 '>
                         <div className="relative border-s-2 border-amber-300">
-                            <TabList className="flex translate-x-10 flex-col space-y-9">
+                            <TabList className="flex translate-x-10.5 flex-col space-y-9">
                                 <Tab as={Fragment}>
                                     {({ hover, selected }) => (
                                         <button className={cn(
