@@ -54,7 +54,7 @@ export default function StepThree() {
   };
 
   return (
-    <div className="flex flex-col gap-6 justify-center max-w-[1440px] px-[50px] py-[30px] gap-10 ">
+    <div className="flex flex-col gap-6  max-w-[1440px] px-[50px] py-[30px] gap-10 ">
       <div className={`flex flex-row-reverse text-right 
           ${contactMans.length > 2 ? 'overflow-x-auto whitespace-nowrap scrollbar-hide' : 'justify-start'}`}>
         {contactMans.map((x, index) => (
@@ -71,7 +71,7 @@ export default function StepThree() {
       <div className='flex flex-row w-full justify-between'>
         <div>
           <Button onClick={addContactManHandler}
-            className="bg-black hover:bg-gray-800 text-white p-5 gap-2 rounded-full">
+                className="bg-black border hover:bg-white hover:text-black hover:border-black text-white p-5 gap-2 rounded-full">
             <PlusCircleIcon />
             הוספת איש קשר נוסף
           </Button>
@@ -79,7 +79,7 @@ export default function StepThree() {
 
         <div className="flex gap-4">
           <Button onClick={previousStepInRedux}
-            className="flex items-center gap-1 bg-white text-black border border-[#F8BD00] p-5 rounded-full hover:bg-white hover:text-black hover:border-[#F8BD00]">
+            className="flex items-center gap-1 bg-white text-black border border-[#F8BD00]  p-5 gap-2 rounded-full hover:bg-white hover:text-black hover:border-black">
             <ArrowLongRightIcon />
             שלב קודם
           </Button>
@@ -93,6 +93,6 @@ export default function StepThree() {
 
       {/* פופאפ אלרט */}
       {showAlert && <AlertSuccess onClose={() => setShowAlert(false)} />}
-    </div>
+    </div >
   );
 }

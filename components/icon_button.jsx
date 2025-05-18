@@ -31,7 +31,7 @@ export default function IconButton({ text, onConfirm, contactId }) {
           <Trash2 className="w-5 h-5" />
         </button>
       </AlertDialogTrigger>
-      <AlertDialogContent dir='rtl' style={{ width: '350px' }}>
+      <AlertDialogContent dir='rtl' style={{  direction: 'rtl', textAlign: 'right', width: '350px' }}>
         <AlertDialogHeader dir='rtl' style={{ direction: 'rtl', textAlign: 'right' }}>
           <AlertDialogTitle className={'text-2xl font-semibold'}>האם למחוק את איש הקשר?</AlertDialogTitle>
         </AlertDialogHeader>

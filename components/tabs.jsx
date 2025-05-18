@@ -23,7 +23,9 @@ export function Tabs({ className, ...props }) {
         <TabGroup selectedIndex={selectedIndex} onChange={setSelectedIndex} vertical>
             <div className={cn('flex space-x-[36px]', className)} {...props}>
                 <div className="w-[368px] flex-none rounded-[40px] bg-white p-8 ">
+                    <div className='w-[280px] pr-5'>
                     <Header />
+                    </div>
                     <div className='ps-12 '>
                         <div className="relative border-s-2 border-amber-300">
                             <TabList className="flex translate-x-10 flex-col space-y-9">

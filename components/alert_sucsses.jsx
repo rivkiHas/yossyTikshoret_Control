@@ -10,7 +10,7 @@ export default function AlertSuccess({ onClose }) {
                     <img src="/images/control.svg" alt="לוגו קונטרול" width={300} />
                 </div>
 
-                <span className="text-[26px] font-bold text-[#F8BD03]">הטופס נשלח בהצלחה!</span>
+                <span className="text-4xl font-bold text-[#F8BD03]">הטופס נשלח בהצלחה!</span>
 
                 <div className="text-center text-[18px] leading-[1.8] text-black max-w-[900px]">
                     <p className="font-bold">ברכות! השלמת בהצלחה את תהליך ההרשמה כמשווק רשמי של יוסי תקשורת.</p>

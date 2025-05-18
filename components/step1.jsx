@@ -32,12 +32,12 @@ export default function StepOne({ index }) {
         <div >
           <Button
             onClick={nextStepInRedux}
-            className="flex items-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-black p-5 rounded-full">
+            className="flex items-center gap-2 bg-yellow-400 text-black p-5 rounded-full border border-transparent hover:bg-white hover:text-black hover:border-[#F8BD03]">
             שלב הבא
             <ArrowLongLeftIcon />
           </Button>
         </div>
       </div>
-    </div>
+    </div >
   );
 }

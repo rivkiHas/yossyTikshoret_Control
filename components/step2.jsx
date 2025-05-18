@@ -7,9 +7,10 @@ import { nextStep, prevStep } from "../store/step_store";
 import { addBrunch, removeBrunch, setActiveBrunch } from "../store/brunch_store";
 import { Button } from "./ui/button";
 import { ArrowLongLeftIcon, PlusCircleIcon, ArrowLongRightIcon } from '@heroicons/react/24/outline'
-import { AlertDialog } from './ui/alert-dialog';
 import IconButton from './icon_button';
 import { LoadScript } from "@react-google-maps/api";
+import { useState } from 'react';
+import { AddBrunchDialog } from './alert_dialog_delete'
 
 const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 const GOOGLE_LIBRARIES = ["places"];
@@ -19,6 +20,8 @@ export default function StepTwo({ brunch }) {
   const dispatch = useDispatch();
   const brunches = useSelector((state) => state.brunch.brunches);
   const activeBrunch = useSelector((state) => state.brunch.activeBrunch)
+  const [showDialog, setShowDialog] = useState(false);
+  const [newBranchName, setNewBranchName] = useState('');
 
   const nextStepInRedux = () => {
     dispatch(setActiveStep(selectedIndex + 1));
@@ -28,8 +31,34 @@ export default function StepTwo({ brunch }) {
     dispatch(setActiveStep(selectedIndex - 1));
   };
 
+  const handleAddBranchClick = () => {
+    setShowDialog(true); // הצגת האלרט
+  };
 
 
+  const handleConfirmAddBranch = () => {
+    const newId = brunches.length + 1;
+    const newBrunch = {
+      id: newId,
+      address: '',
+      location: { lat: 32.0853, lng: 34.7818 },
+      hoursOpen: [
+        { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
+        { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
+        { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
+        { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
+        { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
+        { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
+      ],
+      weekday: { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
+      name: newBranchName || `סניף חדש`,
+    };
+
+    dispatch(addBrunch(newBrunch));
+    dispatch(setActiveBrunch(newId));
+    setShowDialog(false);
+    setNewBranchName('');
+  };
 
   const handleDeleteConfirmation = (brunch) => {
     if (brunches.length > 1) {
@@ -71,7 +100,7 @@ export default function StepTwo({ brunch }) {
         <div className="flex w-full items-start">
           <div className="flex flex-col w-1/2 text-right">
             <LoadScript googleMapsApiKey={GOOGLE_MAPS_API_KEY} libraries={GOOGLE_LIBRARIES}>
-              <AddressSearchMap brunch={brunches.find(x => x.id == activeBrunch)} canEdit={brunches.length>1}/>
+              <AddressSearchMap brunch={brunches.find(x => x.id == activeBrunch)} canEdit={brunches.length > 1} />
             </LoadScript>
           </div>
           <div className="flex flex-col w-1/2 text-right">
@@ -82,12 +111,13 @@ export default function StepTwo({ brunch }) {
         <div className='flex flex-row w-full justify-between'>
           <div>
             <div className='flex flex-row gap-4 '>
-              <Button onClick={AddMoreBrunch}
-                className="bg-black hover:bg-gray-800 text-white p-5 gap-2 rounded-full"
+              <Button onClick={handleAddBranchClick}
+                className="bg-black border hover:bg-white hover:text-black hover:border-black text-white p-5 gap-2 rounded-full"
               >
                 <PlusCircleIcon />
                 הוספת סניף נוסף
               </Button>
+
               {brunches.length > 1 &&
                 <IconButton text="מחיקה" onConfirm={() => { handleDeleteConfirmation() }} contactId={brunch.id} />
               }
@@ -95,19 +125,26 @@ export default function StepTwo({ brunch }) {
           </div>
           <div className="flex gap-4">
             <Button onClick={previousStepInRedux}
-              className="flex items-center gap-1 bg-white text-black border border-[#F8BD00]  p-5 gap-2 rounded-full hover:bg-white hover:text-black hover:border-[#F8BD00]"
+              className="flex items-center gap-1 bg-white text-black border border-[#F8BD00]  p-5 gap-2 rounded-full hover:bg-white hover:text-black hover:border-black"
             >
               <ArrowLongRightIcon />
               שלב קודם
             </Button>
             <Button onClick={nextStepInRedux}
-              className="lex item-center gap-1 bg-yellow-400 hover:bg-yellow-500 text-black  p-5 gap-2 rounded-full">
+              className="flex items-center gap-2 bg-yellow-400 text-black p-5 rounded-full border border-transparent hover:bg-white hover:text-black hover:border-[#F8BD03]">
               שלב הבא
               <ArrowLongLeftIcon />
             </Button>
           </div>
         </div>
       </div>
+      <AddBrunchDialog
+        open={showDialog}
+        value={newBranchName}
+        onChange={setNewBranchName}
+        onConfirm={handleConfirmAddBranch}
+        onCancel={() => setShowDialog(false)}
+      />
     </div >
   );
 }
