@@ -4,7 +4,7 @@ const initialState = {
     brunches: [
         {
             id: 0,
-            address: 'רחוב רבנו תם 11, תל אביב 63304 ',
+            address: "",
             location: {
                 lat: 32.0853,
                 lng: 34.7818
@@ -32,13 +32,13 @@ const brunchSlice = createSlice({
     initialState,
     reducers: {
         addBrunch: (state, action) => {
-            state.brunches.push(action.payload);  // מוסיף את הסניף החדש
+            state.brunches.push(action.payload);  
         },
         setActiveBrunch: (state, action) => {
-            state.activeBrunch = action.payload;  // הגדרת הסניף הפעיל
+            state.activeBrunch = action.payload;  
         },
         removeBrunch: (state, action) => {
-            state.brunches = state.brunches.filter(brunch => brunch.id !== action.payload); // מחיקת איש קשר לפי מזהה
+            state.brunches = state.brunches.filter(brunch => brunch.id !== action.payload); 
 
         },
         updateBrunchDetails: (state, action) => {
@@ -58,7 +58,8 @@ const brunchSlice = createSlice({
                     brunch.hoursOpen[day][period][type] = value;
                 }
             }
-        }
+        },
+        
 
     }
 });

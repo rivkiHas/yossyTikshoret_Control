@@ -20,7 +20,7 @@ const GOOGLE_LIBRARIES = ["places"];
 export default function StepTwo({ brunch }) {
   const dispatch = useDispatch();
   const brunches = useSelector((state) => state.brunch.brunches);
-  const activeBrunch = useSelector((state) => state.brunch.activeBrunch)
+  // const activeBrunch = useSelector((state) => state.brunch.activeBrunch)
   const typeMarketer = useSelector((state) => state.form.pertip.typeMarketer)
   const activeStep = useSelector((state) => state.stepper.activeStep)
 
@@ -44,17 +44,17 @@ export default function StepTwo({ brunch }) {
     const newId = Math.max(...brunches.map(b => b.id)) + 1;
     const newBrunch = {
       id: newId,
-      address: '',
-      location: { lat: 32.0853, lng: 34.7818 },
-      hoursOpen: [
-        { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
-        { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
-        { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
-        { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
-        { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
-        { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
-      ],
-      weekday: { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
+      // address: '',
+      // location: { lat: 32.0853, lng: 34.7818 },
+      // hoursOpen: [
+      //   { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
+      //   { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
+      //   { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
+      //   { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
+      //   { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
+      //   { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
+      // ],
+      // weekday: { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
       name: newBranchName || `סניף חדש`,
     };
     dispatch(addBrunch(newBrunch));
@@ -65,7 +65,7 @@ export default function StepTwo({ brunch }) {
 
   const handleDeleteConfirmation = (brunch) => {
     if (brunches.length > 1) {
-      dispatch(removeBrunch(brunch));
+      dispatch(removeBrunch(brunch.id));
     } else {
       console.log("לא ניתן למחוק, חייב להיות לפחות איש קשר אחד");
     }

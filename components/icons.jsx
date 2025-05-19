@@ -1,6 +1,5 @@
 
-import { BuildingStorefrontIcon, CheckCircleIcon, MapPinIcon, UserCircleIcon } from '@heroicons/react/24/outline'
-import {   } from '@heroicons/react/24/solid'
+import { BuildingStorefrontIcon, CheckCircleIcon, ExclamationCircleIcon, MapPinIcon, UserCircleIcon } from '@heroicons/react/24/outline'
 
 
 const icons = {
@@ -21,7 +20,8 @@ const icons = {
     ),
     done: (
         <div className="flex items-center justify-center w-[32px] h-[32px] flex-shrink-0 rounded-full border-[1.5px] border-[#F8BD00] bg-[#F8BD00]">
-    </div>
+            <ExclamationCircleIcon />
+        </div>
 
     ),
     complete: (
@@ -31,7 +31,7 @@ const icons = {
     ),
     default:
         <div className="flex items-center justify-center w-[32px] h-[32px] flex-shrink-0 rounded-full border-[1.5px] border-[#F8BD00] bg-white">
-           
+
         </div>
 
 

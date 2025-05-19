@@ -42,7 +42,8 @@ const conectManSlice = createSlice({
             if (state.contactMans.length > 1) {
                 state.contactMans.splice(-1, 1); // מחיקת האובייקט האחרון במערך
             }
-        }
+        },
+        
     }
 });
 
