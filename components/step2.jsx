@@ -3,7 +3,7 @@ import { Tab } from '@headlessui/react'
 import AddressSearchMap from './address_search_map';
 import HoursOpen from './hours_open';
 import { useDispatch, useSelector } from "react-redux";
-import { nextStep, prevStep } from "../store/step_store";
+import { nextStep, prevStep, setActiveStep } from "../store/step_store";
 import { addBrunch, removeBrunch, setActiveBrunch } from "../store/brunch_store";
 import { Button } from "./ui/button";
 import { ArrowLongLeftIcon, PlusCircleIcon, ArrowLongRightIcon } from '@heroicons/react/24/outline'
@@ -11,6 +11,7 @@ import IconButton from './icon_button';
 import { LoadScript } from "@react-google-maps/api";
 import { useState } from 'react';
 import { AddBrunchDialog } from './alert_dialog_delete'
+import { DatabaseBackup } from 'lucide-react';
 
 const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 const GOOGLE_LIBRARIES = ["places"];
@@ -20,24 +21,27 @@ export default function StepTwo({ brunch }) {
   const dispatch = useDispatch();
   const brunches = useSelector((state) => state.brunch.brunches);
   const activeBrunch = useSelector((state) => state.brunch.activeBrunch)
+  const typeMarketer = useSelector((state) => state.form.pertip.typeMarketer)
+  const activeStep = useSelector((state) => state.stepper.activeStep)
+
   const [showDialog, setShowDialog] = useState(false);
   const [newBranchName, setNewBranchName] = useState('');
 
   const nextStepInRedux = () => {
-    dispatch(setActiveStep(selectedIndex + 1));
+    dispatch(setActiveStep(activeStep + 1));
   };
 
   const previousStepInRedux = () => {
-    dispatch(setActiveStep(selectedIndex - 1));
+    dispatch(setActiveStep(activeStep - 1));
   };
 
   const handleAddBranchClick = () => {
-    setShowDialog(true); // הצגת האלרט
+    setShowDialog(true);
   };
 
 
   const handleConfirmAddBranch = () => {
-    const newId = brunches.length + 1;
+    const newId = Math.max(...brunches.map(b => b.id)) + 1;
     const newBrunch = {
       id: newId,
       address: '',
@@ -53,7 +57,6 @@ export default function StepTwo({ brunch }) {
       weekday: { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
       name: newBranchName || `סניף חדש`,
     };
-
     dispatch(addBrunch(newBrunch));
     dispatch(setActiveBrunch(newId));
     setShowDialog(false);
@@ -67,44 +70,17 @@ export default function StepTwo({ brunch }) {
       console.log("לא ניתן למחוק, חייב להיות לפחות איש קשר אחד");
     }
   };
-  const AddMoreBrunch = () => {
-
-    const newId = brunches.length + 1;
-    const newBrunch = {
-      id: newId,
-      address: '',
-      location: { lat: 32.0853, lng: 34.7818 },
-      hoursOpen: [
-        { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
-        { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
-        { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
-        { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
-        { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
-        { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
-      ],
-      weekday: { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
-      name: "סניף חדש",
-
-    };
-
-    dispatch(addBrunch(newBrunch));
-    dispatch(setActiveBrunch(newBrunch.id));
-
-  };
-  console.log(activeBrunch);
-
+  
   return (
 
     <div className="flex justify-center">
       <div className="flex flex-col items-end w-full max-w-[1440px] px-[50px] py-[30px] gap-10">
         <div className="flex w-full items-start">
           <div className="flex flex-col w-1/2 text-right">
-            <LoadScript googleMapsApiKey={GOOGLE_MAPS_API_KEY} libraries={GOOGLE_LIBRARIES}>
-              <AddressSearchMap brunch={brunches.find(x => x.id == activeBrunch)} canEdit={brunches.length > 1} />
-            </LoadScript>
+              <AddressSearchMap canEdit={brunches.length > 1} typeMarketer={typeMarketer} />
           </div>
           <div className="flex flex-col w-1/2 text-right">
-            <HoursOpen brunch={brunches.find(x => x.id == activeBrunch)} />
+            <HoursOpen />
           </div>
         </div>
 
@@ -117,7 +93,6 @@ export default function StepTwo({ brunch }) {
                 <PlusCircleIcon />
                 הוספת סניף נוסף
               </Button>
-
               {brunches.length > 1 &&
                 <IconButton text="מחיקה" onConfirm={() => { handleDeleteConfirmation() }} contactId={brunch.id} />
               }

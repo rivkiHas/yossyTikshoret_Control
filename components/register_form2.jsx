@@ -55,11 +55,11 @@ export function RegisterForm2({ OkFunction, contactId, canDelete }) {
     state.conectMan.contactMans.find((c) => c.id === contactId)
   );
   const contactMans = useSelector((state) => state.conectMan.contactMans || []);
-
+  const contactIndex = contactMans.findIndex((c) => c.id === contactId);
   const brunches = useSelector((state) => state.brunch.brunches || [])
-  const [query, setQuery] = useState('')
-  const [selected, setSelected] = useState(brunches[1])
-  const [open, setOpen] = useState(false);
+  // const [query, setQuery] = useState('')
+  // const [selected, setSelected] = useState(brunches[1])
+  // const [open, setOpen] = useState(false);
 
 
   const form = useForm({
@@ -95,12 +95,12 @@ export function RegisterForm2({ OkFunction, contactId, canDelete }) {
 
 
   return (
-    <div className="w-85">
+    <div className="w-85 ">
       <div className="flex justify-between items-center">
         <div className="flex flex-row justify-between items-center mb-4 w-full">
           <Typography className="text-2xl font-bold">איש קשר</Typography>
           <div>
-            {canDelete &&
+            {canDelete && contactIndex > 0 &&
               <IconButton text="מחיקה" onConfirm={(co) => { OkFunction(co) }} contactId={contactId} />
             }
           </div>
@@ -108,7 +108,7 @@ export function RegisterForm2({ OkFunction, contactId, canDelete }) {
       </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 ">
           <FormField
             control={form.control}
             name="contactManName"

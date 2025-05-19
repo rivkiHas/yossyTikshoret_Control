@@ -4,15 +4,16 @@ import React, { useState } from "react";
 import { RegisterForm1 } from "./register_form1";
 import { RegisterFormButton } from "./register_form_button";
 import { Button } from "./ui/button";
-import { useDispatch } from "react-redux";
-import { nextStep } from '../store/step_store';
+import { useDispatch, useSelector } from "react-redux";
+import { nextStep, prevStep, setActiveStep } from "../store/step_store";
 import { ArrowLongLeftIcon } from '@heroicons/react/24/outline'
 export default function StepOne({ index }) {
+
   const dispatch = useDispatch();
-  const [isEditing, setIsEditing] = useState(false);
+  const activeStep = useSelector((state) => state.stepper.activeStep)
 
   const nextStepInRedux = () => {
-    dispatch(nextStep());
+    dispatch(setActiveStep(activeStep+1));
   };
 
 
@@ -32,7 +33,7 @@ export default function StepOne({ index }) {
         <div >
           <Button
             onClick={nextStepInRedux}
-            className="flex items-center gap-2 bg-yellow-400 text-black p-5 rounded-full border border-transparent hover:bg-white hover:text-black hover:border-[#F8BD03]">
+            className="flex items-center gap-2 font-[16px] bg-yellow-400 text-black p-5 rounded-full border border-transparent hover:bg-white hover:text-black hover:border-[#F8BD03]">
             שלב הבא
             <ArrowLongLeftIcon />
           </Button>

@@ -1,23 +1,24 @@
 'use client';
 
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { updateBrunchDetails } from '../store/brunch_store';
 import { Switch } from "@/components/ui/switch";
 import { Typography } from './typhography';
 import { PencilSquareIcon } from '@heroicons/react/24/solid';
 import { PlusCircleIcon, MinusCircleIcon } from "@heroicons/react/24/solid";
 
-const HoursOpen = ({ brunch }) => {
+const HoursOpen = () => {
   const dispatch = useDispatch();
   const [isGrouped, setIsGrouped] = useState(false);
   const [hover, setHover] = useState(-1);
   const [isSwitchOn, setIsSwitchOn] = useState(false);
+  const activeBrunch = useSelector((state) => state.brunch.activeBrunch)
 
   const handleChange = (day, period, type, value, index) => {
     dispatch(
       updateBrunchDetails({
-        id: brunch.id,
+        id: activeBrunch.id,
         hoursOpen: {
           day: index,
           period,
@@ -54,24 +55,24 @@ const HoursOpen = ({ brunch }) => {
       <div className="mb-1 bg-[#F4F4F4] rounded-4xl p-2 w-fit">
         <div dir="ltr" className="flex items-center gap-2 w-fit">
           <span className="text-sm text-[#111928] font-semibold">שעות בתיאום מראש</span>
-          <Switch checked={isSwitchOn} onCheckedChange={handleSwitchChange} />
+          <Switch checked={isSwitchOn} onCheckedChange={handleSwitchChange} className={'duration-300 '} />
         </div>
       </div>
 
       <div className="relative max-h-[400px] overflow-y-auto  scrollbar-none flex flex-col text-[23px] font-semibold text-[#F8BD00]">
-
         {isSwitchOn && (
           <div className="absolute inset-0 bg-gray-300 opacity-60 z-10 rounded-xl" />
-        )}        {!isGrouped ? (
+        )}
+        {!isGrouped ? (
           <DayRow
             day="weekday"
             label="ימים א'-ה'"
-            hours={brunch?.weekday}
+            hours={activeBrunch?.weekday}
             handleChange={handleChange}
             index="weekday"
           />
         ) : (
-          ["ראשון", "שני", "שלישי", "רביעי", "חמישי"].map((day, index) => (
+          ["ראשון", " שני  " , "שלישי", "רביעי", "חמישי"].map((day, index) => (
             <div
               key={index}
               onMouseEnter={() => setHover(index)}
@@ -80,7 +81,7 @@ const HoursOpen = ({ brunch }) => {
               <DayRow
                 day={day}
                 label={`יום ${day}`}
-                hours={brunch?.hoursOpen?.[index + 1]}
+                hours={activeBrunch?.hoursOpen?.[index + 1]}
                 handleChange={handleChange}
                 hover={hover === index}
                 index={index + 1}
@@ -91,7 +92,7 @@ const HoursOpen = ({ brunch }) => {
         <DayRow
           day="שישי"
           label="יום ו'"
-          hours={brunch?.hoursOpen?.[5]}
+          hours={activeBrunch?.hoursOpen?.[5]}
           handleChange={handleChange}
           index={5}
         />
@@ -108,7 +109,10 @@ const DayRow = ({ day, label, hours, handleChange, hover, index }) => {
   return (
     <div className="flex flex-col bg-white rounded-xl p-2 relative group">
       <div className='flex flex-row justify-between items-center'>
-        <Typography className="text-[18px] font-bold text-[#F8BD00] mb-2">{label}</Typography>
+        <div className='flex flex-col'>
+          <Typography className="text-[24px] font-bold text-[#F8BD00] mb-2 text-left">{label}</Typography>
+          {isEveningVisible && <span className='text-sm text-black text-left'> בוקר</span>}
+        </div>
         <div className="flex flex-row-reverse items-center justify-start gap-5 p-2 rounded-xl">
           <button
             onClick={toggleEvening}
@@ -119,7 +123,8 @@ const DayRow = ({ day, label, hours, handleChange, hover, index }) => {
             ) : <div className="h-[40px] w-[40px] text-black" />}
           </button>
 
-          <div className='flex flex-row gap-3' >
+          <div className='flex flex-row gap-3 items-end' >
+
             <div className="flex flex-col gap-1">
               <label className="text-sm text-black">שעת פתיחה</label>
               <InputTime
@@ -139,7 +144,7 @@ const DayRow = ({ day, label, hours, handleChange, hover, index }) => {
         </div>
       </div>
       {isEveningVisible && (
-        <div className="flex flex-row-reverse items-center justify-start gap-4 p-2 rounded-xl">
+        <div className="flex flex-row-reverse items-center justify-start gap-4 p-3 rounded-xl">
           <button
             onClick={toggleEvening}
             className="opacity-0 group-hover:opacity-100 transition-opacity duration-200"
@@ -147,20 +152,24 @@ const DayRow = ({ day, label, hours, handleChange, hover, index }) => {
             <MinusCircleIcon className="h-[40px] w-[40px] text-black" />
           </button>
 
-
-          <div className="flex flex-col gap-1">
-            <label className="text-sm text-black">שעת סגירה</label>
-            <InputTime
-              value={hours?.evening?.close || ""}
-              onChange={(e) => handleChange(day, "evening", "close", e.target.value, index)}
-            />
-          </div>
-          <div className="flex flex-col gap-1">
-            <label className="text-sm text-black">שעת פתיחה</label>
-            <InputTime
-              value={hours?.evening?.open || ""}
-              onChange={(e) => handleChange(day, "evening", "open", e.target.value, index)}
-            />
+          <div className='flex flex-row gap-3 items-end'>
+            <div className='text-start p-3'>
+              <span className='text-sm text-black'> ערב</span>
+            </div>
+            <div className="flex flex-col gap-1">
+              <label className="text-sm text-black">שעת סגירה</label>
+              <InputTime
+                value={hours?.evening?.close || ""}
+                onChange={(e) => handleChange(day, "evening", "close", e.target.value, index)}
+              />
+            </div>
+            <div className="flex flex-col gap-1">
+              <label className="text-sm text-black">שעת פתיחה</label>
+              <InputTime
+                value={hours?.evening?.open || ""}
+                onChange={(e) => handleChange(day, "evening", "open", e.target.value, index)}
+              />
+            </div>
           </div>
         </div>
       )}
@@ -173,7 +182,6 @@ const DayRow = ({ day, label, hours, handleChange, hover, index }) => {
 
 const InputTime = ({ label, value, onChange }) => (
   <div className="flex flex-col">
-    {/* <Typography className='text-sm text-[#111928] font-semibold'>{label}</Typography> */}
     <input
       type="time"
       dir="ltr"

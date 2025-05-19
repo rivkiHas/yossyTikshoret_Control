@@ -52,8 +52,8 @@ export function RegisterFormButton() {
     };
 
     return (
+        
         <div className="flex flex-col items-start w-full max-w-[488px]">
-            {/* סוג משווק */}
             <Typography className="text-[24px] font-bold mb-4">סוג משווק</Typography>
 
             <div className="flex items-center justify-between w-full gap-4 mb-[30px]">
@@ -67,7 +67,6 @@ export function RegisterFormButton() {
                 ))}
             </div>
 
-            {/* סוג המכירות */}
             <div className="flex flex-row justify-between items-center w-full mb-4">
                 <Typography className="text-[24px] font-bold">סוג המכירות</Typography>
                 <Typography className="text-sm text-black-500 font-medium">

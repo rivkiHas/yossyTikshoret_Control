@@ -11,11 +11,11 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="he" dir="rtl" suppressHydrationWarning>
-      <body className={`antialiased`}>
-          <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
-            {children}
-          </ThemeProvider>
+    <html lang="he" dir="rtl" suppressHydrationWarning className="font-[SimplerPro]">
+      <body className={`antialiased `}>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   )

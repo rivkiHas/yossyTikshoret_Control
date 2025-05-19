@@ -9,17 +9,18 @@ export function CustomButton({ item, selected, handleSelect }) {
         <Button
             onClick={() => handleSelect(item.value)}
             className={`
-                relative w-[190px] h-[119px] rounded-[40px] overflow-hidden cursor-pointer transition-all duration-300
+                relative w-[200px] h-[119px] rounded-[40px] overflow-hidden cursor-pointer transition-all duration-300
                 bg-cover bg-center shadow-md
                 ${selected ? "border-2 border-yellow-400" : "border-2 border-transparent"}
             `}
-            // style={{ backgroundImage: `url(${item.image})` }}
-            style={{ background: 'grey' }}
+       
         >
+            <img src="/images/AlbedoBase_XL_A_clean_modern_illustration_of_a_business_profes_2.jgp" alt="לוגו קונטרול" width={300} />
+
             <div className="absolute bottom-[14px] left-[16px] bg-white rounded-[30px] text-[16px] px-4 py-2 shadow-sm">
                 {item.label}
             </div>
-        </Button>
+        </Button >
     );
 }
 

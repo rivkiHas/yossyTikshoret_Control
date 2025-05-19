@@ -6,7 +6,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { updateBrunchDetails } from "../store/brunch_store";
 import { Typography } from "./typhography";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
-
+import Carusel from "./carusel";
+import { setActiveBrunch } from '../store/brunch_store'
 const containerStyle = {
     height: "60vh",
     width: "100%",
@@ -21,21 +22,25 @@ const containerStyle = {
 const customMarkerIcon = {
     path: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 12 7 12s7-6.75 7-12c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z",
     fillColor: "#F8BD00",
-    fillOpacity: 1,
+    fillOpacity: 2,
     strokeColor: "#FFFFFF",
-    strokeWeight: 2,
-    scale: 2,
+    strokeWeight: 3,
+    scale: 3,
 };
 
-export default function AddressSearchMap({ brunch, canEdit }) {
+export default function AddressSearchMap({ canEdit, typeMarketer }) {
     const dispatch = useDispatch();
     const autocompleteRef = useRef(null);
-    const typeMarketer = useSelector((state) => state.form.pertip.typeMarketer);
-    const address = brunch.address;
-    const location = brunch.location;
+    const brunches = useSelector((state) => state.brunch.brunches);
+    const activeBrunch = useSelector((state) => state.brunch.activeBrunch);
+    const brunch = brunches[activeBrunch];
+    const address = brunch?.address || "";
+    const location = brunch?.location || null;
+
     const [localInputValue, setLocalInputValue] = useState(address || "");
 
     useEffect(() => {
+
         if (!address.trim()) return;
 
         const interval = setInterval(() => {
@@ -54,7 +59,7 @@ export default function AddressSearchMap({ brunch, canEdit }) {
                             newLocation.lat !== location.lat ||
                             newLocation.lng !== location.lng
                         ) {
-                            dispatch(updateBrunchDetails({ id: brunch.id, location: newLocation }));
+                            dispatch(updateBrunchDetails({ id: activeBrunch, location: newLocation }));
                         }
                     }
                 });
@@ -80,7 +85,7 @@ export default function AddressSearchMap({ brunch, canEdit }) {
                     lng: place.geometry.location.lng(),
                 };
                 dispatch(updateBrunchDetails({
-                    id: brunch.id,
+                    id: activeBrunch.id,
                     address: place.formatted_address,
                     location: newLocation,
                 }));
@@ -88,12 +93,13 @@ export default function AddressSearchMap({ brunch, canEdit }) {
         }
     };
 
-    return typeMarketer === "חנות" ? (
+    return (
         <div>
             {canEdit && <button onClick={editNameBrunch}>
                 <PencilSquareIcon /> </button>}
-            <Typography className="text-[24px] font-bold mb-4 block w-full"> כתובת העסק</Typography>
-            <Typography className="text-[16px] font-medium mb-1">כתובת חנות</Typography>
+            <Typography className="text-[24px] font-bold mb-4 block w-full">   {typeMarketer === 'סוכן' ? 'כתובת הסוכן' : 'כתובת העסק'}
+            </Typography>
+            <Typography className="text-[16px] font-medium mb-1"> {typeMarketer === 'סוכן' ? 'כתובת הסוכן' : 'כתובת החנות'}</Typography>
 
             <div className="w-5/6 space-y-6 flex flex-col">
                 <Autocomplete onLoad={handleLoad} onPlaceChanged={handlePlaceChanged}>
@@ -112,7 +118,10 @@ export default function AddressSearchMap({ brunch, canEdit }) {
                 >
                     <Marker position={location} icon={customMarkerIcon} />
                 </GoogleMap>
+                {typeMarketer == 'סוכן' && <Carusel />}
+
             </div>
-        </div>
-    ) : null;
+
+        </div >
+    )
 }

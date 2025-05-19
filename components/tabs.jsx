@@ -11,20 +11,21 @@ import icons from './icons'
 import { useState } from 'react'
 import { Header } from './header'
 import { setActiveBrunch } from '@/store/brunch_store'
+import { nextStep, prevStep, setActiveStep } from "../store/step_store";
 
 export function Tabs({ className, ...props }) {
 
     const brunches = useSelector((state) => state.brunch.brunches || [])
     const activeBrunch = useSelector((state) => state.brunch.activeBrunch)
-    const [selectedIndex, setSelectedIndex] = useState(() => brunches.find(x => x.id == activeBrunch))
+    const selectedIndex = useSelector((state) => state.stepper.activeStep)
 
     const dispatch = useDispatch()
     return (
-        <TabGroup selectedIndex={selectedIndex} onChange={setSelectedIndex} vertical>
+        <TabGroup selectedIndex={selectedIndex} onChange={(index) => dispatch(setActiveStep(index))} vertical>
             <div className={cn('flex space-x-[36px]', className)} {...props}>
                 <div className="w-[368px] flex-none rounded-[40px] bg-white p-8 ">
                     <div className='w-[280px] pr-5'>
-                    <Header />
+                        <Header />
                     </div>
                     <div className='ps-12 '>
                         <div className="relative border-s-2 border-amber-300">
@@ -53,12 +54,12 @@ export function Tabs({ className, ...props }) {
                                     )}
                                 </Tab>
                                 <Tab as={Fragment} disabled={brunches.length > 1}>
-                                    {({ hover, selected }) => (
+                                    {({ selected }) => (
                                         <button className={cn(
                                             'text-start ps-6 pe-5 py-4 w-full',
                                             'flex flex-row items-center gap-5',
                                             'rounded-[16px]',
-                                            selected && 'bg-[#FDEBB2]'
+                                            selected && (brunches.length > 1 ? 'bg-[#FEF8E5]' : 'bg-[#FDEBB2]')
                                         )}
                                         >
                                             <div>
@@ -75,29 +76,32 @@ export function Tabs({ className, ...props }) {
                                         </button>
                                     )}
                                 </Tab>
-                                {brunches.slice(1).map((brunch) => (
-                                    <Tab as="div" key={brunch.id}>
-                                        {({ selected }) => (
-                                            <button
-                                                className={cn(
-                                                    'text-start ps-8 pe-2 py-4 w-full',
-                                                    'flex flex-row items-center gap-5',
-                                                    'rounded-[16px]',
-                                                    selected && 'bg-[#FDEBB2]'
-                                                )}
-                                            >
-                                                <span className="flex items-center gap-3">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="14" viewBox="0 0 15 14" fill="none">
-                                                        <circle cx="7.26514" cy="6.98962" r="6.77185" fill="#F8BD00" />
-                                                    </svg>
-                                                    <span className="text-[16px] font-normal leading-snug">
-                                                        {brunch.name || 'סניף'}
+                                {brunches.length > 1 &&
+                                    brunches.map((brunch) => (
+                                        <Tab as="div" key={brunch.id}>
+                                            {({ selected }) => (
+                                                <button
+                                                    className={cn(
+                                                        'text-start ps-8 pe-2 py-4 w-full',
+                                                        'flex flex-row items-center gap-5',
+                                                        'rounded-[16px]',
+                                                        selected && 'bg-[#FDEBB2]'
+                                                    )}
+                                                >
+                                                    <span className="flex items-center gap-3">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="14" viewBox="0 0 15 14" fill="none">
+                                                            <circle cx="7.26514" cy="6.98962" r="6.77185" fill="#F8BD00" />
+                                                        </svg>
+                                                        <span className="text-[16px] font-normal leading-snug">
+                                                            {brunch.name || 'סניף'}
+                                                        </span>
                                                     </span>
-                                                </span>
-                                            </button>
-                                        )}
-                                    </Tab>
-                                ))}
+                                                </button>
+                                            )}
+
+                                        </Tab>
+
+                                    ))}
                                 <Tab as={Fragment}>
                                     {({ hover, selected }) => (
                                         <button className={cn(

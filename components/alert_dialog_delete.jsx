@@ -14,7 +14,7 @@ import { ArrowLongLeftIcon } from '@heroicons/react/24/outline';
 
 export function AddBrunchDialog({ open, onConfirm, onCancel, value, onChange }) {
   return (
-    <AlertDialogRoot open={open} dir="rtl">
+    <AlertDialogRoot open={open} dir="rtl" className={'font-assistant'}>
       <AlertDialogContent
         className="flex w-[398px] p-8 flex-col justify-center items-start gap-4"
         style={{ direction: 'rtl' }}
@@ -42,7 +42,7 @@ export function AddBrunchDialog({ open, onConfirm, onCancel, value, onChange }) 
         <AlertDialogFooter className="w-full mt-4">
           <AlertDialogAction
             onClick={onConfirm}
-            className="flex px-10 py-3 justify-center items-center gap-2 border border-[#F8BD00] bg-[#F8BD00] text-black rounded-full"
+            className="flex px-10 py-3 justify-center items-center gap-2 border border-[#F8BD00] bg-[#F8BD00] text-black rounded-full hover:bg-white"
           >
             סיימתי, הולך לסניף הבא
             <ArrowLongLeftIcon className="w-5 h-5" />

@@ -4,7 +4,7 @@ const initialState = {
     brunches: [
         {
             id: 0,
-            address: '',
+            address: 'רחוב רבנו תם 11, תל אביב 63304 ',
             location: {
                 lat: 32.0853,
                 lng: 34.7818

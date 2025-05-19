@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { nextStep, prevStep } from "../store/step_store";
+import { nextStep, prevStep, setActiveStep } from "../store/step_store";
 import { addContactMan, deleteContactMan } from "../store/contact_man_store";
 import { Button } from "./ui/button";
 import { RegisterForm2 } from "./register_form2";
@@ -19,13 +19,13 @@ export default function StepThree() {
   const activeStep = useSelector(state => state.stepper.activeStep);
 
   const nextStepInRedux = async () => {
-    setShowAlert(true); // פותח את הפופ-אפ
+    setShowAlert(true);
 
     if (validateFunction()) {
       if (activeStep === 2) {
         try {
-          await sendDataToServer(); // ודא שהפונקציה הזו מוגדרת
-          setShowAlert(true); // פותח את הפופ-אפ
+          await sendDataToServer();
+          setShowAlert(true);
         } catch (error) {
           console.log("שגיאה בשליחה");
         }
@@ -38,7 +38,7 @@ export default function StepThree() {
   };
 
   const previousStepInRedux = () => {
-    dispatch(prevStep());
+    dispatch(setActiveStep(activeStep - 1));
   };
 
   const addContactManHandler = () => {
@@ -54,9 +54,9 @@ export default function StepThree() {
   };
 
   return (
-    <div className="flex flex-col gap-6  max-w-[1440px] px-[50px] py-[30px] gap-10 ">
-      <div className={`flex flex-row-reverse text-right 
-          ${contactMans.length > 2 ? 'overflow-x-auto whitespace-nowrap scrollbar-hide' : 'justify-start'}`}>
+    <div className="flex flex-col gap-6 max-w-[1440px] px-[50px] py-[30px] direction-rtl ">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-h-[70vh] overflow-y-auto pr-2">
+
         {contactMans.map((x, index) => (
           <div key={x.id} className="ml-20">
             <RegisterForm2
@@ -71,7 +71,7 @@ export default function StepThree() {
       <div className='flex flex-row w-full justify-between'>
         <div>
           <Button onClick={addContactManHandler}
-                className="bg-black border hover:bg-white hover:text-black hover:border-black text-white p-5 gap-2 rounded-full">
+            className="bg-black border hover:bg-white hover:text-black hover:border-black text-white p-5 gap-2 rounded-full">
             <PlusCircleIcon />
             הוספת איש קשר נוסף
           </Button>
