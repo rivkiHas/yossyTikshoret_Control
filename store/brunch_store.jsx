@@ -14,7 +14,6 @@ const initialState = {
                 { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
                 { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
                 { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
-                { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
                 { morning: { open: "", close: "" }, evening: { open: "", close: "" } }
             ],
             weekday: { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
@@ -23,7 +22,7 @@ const initialState = {
     ],
 
     activeBrunch: 0
-    
+
 };
 
 
@@ -32,34 +31,39 @@ const brunchSlice = createSlice({
     initialState,
     reducers: {
         addBrunch: (state, action) => {
-            state.brunches.push(action.payload);  
+            state.brunches.push(action.payload);
         },
         setActiveBrunch: (state, action) => {
-            state.activeBrunch = action.payload;  
+            state.activeBrunch = action.payload;
         },
         removeBrunch: (state, action) => {
-            state.brunches = state.brunches.filter(brunch => brunch.id !== action.payload); 
+            state.brunches = state.brunches.filter(brunch => brunch.id !== action.payload);
 
         },
         updateBrunchDetails: (state, action) => {
-
             const { id, address, hoursOpen, location, name, weekday } = action.payload;
             const brunch = state.brunches.find(b => b.id === id);
-            if (brunch) {
-                if (address !== undefined) brunch.address = address;
-                brunch.location = location;
-                brunch.name = name;
-                if (weekday) {
-                    const { period, type, value } = weekday;
-                    brunch.weekday[period][type] = value;
-                }
-                if (hoursOpen) {
-                    const { day, period, type, value } = hoursOpen;
-                    brunch.hoursOpen[day][period][type] = value;
-                }
+            if (!brunch) return;
+
+            if (address !== undefined) brunch.address = address;
+            if (location !== undefined) brunch.location = location;
+            if (name !== undefined) brunch.name = name;
+
+            if (weekday) {
+                const { period, type, value } = weekday;
+                if (!brunch.weekday) brunch.weekday = {};
+                if (!brunch.weekday[period]) brunch.weekday[period] = {};
+                brunch.weekday[period][type] = value;
             }
-        },
-        
+
+            if (hoursOpen) {
+                const { day, period, type, value } = hoursOpen;
+                if (!brunch.hoursOpen) brunch.hoursOpen = [];
+                if (!brunch.hoursOpen[day]) brunch.hoursOpen[day] = { morning: {}, evening: {} };
+                if (!brunch.hoursOpen[day][period]) brunch.hoursOpen[day][period] = {};
+                brunch.hoursOpen[day][period][type] = value;
+            }
+        }
 
     }
 });

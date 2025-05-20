@@ -101,7 +101,7 @@ export function RegisterForm2({ OkFunction, contactId, canDelete }) {
           <Typography className="text-2xl font-bold">איש קשר</Typography>
           <div>
             {canDelete && contactIndex > 0 &&
-              <IconButton text="מחיקה" onConfirm={(co) => { OkFunction(co) }} contactId={contactId} />
+              <IconButton headerText="מחיקה" onConfirm={(co) => { OkFunction(co) }} contactId={contactId} text={"האם ברצונך למחוק את איש קשר זה?"}/>
             }
           </div>
         </div>

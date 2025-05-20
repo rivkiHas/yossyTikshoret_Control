@@ -3,18 +3,19 @@
 import { useRef, useEffect, useState } from "react";
 import { GoogleMap, Marker, Autocomplete } from "@react-google-maps/api";
 import { useSelector, useDispatch } from "react-redux";
-import { updateBrunchDetails } from "../store/brunch_store";
+import { updateBrunchDetails, setActiveBrunch } from "../store/brunch_store";
 import { Typography } from "./typhography";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import Carusel from "./carusel";
-import { setActiveBrunch } from '../store/brunch_store'
+
 const containerStyle = {
-    height: "60vh",
+    height: "50vh",
     width: "100%",
     flexShrink: 0,
     alignSelf: "stretch",
     borderRadius: "8px",
-    background: "url('<path-to-image>') -212.782px -5.3px / 237.14% 102.469% no-repeat lightgray",
+    background:
+        "url('<path-to-image>') -212.782px -5.3px / 237.14% 102.469% no-repeat lightgray",
     position: "relative",
     overflow: "hidden",
 };
@@ -31,16 +32,20 @@ const customMarkerIcon = {
 export default function AddressSearchMap({ canEdit, typeMarketer }) {
     const dispatch = useDispatch();
     const autocompleteRef = useRef(null);
+
     const brunches = useSelector((state) => state.brunch.brunches);
     const activeBrunch = useSelector((state) => state.brunch.activeBrunch);
-    const brunch = brunches[activeBrunch];
+    const brunch = brunches.find((b) => b.id === activeBrunch) || null;
     const address = brunch?.address || "";
     const location = brunch?.location || null;
 
     const [localInputValue, setLocalInputValue] = useState(address || "");
 
     useEffect(() => {
+        setLocalInputValue(address);
+    }, [address]);
 
+    useEffect(() => {
         if (!address.trim()) return;
 
         const interval = setInterval(() => {
@@ -49,17 +54,23 @@ export default function AddressSearchMap({ canEdit, typeMarketer }) {
 
                 const geocoder = new window.google.maps.Geocoder();
                 geocoder.geocode({ address }, (results, status) => {
-                    if (status === "OK" && results[0]?.geometry?.location) {
+                    if (
+                        status === "OK" &&
+                        results[0]?.geometry?.location
+                    ) {
                         const newLocation = {
                             lat: results[0].geometry.location.lat(),
                             lng: results[0].geometry.location.lng(),
                         };
 
                         if (
+                            !location ||
                             newLocation.lat !== location.lat ||
                             newLocation.lng !== location.lng
                         ) {
-                            dispatch(updateBrunchDetails({ id: activeBrunch, location: newLocation }));
+                            dispatch(
+                                updateBrunchDetails({ id: activeBrunch, location: newLocation })
+                            );
                         }
                     }
                 });
@@ -73,9 +84,6 @@ export default function AddressSearchMap({ canEdit, typeMarketer }) {
         autocompleteRef.current = autocomplete;
     };
 
-    const editNameBrunch = () => {
-
-    }
     const handlePlaceChanged = () => {
         if (autocompleteRef.current) {
             const place = autocompleteRef.current.getPlace();
@@ -84,31 +92,46 @@ export default function AddressSearchMap({ canEdit, typeMarketer }) {
                     lat: place.geometry.location.lat(),
                     lng: place.geometry.location.lng(),
                 };
-                dispatch(updateBrunchDetails({
-                    id: activeBrunch.id,
-                    address: place.formatted_address,
-                    location: newLocation,
-                }));
+                dispatch(
+                    updateBrunchDetails({
+                        id: brunch.id,
+                        address: place.formatted_address,
+                        location: newLocation,
+                    })
+                );
+                setLocalInputValue(place.formatted_address);
             }
         }
     };
 
     return (
         <div>
-            {canEdit && <button onClick={editNameBrunch}>
-                <PencilSquareIcon /> </button>}
-            <Typography className="text-[24px] font-bold mb-4 block w-full">   {typeMarketer === 'סוכן' ? 'כתובת הסוכן' : 'כתובת העסק'}
-            </Typography>
-            <Typography className="text-[16px] font-medium mb-1"> {typeMarketer === 'סוכן' ? 'כתובת הסוכן' : 'כתובת החנות'}</Typography>
+            {/* {canEdit && (
+                <button
+                    onClick={() => { }}
+                    className="flex cursor-pointer items-center gap-1 text-sm text-blue-600 hover:underline mb-2"
+                >
+                    <PencilSquareIcon className="w-4 h-4" />
+                </button>
+            )} */}
 
-            <div className="w-5/6 space-y-6 flex flex-col">
+            <Typography className="text-[24px] font-bold mb-4 block w-full">
+                {typeMarketer === "סוכן" ? "כתובת הסוכן" : "כתובת העסק"}
+            </Typography>
+
+            <Typography className="text-[16px] font-medium mb-1">
+                {typeMarketer === "סוכן" ? "כתובת הסוכן" : "כתובת החנות"}
+            </Typography>
+
+            <div className="w-5/6 space-y-3 flex flex-col">
                 <Autocomplete onLoad={handleLoad} onPlaceChanged={handlePlaceChanged}>
                     <input
                         type="text"
                         placeholder="הכנס כתובת..."
                         value={localInputValue}
                         onChange={(e) => setLocalInputValue(e.target.value)}
-                        className="w-6/6 flex justify-between items-center h-9 px-4 border border-input rounded-md bg-background text-sm text-muted-foreground peer-hover:border-primary peer-focus-visible:ring-1 peer-focus-visible:ring-ring transition-colors" />
+                        className="w-full flex justify-between items-center h-11 px-4 border border-input rounded-md bg-background text-sm text-muted-foreground peer-hover:border-primary peer-focus-visible:ring-1 peer-focus-visible:ring-ring transition-colors"
+                    />
                 </Autocomplete>
 
                 <GoogleMap
@@ -116,12 +139,11 @@ export default function AddressSearchMap({ canEdit, typeMarketer }) {
                     center={location || { lat: 32.0853, lng: 34.7818 }}
                     zoom={location ? 15 : 10}
                 >
-                    <Marker position={location} icon={customMarkerIcon} />
+                    {location && <Marker position={location} icon={customMarkerIcon} />}
                 </GoogleMap>
-                {typeMarketer == 'סוכן' && <Carusel />}
 
+                {typeMarketer === "סוכן" && <Carusel />}
             </div>
-
-        </div >
-    )
+        </div>
+    );
 }

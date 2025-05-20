@@ -9,7 +9,7 @@ export function CustomButton({ item, selected, handleSelect }) {
             onClick={() => handleSelect(item.value)}
             className={`
                 relative w-[200px] h-[119px] rounded-[40px] overflow-hidden cursor-pointer transition-all duration-300
-                bg-cover bg-center shadow-md
+                bg-cover bg-center shadow-md cursor-pointer
                 ${selected ? "border-2 border-yellow-400" : "border-2 border-transparent"}
             `}
 
@@ -31,7 +31,7 @@ export function CustomButtonRectangle({ item, selected, handleSelect }) {
             onClick={() => handleSelect(item.value)}
             className={`
                 relative flex h-[70px] w-full justify-start items-center rounded-full cursor-pointer transition-all duration-300 
-                shadow-md bg-cover bg-center
+                shadow-md bg-cover bg-center cursor-pointer
                 ${selected ? 'border-2 border-yellow-400' : 'border-2 border-transparent'}
             `}
             // style={{ backgroundImage: `url(${item.image})`, aspectRatio: '368 / 62' }}

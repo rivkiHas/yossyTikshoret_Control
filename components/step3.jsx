@@ -71,7 +71,7 @@ export default function StepThree() {
       <div className='flex flex-row w-full justify-between'>
         <div>
           <Button onClick={addContactManHandler}
-            className="bg-black border hover:bg-white hover:text-black hover:border-black text-white p-5 gap-2 rounded-full">
+            className=" cursor-pointer bg-black border hover:bg-white hover:text-black hover:border-black text-white p-5 gap-2 rounded-full">
             <PlusCircleIcon />
             הוספת איש קשר נוסף
           </Button>
@@ -79,12 +79,12 @@ export default function StepThree() {
 
         <div className="flex gap-4">
           <Button onClick={previousStepInRedux}
-            className="flex items-center gap-1 bg-white text-black border border-[#F8BD00]  p-5 gap-2 rounded-full hover:bg-white hover:text-black hover:border-black">
+            className=" cursor-pointer flex items-center gap-1 bg-white text-black border border-[#F8BD00]  p-5 gap-2 rounded-full hover:bg-white hover:text-black hover:border-black">
             <ArrowLongRightIcon />
             שלב קודם
           </Button>
           <Button onClick={nextStepInRedux}
-            className="flex items-center gap-3 text-black border border-black p-5 rounded-full relative overflow-hidden bg-white transition-all duration-400 ease-in-out shadow-md hover:scale-105 hover:text-black hover:shadow-lg active:scale-90 
+            className="flex cursor-pointer items-center gap-3 text-black border border-black p-5 rounded-full relative overflow-hidden bg-white transition-all duration-400 ease-in-out shadow-md hover:scale-105 hover:text-black hover:shadow-lg active:scale-90 
 before:absolute before:top-0 before:-right-full before:w-full before:h-full 
 before:bg-[#F8BD00] before:transition-all before:duration-500 before:ease-in-out 
 before:z-[-1] before:rounded-full hover:before:right-0"

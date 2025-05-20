@@ -43,6 +43,10 @@
     url('/fonts/SimplerPro/SimplerPro_HLAR-Black.woff') format('woff');
 }
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @import 'tailwindcss';
 
 @import 'tw-animate-css';
@@ -167,4 +171,39 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+@layer utilities {
+  .animate-slideIn {
+    animation: slideIn 1s ease-out forwards;
+  }
+
+  .animate-slideUpOut {
+    animation: slideUpOut 0.8s ease-in forwards;
+  }
+
+  @keyframes slideIn {
+    0% {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+
+    100% {
+      transform: translateY(0%);
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideUpOut {
+    0% {
+      transform: translateY(0%);
+      opacity: 1;
+    }
+
+    100% {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+  }
+
 }
