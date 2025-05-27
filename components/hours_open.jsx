@@ -8,7 +8,7 @@ import { Typography } from './typhography';
 import { PencilSquareIcon } from '@heroicons/react/24/solid';
 import { PlusCircleIcon, MinusCircleIcon } from "@heroicons/react/24/outline";
 
-const HoursOpen = () => {
+const HoursOpen = ({typeMarketer}) => {
   const dispatch = useDispatch();
   const [isGrouped, setIsGrouped] = useState(false);
   const [hover, setHover] = useState(-1);
@@ -27,7 +27,8 @@ const HoursOpen = () => {
           value,
         }
       }));
-    } else {
+    }
+    else {
       dispatch(updateBrunchDetails({
         id: brunch.id,
         hoursOpen: {
@@ -49,7 +50,7 @@ const HoursOpen = () => {
   return (
     <div className="flex flex-col h-[80vh]">
       <div className="flex flex-row justify-between mb-4">
-        <Typography className='text-2xl font-bold'>שעות פתיחה</Typography>
+        <Typography className='text-2xl font-bold'>  {typeMarketer === "סוכן" ? "שעות זמינות  " : "שעות פתיחה "}</Typography>
         <button
           onClick={() => setIsGrouped((prev) => !prev)}
           type="button"
@@ -198,11 +199,12 @@ const DayRow = ({ day, label, hours, handleChange, hover, index }) => {
 
 };
 
-const InputTime = ({ label, value, onChange }) => (
+const InputTime = ({ onChange }) => (
   <div className="flex flex-col">
     <input
       type="time"
       dir="ltr"
+      step="1800"
       onChange={onChange}
       className="flex items-center justify-end w-[100px] h-[40px] px-[20px] pr-[16px] gap-[10px]
                 border border-[#DBDEDE] rounded-[6px] bg-white 

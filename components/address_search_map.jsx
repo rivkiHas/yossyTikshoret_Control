@@ -5,7 +5,7 @@ import { GoogleMap, Marker, Autocomplete } from "@react-google-maps/api";
 import { useSelector, useDispatch } from "react-redux";
 import { updateBrunchDetails, setActiveBrunch } from "../store/brunch_store";
 import { Typography } from "./typhography";
-import { PencilSquareIcon } from "@heroicons/react/24/outline";
+import { MagnifyingGlassIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 import Carusel from "./carusel";
 
 const containerStyle = {
@@ -29,17 +29,18 @@ const customMarkerIcon = {
     scale: 3,
 };
 
-export default function AddressSearchMap({ canEdit, typeMarketer }) {
+export default function AddressSearchMap({ typeMarketer }) {
     const dispatch = useDispatch();
     const autocompleteRef = useRef(null);
-
     const brunches = useSelector((state) => state.brunch.brunches);
     const activeBrunch = useSelector((state) => state.brunch.activeBrunch);
-    const brunch = brunches.find((b) => b.id === activeBrunch) || null;
+    const brunch = brunches.find((b) => b.id === activeBrunch) || brunches[0];
     const address = brunch?.address || "";
     const location = brunch?.location || null;
 
     const [localInputValue, setLocalInputValue] = useState(address || "");
+    const [isEditing, setIsEditing] = useState(false);
+    const [brunchName, setBrunchName] = useState(`כתובת סניף  ${brunches.findIndex(b => b.id === activeBrunch) }`);
 
     useEffect(() => {
         setLocalInputValue(address);
@@ -83,7 +84,22 @@ export default function AddressSearchMap({ canEdit, typeMarketer }) {
     const handleLoad = (autocomplete) => {
         autocompleteRef.current = autocomplete;
     };
+    const setNameBrunch = () => {
+        dispatch
+    }
 
+    const handleEditBrunch = () => {
+        setIsEditing(true);
+    };
+
+    const handleSaveBrunch = (e) => {
+
+        setIsEditing(false);
+        dispatch(updateBrunchDetails({
+            id: brunch.id,
+            name: brunchName
+        }))
+    };
     const handlePlaceChanged = () => {
         if (autocompleteRef.current) {
             const place = autocompleteRef.current.getPlace();
@@ -106,28 +122,46 @@ export default function AddressSearchMap({ canEdit, typeMarketer }) {
 
     return (
         <div>
-            {/* {canEdit && (
-                <button
-                    onClick={() => { }}
-                    className="flex cursor-pointer items-center gap-1 text-sm text-blue-600 hover:underline mb-2"
-                >
-                    <PencilSquareIcon className="w-4 h-4" />
-                </button>
-            )} */}
+            <div className="flex items-center w-5/6">
+                {isEditing ? (
+                    <input
+                        type="text"
+                        value={brunchName}
+                        onChange={(e) => setBrunchName(e.target.value)}
+                        onBlur={handleSaveBrunch}
+                        onKeyPress={(e) => e.key === "Enter" && handleSaveBrunch()}
+                        autoFocus
+                        className="text-[24px] font-bold mb-4 block border-b border-gray-300 "
+                    />
+                ) : (
+                    <Typography className="text-[24px] font-bold mb-4 block w-full">
+                        {typeMarketer === "סוכן"
+                            ? "אזור פעילות"
+                            : brunches.length > 1
+                                ? brunchName
+                                : "כתובת העסק"}
+                    </Typography>
+                )}
 
-            <Typography className="text-[24px] font-bold mb-4 block w-full">
-                {typeMarketer === "סוכן" ? "כתובת הסוכן" : "כתובת העסק"}
-            </Typography>
-
+                {typeMarketer === "חנות" && brunches.length > 1 && !isEditing && (
+                    <button onClick={handleEditBrunch} className=" cursor-pointer p-1 hover:bg-gray-100 rounded-full">
+                        <PencilSquareIcon className="h-6 w-6 text-black font-bold cursor-pointer" />
+                    </button>
+                )}
+            </div>
             <Typography className="text-[16px] font-medium mb-1">
-                {typeMarketer === "סוכן" ? "כתובת הסוכן" : "כתובת החנות"}
+                {typeMarketer === "סוכן"
+                    ? "אזור פעילות"
+                    : brunches.length > 1
+                        ? `כתובת חנות מס ${brunches.findIndex(b => b.id === activeBrunch)+1 }`
+                        : "כתובת החנות"}
             </Typography>
 
-            <div className="w-5/6 space-y-3 flex flex-col">
+            <div className="w-5/6 space-y-3 flex flex-col gap-4">
                 <Autocomplete onLoad={handleLoad} onPlaceChanged={handlePlaceChanged}>
                     <input
                         type="text"
-                        placeholder="הכנס כתובת..."
+                        placeholder={typeMarketer=="חנות"? "הכנס כתובת...": "חפש מיקום נוסף"}
                         value={localInputValue}
                         onChange={(e) => setLocalInputValue(e.target.value)}
                         className="w-full flex justify-between items-center h-11 px-4 border border-input rounded-md bg-background text-sm text-muted-foreground peer-hover:border-primary peer-focus-visible:ring-1 peer-focus-visible:ring-ring transition-colors"
@@ -142,8 +176,8 @@ export default function AddressSearchMap({ canEdit, typeMarketer }) {
                     {location && <Marker position={location} icon={customMarkerIcon} />}
                 </GoogleMap>
 
-                {typeMarketer === "סוכן" && <Carusel />}
+                {typeMarketer === "סוכן" && <Carusel activeBrunch={activeBrunch} />}
             </div>
-        </div>
+        </div >
     );
 }

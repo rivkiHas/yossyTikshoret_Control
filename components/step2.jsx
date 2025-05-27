@@ -19,13 +19,14 @@ export default function StepTwo({ brunch: propBrunch }) {
   const activeStep = useSelector((state) => state.stepper.activeStep)
   const activeBrunch = useSelector((state) => state.brunch.activeBrunch);
 
-  // אם יש brunch שנשלח כפרופ, השתמש בו; אחרת, השתמש בסניף הפעיל מהסטור
   const brunch = propBrunch || brunches.find(b => b.id === activeBrunch);
 
-  // עדכון הסניף הפעיל כאשר הוא משתנה דרך הפרופס
   useEffect(() => {
-    if (propBrunch && propBrunch.id !== activeBrunch) {
+    if (propBrunch &&propBrunch.id && propBrunch.id !== activeBrunch) {
+      console.log("step2", propBrunch.id );
+      
       dispatch(setActiveBrunch(propBrunch.id));
+
     }
   }, [propBrunch, activeBrunch, dispatch]);
 
@@ -33,40 +34,30 @@ export default function StepTwo({ brunch: propBrunch }) {
   const [newBranchName, setNewBranchName] = useState('');
 
   const nextStepInRedux = () => {
-    // אם יש רק סניף אחד, עבור לשלב הבא
     if (brunches.length === 1) {
       dispatch(setActiveStep(activeStep + 1));
     } else {
-      // אם יש יותר מסניף אחד, עבור לסניף הבא או לשלב השלישי
       const currentBrunchIndex = brunches.findIndex(b => b.id === activeBrunch);
       if (currentBrunchIndex < brunches.length - 1) {
-        // יש עוד סניף אחרי הנוכחי
         const nextBrunch = brunches[currentBrunchIndex + 1];
         dispatch(setActiveBrunch(nextBrunch.id));
-        // מחשב את האינדקס של הסניף בטאבים (2 + currentBrunchIndex + 1)
         dispatch(setActiveStep(2 + currentBrunchIndex + 1));
       } else {
-        // זה הסניף האחרון, עבור לשלב 3
-        dispatch(setActiveStep(2 + brunches.length)); // אינדקס של שלב 3 בטאבים
+        dispatch(setActiveStep(2 + brunches.length));
       }
     }
   };
 
   const previousStepInRedux = () => {
-    // אם יש רק סניף אחד, חזור לשלב הראשון
     if (brunches.length === 1) {
       dispatch(setActiveStep(activeStep - 1));
     } else {
-      // אם יש יותר מסניף אחד, חזור לסניף הקודם או לשלב הראשון
       const currentBrunchIndex = brunches.findIndex(b => b.id === activeBrunch);
       if (currentBrunchIndex > 0) {
-        // יש סניף לפני הנוכחי
         const prevBrunch = brunches[currentBrunchIndex - 1];
         dispatch(setActiveBrunch(prevBrunch.id));
-        // מחשב את האינדקס של הסניף בטאבים (2 + currentBrunchIndex - 1)
         dispatch(setActiveStep(2 + currentBrunchIndex - 1));
       } else {
-        // זה הסניף הראשון, חזור לשלב 1
         dispatch(setActiveStep(0));
       }
     }
@@ -98,7 +89,6 @@ export default function StepTwo({ brunch: propBrunch }) {
     dispatch(addBrunch(newBrunch));
     dispatch(setActiveBrunch(newId));
 
-    // עדכון האינדקס של הסניף החדש בטאבים
     const newBrunchIndex = brunches.length;
     dispatch(setActiveStep(2 + newBrunchIndex));
 
@@ -111,19 +101,15 @@ export default function StepTwo({ brunch: propBrunch }) {
       const brunchIndex = brunches.findIndex(b => b.id === brunch.id);
       dispatch(removeBrunch(brunch.id));
 
-      // עדכון הסניף הפעיל והשלב הפעיל אחרי המחיקה
       if (brunchIndex > 0) {
-        // אם יש סניף קודם, עבור אליו
         const prevBrunch = brunches[brunchIndex - 1];
         dispatch(setActiveBrunch(prevBrunch.id));
         dispatch(setActiveStep(2 + brunchIndex - 1));
       } else if (brunches.length > 1) {
-        // אם יש סניף אחרי הנוכחי, עבור אליו
         const nextBrunch = brunches[1];
         dispatch(setActiveBrunch(nextBrunch.id));
         dispatch(setActiveStep(2));
       } else {
-        // אם זה הסניף האחרון שנשאר, השאר בשלב 2
         dispatch(setActiveStep(1));
       }
     } else {
@@ -131,7 +117,6 @@ export default function StepTwo({ brunch: propBrunch }) {
     }
   };
 
-  // אם אין סניף פעיל, אל תרנדר
   if (!brunch) {
     return null;
   }
@@ -141,15 +126,15 @@ export default function StepTwo({ brunch: propBrunch }) {
       <div className="flex flex-col items-end w-full max-w-[1440px] px-[50px] py-[30px]">
         <div className="flex w-full items-start">
           <div className="flex flex-col w-1/2 text-right">
-            <AddressSearchMap canEdit={brunches.length > 1} typeMarketer={typeMarketer} />
+            <AddressSearchMap typeMarketer={typeMarketer} />
           </div>
           <div className="flex flex-col w-1/2 text-right">
-            <HoursOpen />
+            <HoursOpen typeMarketer={typeMarketer} />
           </div>
         </div>
 
-        <div className='flex flex-row w-full justify-between'>
-          <div>
+        <div className={`flex flex-row w-full ${typeMarketer === "חנות" ? "justify-between" : "justify-end"}`}>
+          {typeMarketer == "חנות" && <div>
             <div className='flex flex-row gap-4'>
               <Button onClick={handleAddBranchClick}
                 className="cursor-pointer bg-black border hover:bg-white hover:text-black hover:border-black text-white p-5 gap-2 rounded-full"
@@ -167,8 +152,8 @@ export default function StepTwo({ brunch: propBrunch }) {
                 />
               }
             </div>
-          </div>
-          <div className="flex gap-4">
+          </div>}
+          <div className="flex gap-4 ">
             <Button onClick={previousStepInRedux}
               className="cursor-pointer flex items-center gap-1 bg-white text-black border border-[#F8BD00]  p-5 gap-2 rounded-full hover:bg-white hover:text-black hover:border-black"
             >

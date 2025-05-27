@@ -21,11 +21,11 @@ export function RegisterForm1() {
 
     const form = useForm({
         defaultValues: {
-            username: user?.username || "",
-            useremail: user?.useremail || "",
-            userid: user?.userid || "",
-            userphone: user?.userphone || "",
-            userlogo: null,
+            name: user?.name || "",
+            mail: user?.mail || "",
+            id: user?.id || "",
+            phone: user?.phone || "",
+            logo: null,
         },
     });
 
@@ -54,10 +54,10 @@ export function RegisterForm1() {
                     className="w-5/6 space-y-7.5 flex flex-col"
                 >
                     {[
-                        { name: "username", label: "שם העסק", placeholder: "יש להזין שם העסק" },
-                        { name: "useremail", label: "אימייל העסק", placeholder: "יש להזין את אימייל העסק" },
-                        { name: "userid", label: "ח.פ / ע.מ העסק", placeholder: "יש להזין ח.פ / ע.מ העסק" },
-                        { name: "userphone", label: "טלפון העסק", placeholder: "יש להזין את טלפון העסק" },
+                        { name: "name", label: "שם העסק", placeholder: "יש להזין שם העסק" },
+                        { name: "mail", label: "אימייל העסק", placeholder: "יש להזין את אימייל העסק" },
+                        { name: "id", label: "ח.פ / ע.מ העסק", placeholder: "יש להזין ח.פ / ע.מ העסק" },
+                        { name: "phone", label: "טלפון העסק", placeholder: "יש להזין את טלפון העסק" },
                     ].map(({ name, label, placeholder }) => (
                         <FormField
                             key={name}
@@ -82,9 +82,9 @@ export function RegisterForm1() {
 
                     <FormField
                         control={form.control}
-                        name="userlogo"
+                        name="logo"
                         render={({ field }) => {
-                            const file = form.watch("userlogo");
+                            const file = form.watch("logo");
 
                             return (
                                 <FormItem>
@@ -98,8 +98,8 @@ export function RegisterForm1() {
                                                 className="peer absolute inset-0 z-10 opacity-0 cursor-pointer"
                                                 onChange={(e) => {
                                                     const selectedFile = e.target.files?.[0];
-                                                    form.setValue("userlogo", selectedFile);
-                                                    dispatch(setFormData({ userlogo: selectedFile.name }));
+                                                    form.setValue("logo", selectedFile);
+                                                    dispatch(setFormData({ logo: selectedFile }));
                                                 }}
                                             />
                                             <div className="flex justify-between items-center h-9 px-4 border border-input rounded-md bg-background text-sm text-muted-foreground peer-hover:border-primary peer-focus-visible:ring-1 peer-focus-visible:ring-ring transition-colors">
@@ -114,8 +114,8 @@ export function RegisterForm1() {
                                                         className="text-gray-500 hover:text-red-500"
                                                         onClick={(e) => {
                                                             e.stopPropagation();
-                                                            form.setValue("userlogo", null);
-                                                            dispatch(setFormData({ userlogo: null }));
+                                                            form.setValue("logo", null);
+                                                            dispatch(setFormData({ logo: null }));
                                                         }}
                                                     >
                                                         ✕

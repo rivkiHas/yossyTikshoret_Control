@@ -35,6 +35,8 @@ const brunchSlice = createSlice({
         },
         setActiveBrunch: (state, action) => {
             state.activeBrunch = action.payload;
+            console.log(action.payload);
+            
         },
         removeBrunch: (state, action) => {
             state.brunches = state.brunches.filter(brunch => brunch.id !== action.payload);

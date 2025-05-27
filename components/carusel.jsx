@@ -3,26 +3,22 @@ import { TrashIcon } from "@heroicons/react/24/outline";
 import { motion } from "framer-motion";
 import { useSelector, useDispatch } from "react-redux";
 import { removeBrunch, setActiveBrunch } from "../store/brunch_store";
+import { setActiveStep } from "@/store/step_store";
 
-function BranchCard({ branch, isActive, onDelete, onSelect }) {
+
+function BranchCard({ branch, isActive, onDelete, onSelect, index }) {
     const [isHovered, setIsHovered] = useState(false);
-
-    const backgroundStyles = {
-        backgroundImage: `url(/images/Component59.png)`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundBlendMode: isActive ? "lighten" : undefined,
-    };
-
     return (
         <div
             key={branch.id}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
             onClick={() => onSelect(branch.id)}
-            className={`relative flex w-[132px] h-[84.9px] p-[12px_12px_8px_12px] flex-col justify-end items-start flex-shrink-0 rounded-[16px] cursor-pointer transition-all duration-300 ${isActive ? "border-[2px] border-[#F8BD00]" : ""
-                }`}
-            style={backgroundStyles}
+            className={`relative flex w-[132px] h-[84.9px] p-[12px_12px_8px_12px] flex-col justify-end items-start flex-shrink-0 rounded-[16px] cursor-pointer transition-all duration-300 ${
+                isActive
+                    ? "border-[2px] border-[#F8BD00] bg-yellow-100"
+                    : "border border-gray-300 bg-gray-200"
+            }`}
         >
             {isHovered && (
                 <motion.div
@@ -35,46 +31,56 @@ function BranchCard({ branch, isActive, onDelete, onSelect }) {
                     <TrashIcon
                         onClick={(e) => {
                             e.stopPropagation();
-                            onDelete(branch);
+                            onDelete(branch, index);
                         }}
                         className="w-6 h-6 hover:scale-110 transition-transform duration-300 text-black"
                     />
                 </motion.div>
             )}
-
-            <div className="flex w-[50px] p-[6px] bottom-1 left-1 justify-center items-center gap-[6px] flex-shrink-0 rounded-[22.11px] bg-white text-black font-[SimplerPro_HLAR] text-[16px] font-semibold">
+            <div className="absolute flex bottom-2 left-2 justify-center items-center p-1 gap-[6px] flex-shrink-0 rounded-[22.11px] bg-white text-black font-[SimplerPro_HLAR] text-[16px] font-semibold">
                 {branch.name}
             </div>
-
         </div>
     );
 }
 
 export default function BranchCarousel() {
     const brunches = useSelector((state) => state.brunch.brunches);
-    const activeBrunch = useSelector((state) => state.brunch.activeBrunch);
+    const activeBrunch = useSelector((state) => state.brunch.activeBrunch || 0);
     const dispatch = useDispatch();
 
-    const handleDelete = (branch) => {
+    const handleDelete = (branch, index) => {
         if (brunches.length > 1) {
             dispatch(removeBrunch(branch.id));
+            if (index === activeBrunch) {
+                const newActiveBrunch = index === brunches.length - 1 ? Math.max(0, index - 1) : index;
+                dispatch(setActiveStep(newActiveBrunch));
+            } else if (index < activeBrunch) {
+                console.log("delete");
+                
+                dispatch(setActiveBrunch(activeBrunch - 1));
+                
+            }
         } else {
             console.log("לא ניתן למחוק, חייב להיות לפחות סניף אחד");
         }
     };
 
-    const handleSelect = (id) => {
-        dispatch(setActiveBrunch(id));
+    const handleSelect = (index) => {
+        dispatch(setActiveBrunch(index));
+        console.log("index" ,index );
+        
     };
 
     return (
         <div className="w-full overflow-x-auto scrollbar-none cursor-pointer">
-            <div className="flex gap-2 pr-2">
-                {brunches.map((branch) => (
+            <div className="flex gap-2">
+                {brunches.map((branch, index) => (
                     <BranchCard
                         key={branch.id}
                         branch={branch}
-                        isActive={branch.id === activeBrunch}
+                        index={index}
+                        isActive={index === activeBrunch}
                         onDelete={handleDelete}
                         onSelect={handleSelect}
                     />

@@ -20,7 +20,7 @@ const icons = {
     ),
     done: (
         <div className="flex items-center justify-center w-[32px] h-[32px] flex-shrink-0 rounded-full border-[1.5px] border-[#F8BD00] bg-[#F8BD00]">
-            <ExclamationCircleIcon />
+            <ExclamationCircleIcon className="w-[27px] h-[27px] flex-shrink-0 aspect-square text-[#FFF]"/>
         </div>
 
     ),

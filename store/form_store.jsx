@@ -1,4 +1,3 @@
-// src/redux/formSlice.js
 import { createSlice } from '@reduxjs/toolkit';
 
 const formSlice = createSlice({
@@ -19,7 +18,6 @@ const formSlice = createSlice({
     },
     reducers: {
         setFormData: (state, action) => {
-            // רק מעדכן את הערכים ששונו ולא מחליף את כל ה-state
             state.pertip = {
                 ...state.pertip,
                 ...action.payload

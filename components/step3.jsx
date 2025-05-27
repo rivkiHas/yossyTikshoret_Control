@@ -55,7 +55,7 @@ export default function StepThree() {
 
   return (
     <div className="flex flex-col gap-6 max-w-[1440px] px-[50px] py-[30px] direction-rtl ">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-h-[70vh] overflow-y-auto pr-2">
+      <div className="grid grid-cols-1 md:grid-cols-1 gap-30 max-h-[70vh] overflow-y-auto pr-2">
 
         {contactMans.map((x, index) => (
           <div key={x.id} className="ml-20">
@@ -66,6 +66,7 @@ export default function StepThree() {
             />
           </div>
         ))}
+       
       </div>
 
       <div className='flex flex-row w-full justify-between'>

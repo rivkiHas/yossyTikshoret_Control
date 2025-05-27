@@ -1,11 +1,14 @@
 import { createSelector } from '@reduxjs/toolkit';
 
 export const isPertipStepComplete = createSelector(
+
     state => state.form.pertip,
     (pertip) => {
         const { name, email, id, phone, typeMarketer, typeSales } = pertip;
+        console.log("pertip values:", name, email, id, phone, typeMarketer, typeSales);
         return !!(name && email && id && phone && typeMarketer && typeSales.length > 0);
     }
+
 );
 
 export const isContactStepComplete = createSelector(
