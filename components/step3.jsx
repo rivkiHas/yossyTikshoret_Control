@@ -17,6 +17,7 @@ export default function StepThree() {
   const [showAlert, setShowAlert] = useState(false); // חדש
   const contactMans = useSelector(state => state.conectMan.contactMans || []);
   const activeStep = useSelector(state => state.stepper.activeStep);
+  const [validators, setValidators] = useState({});
 
   const nextStepInRedux = async () => {
     setShowAlert(true);
@@ -63,10 +64,13 @@ export default function StepThree() {
               contactId={x.id}
               canDelete={contactMans.length > 1}
               OkFunction={handleDeleteConfirmation}
+              setValidator={(fn) => {
+                setValidators((prev) => ({ ...prev, [x.id]: fn }));
+              }}
             />
           </div>
         ))}
-       
+
       </div>
 
       <div className='flex flex-row w-full justify-between'>

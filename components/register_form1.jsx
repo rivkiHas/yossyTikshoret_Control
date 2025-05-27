@@ -20,11 +20,8 @@ export function RegisterForm1({ form }) {
     const dispatch = useDispatch();
     const user = useSelector((state) => state.form.pertip);
 
-
-
     const onSubmit = () => {
         const formData = form.getValues();
-        console.log("Form Data:", formData);
         dispatch(setFormData(formData));
     };
 
@@ -49,7 +46,7 @@ export function RegisterForm1({ form }) {
             },
         },
         {
-            name: "mail",
+            name: "email",
             label: "אימייל העסק",
             placeholder: "יש להזין את אימייל העסק",
             rules: {

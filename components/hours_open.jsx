@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateBrunchDetails } from '../store/brunch_store';
 import { Switch } from "@/components/ui/switch";
@@ -8,7 +8,7 @@ import { Typography } from './typhography';
 import { PencilSquareIcon } from '@heroicons/react/24/solid';
 import { PlusCircleIcon, MinusCircleIcon } from "@heroicons/react/24/outline";
 
-const HoursOpen = ({typeMarketer}) => {
+const HoursOpen = ({ typeMarketer }) => {
   const dispatch = useDispatch();
   const [isGrouped, setIsGrouped] = useState(false);
   const [hover, setHover] = useState(-1);
@@ -16,32 +16,54 @@ const HoursOpen = ({typeMarketer}) => {
   const brunches = useSelector((state) => state.brunch.brunches);
   const activeBrunch = useSelector((state) => state.brunch.activeBrunch);
   const brunch = brunches.find((b) => b.id === activeBrunch) || null;
+  const [localHoursOpen, setLocalHoursOpen] = useState([]);
+
+  useEffect(() => {
+    if (brunch?.hoursOpen) {
+      setLocalHoursOpen(JSON.parse(JSON.stringify(brunch.hoursOpen)));
+    }
+  }, [brunch]);
 
   const handleChange = (day, period, type, value, index) => {
-    if (day === "weekday") {
-      dispatch(updateBrunchDetails({
-        id: brunch.id,
-        weekday: {
-          period,
-          type,
-          value,
-        }
-      }));
+    // day - מחרוזת: שם היום
+    // period - "morning" או "evening"
+    // type - "open" או "close"
+    // value - השעה שנבחרה
+    // index - אינדקס היום במספרים, לפי איך שהקוד עובד (1-5 וכו')
+
+    if (!index) {
+      console.warn("index לא מוגדר ב-handleChange");
+      return;
     }
-    else {
+
+    let updatedHours = [...localHoursOpen];
+
+    if (isGrouped) {
+      // אם מקובץ, נעדכן את הימים א-ה (1-5)
+      const daysToUpdate = [1, 2, 3, 4, 5];
+
+      daysToUpdate.forEach((dayIndex) => {
+        if (!updatedHours[dayIndex]) updatedHours[dayIndex] = { morning: {}, evening: {} };
+        if (!updatedHours[dayIndex][period]) updatedHours[dayIndex][period] = {};
+        updatedHours[dayIndex][period][type] = value;
+      });
+
+    } else {
+      // לא מקובץ - רק יום אחד מתעדכן
+      if (!updatedHours[index]) updatedHours[index] = { morning: {}, evening: {} };
+      if (!updatedHours[index][period]) updatedHours[index][period] = {};
+      updatedHours[index][period][type] = value;
+    }
+
+    setLocalHoursOpen(updatedHours);
+
+    if (brunch) {
       dispatch(updateBrunchDetails({
         id: brunch.id,
-        hoursOpen: {
-          day: index,
-          period,
-          type,
-          value,
-        }
+        hoursOpen: updatedHours,
       }));
     }
   };
-
-
 
   const handleSwitchChange = (checked) => {
     setIsSwitchOn(checked);
@@ -50,12 +72,13 @@ const HoursOpen = ({typeMarketer}) => {
   return (
     <div className="flex flex-col h-[80vh]">
       <div className="flex flex-row justify-between mb-4">
-        <Typography className='text-2xl font-bold'>  {typeMarketer === "סוכן" ? "שעות זמינות  " : "שעות פתיחה "}</Typography>
+        <Typography className='text-2xl font-bold'>
+          {typeMarketer === "סוכן" ? "שעות זמינות  " : "שעות פתיחה "}
+        </Typography>
         <button
           onClick={() => setIsGrouped((prev) => !prev)}
           type="button"
           className="group flex h-[40px] w-[40px] items-center justify-center rounded-full bg-[#FEF2CC] text-[#F8BD00] transition-[width] delay-1000 duration-100 ease-out hover:w-auto hover:rounded-3xl hover:px-3 hover:flex-row-reverse"
-
         >
           <span className="hidden group-hover:inline-block text-black text-base font-bold
              opacity-0 group-hover:opacity-100
@@ -78,30 +101,28 @@ const HoursOpen = ({typeMarketer}) => {
         )}
         {!isGrouped ? (
           <DayRow
-            day="weekday"
+            day="one"
             label="ימים א'-ה'"
-            hours={brunch?.weekday}
+            hours={localHoursOpen?.[1]}
             handleChange={handleChange}
-            index="weekday"
+            index={1}
             disabled={isSwitchOn}
-
           />
         ) : (
-          ["ראשון", " שני  ", "שלישי", "רביעי", "חמישי"].map((day, index) => (
+          ["ראשון", "שני", "שלישי", "רביעי", "חמישי"].map((day, idx) => (
             <div
-              key={index}
-              onMouseEnter={() => setHover(index)}
+              key={idx}
+              onMouseEnter={() => setHover(idx)}
               onMouseLeave={() => setHover(-1)}
             >
               <DayRow
                 day={day}
                 label={`יום ${day}`}
-                hours={brunch?.hoursOpen?.[index + 1]}
+                hours={localHoursOpen?.[idx + 1]}
                 handleChange={handleChange}
-                hover={hover === index}
-                index={index + 1}
+                hover={hover === idx}
+                index={idx + 1}
                 disabled={isSwitchOn}
-
               />
             </div>
           ))
@@ -109,18 +130,17 @@ const HoursOpen = ({typeMarketer}) => {
         <DayRow
           day="שישי"
           label="יום ו'"
-          hours={brunch?.hoursOpen?.[5]}
+          hours={localHoursOpen?.[6]}  // שים לב, לפי מה שהגדרת, כנראה שימי השבוע מסודרים מ-1 עד 6
           handleChange={handleChange}
-          index={5}
+          index={6}
           disabled={isSwitchOn}
-
         />
       </div>
     </div>
   );
 };
 
-const DayRow = ({ day, label, hours, handleChange, hover, index }) => {
+const DayRow = ({ day, label, hours, handleChange, hover, index, disabled }) => {
   const [isEveningVisible, setIsEveningVisible] = useState(false);
 
   const toggleEvening = () => setIsEveningVisible(prev => !prev);
@@ -135,10 +155,11 @@ const DayRow = ({ day, label, hours, handleChange, hover, index }) => {
         <div className="flex flex-row-reverse items-center justify-start gap-5 p-2 rounded-xl">
           <button
             onClick={toggleEvening}
-            className="group cursor-pointer outline-none hover:rotate-90 duration-300  "
+            disabled={disabled}
+            className="group cursor-pointer outline-none hover:rotate-90 duration-300"
           >
             {!isEveningVisible ? (
-              <PlusCircleIcon className="h-[40px] w-[40px] fill-black text-white stroke-white hover:fill-[#F8BD00]  " />
+              <PlusCircleIcon className="h-[40px] w-[40px] fill-black text-white stroke-white hover:fill-[#F8BD00]" />
             ) : <div className="h-[40px] w-[40px] text-black" />}
           </button>
 
@@ -149,6 +170,7 @@ const DayRow = ({ day, label, hours, handleChange, hover, index }) => {
               <InputTime
                 value={hours?.morning?.open || ""}
                 onChange={(e) => handleChange(day, "morning", "open", e.target.value, index)}
+                disabled={disabled}
               />
             </div>
             <div className="flex flex-col gap-1">
@@ -156,6 +178,7 @@ const DayRow = ({ day, label, hours, handleChange, hover, index }) => {
               <InputTime
                 value={hours?.morning?.close || ""}
                 onChange={(e) => handleChange(day, "morning", "close", e.target.value, index)}
+                disabled={disabled}
               />
             </div>
 
@@ -166,9 +189,10 @@ const DayRow = ({ day, label, hours, handleChange, hover, index }) => {
         <div className="flex flex-row-reverse items-center justify-start gap-4 p-3 rounded-xl">
           <button
             onClick={toggleEvening}
-            className="group cursor-pointer outline-none hover:rotate-90 duration-300 "
+            disabled={disabled}
+            className="group cursor-pointer outline-none hover:rotate-90 duration-300"
           >
-            <MinusCircleIcon className="h-[40px] w-[40px] fill-black text-white stroke-white hover:fill-[#F8BD00] " />
+            <MinusCircleIcon className="h-[40px] w-[40px] fill-black text-white stroke-white hover:fill-[#F8BD00]" />
           </button>
 
           <div className='flex flex-row gap-3 items-end'>
@@ -180,6 +204,7 @@ const DayRow = ({ day, label, hours, handleChange, hover, index }) => {
               <InputTime
                 value={hours?.evening?.close || ""}
                 onChange={(e) => handleChange(day, "evening", "close", e.target.value, index)}
+                disabled={disabled}
               />
             </div>
             <div className="flex flex-col gap-1">
@@ -187,6 +212,7 @@ const DayRow = ({ day, label, hours, handleChange, hover, index }) => {
               <InputTime
                 value={hours?.evening?.open || ""}
                 onChange={(e) => handleChange(day, "evening", "open", e.target.value, index)}
+                disabled={disabled}
               />
             </div>
           </div>
@@ -199,16 +225,18 @@ const DayRow = ({ day, label, hours, handleChange, hover, index }) => {
 
 };
 
-const InputTime = ({ onChange }) => (
+const InputTime = ({ onChange, value, disabled }) => (
   <div className="flex flex-col">
     <input
       type="time"
       dir="ltr"
       step="1800"
       onChange={onChange}
+      value={value}
+      disabled={disabled}
       className="flex items-center justify-end w-[100px] h-[40px] px-[20px] pr-[16px] gap-[10px]
                 border border-[#DBDEDE] rounded-[6px] bg-white 
-                text-[#4C585B] text-[16px] leading-[24px] font-[400] text-right"
+                text-[#4C585B] text-[16px] leading-[24px] font-[400] text-right disabled:opacity-50"
     />
   </div>
 );

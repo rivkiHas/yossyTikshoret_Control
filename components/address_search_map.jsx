@@ -134,7 +134,6 @@ export default function AddressSearchMap({ typeMarketer }) {
             <div className="flex items-center justify-between w-5/6 gap-2">
                 <div className="flex flex-row items-start text-[24px] font-bold mb-4">
                     <span className="block">כתובת סניף&nbsp;</span>
-
                     {isEditing ? (
                         <input
                             type="text"
@@ -168,10 +167,10 @@ export default function AddressSearchMap({ typeMarketer }) {
             <Typography className="text-[16px] font-medium mb-1">
                 {typeMarketer === "סוכן"
                     ? "אזור פעילות"
-                    : `כתובת סניף${brunch?.name} ` && brunch.name.trim() !== ""
-                        ? brunch.name
+                    : `כתובת סניף ${brunch?.name}` && brunch.name.trim() !== ""
+                        ? `כתובת סניף${brunch.name}`
                         : brunches.length > 1
-                            ? brunchName
+                            ? `כתובת סניף ${brunch.name}`
                             : "כתובת העסק"}
             </Typography>
 

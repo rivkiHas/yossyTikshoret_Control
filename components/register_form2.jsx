@@ -26,6 +26,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import TooltipValid from './tooltip_valid'
+
 
 const FormSchema = z.object({
   contactManName: z.string().min(2, {
@@ -46,7 +48,7 @@ const FormSchema = z.object({
 })
 
 
-export function RegisterForm2({ OkFunction, contactId, canDelete }) {
+export function RegisterForm2({ OkFunction, contactId, canDelete, setValidator }) {
 
   const dispatch = useDispatch()
 
@@ -60,6 +62,7 @@ export function RegisterForm2({ OkFunction, contactId, canDelete }) {
 
 
   const form = useForm({
+    mode: "onBlur",
     resolver: zodResolver(FormSchema),
     defaultValues: {
       contactManName: contactMan?.contactManName || "",
@@ -69,6 +72,7 @@ export function RegisterForm2({ OkFunction, contactId, canDelete }) {
       owner: "",
     },
   })
+
 
   const watchPhone = form.watch("contactManPhone")
   const watchMail = form.watch("contactManEmail")
@@ -97,7 +101,7 @@ export function RegisterForm2({ OkFunction, contactId, canDelete }) {
           <Typography className="text-2xl font-bold">איש קשר</Typography>
           <div>
             {canDelete && contactIndex > 0 &&
-              <IconButton headerText="מחיקה" onConfirm={(co) => { OkFunction(co) }} contactId={contactId} text={"האם ברצונך למחוק את איש קשר זה?"}/>
+              <IconButton headerText="מחיקה" onConfirm={(co) => { OkFunction(co) }} contactId={contactId} text={"האם ברצונך למחוק את איש קשר זה?"} />
             }
           </div>
         </div>
@@ -108,32 +112,47 @@ export function RegisterForm2({ OkFunction, contactId, canDelete }) {
           <FormField
             control={form.control}
             name="contactManName"
-            render={({ field }) => (
-              <FormItem>
+            render={({ field, fieldState }) => (
+              <FormItem className="relative">
                 <FormLabel>שם מלא</FormLabel>
                 <FormControl>
-                  <Input placeholder="יש להזין שם מלא"
-                    name={field.name}
-                    {...field}
-                    value={field.value}
-                    onChange={handleInputChange(field)}
-                  />
+                  <div className="relative">
+                    <Input
+                      placeholder="יש להזין שם מלא"
+                      name={field.name}
+                      {...field}
+                      value={field.value}
+                      onChange={handleInputChange(field)}
+                    />
+                    {fieldState.error && (
+                      <TooltipValid tooltipText={fieldState.error.message} />
+                    )}
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
             name="contactManPhone"
-            render={({ field }) => (
-              <FormItem>
+            render={({ field, fieldState }) => (
+              <FormItem className="relative">
                 <FormLabel>טלפון אישי</FormLabel>
                 <FormControl>
-                  <Input placeholder="יש להזין מספר טלפון אישי" {...field}
-                    name={field.name}
-                    value={field.value}
-                    onChange={handleInputChange(field)} />
+                  <div className="relative">
+                    <Input
+                      placeholder="יש להזין מספר טלפון אישי"
+                      name={field.name}
+                      {...field}
+                      value={field.value}
+                      onChange={handleInputChange(field)}
+                    />
+                    {fieldState.error && (
+                      <TooltipValid tooltipText={fieldState.error.message} />
+                    )}
+                  </div>
                 </FormControl>
                 <FormDescription>מספר זה מיועד לקשר אישי ואינו מספר העסק.</FormDescription>
                 {isPhoneValid && <CodeVerificationFlow placeholder="טלפון" />}
@@ -141,17 +160,26 @@ export function RegisterForm2({ OkFunction, contactId, canDelete }) {
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
             name="contactManEmail"
-            render={({ field }) => (
-              <FormItem>
+            render={({ field, fieldState }) => (
+              <FormItem className="relative">
                 <FormLabel>אימייל אישי</FormLabel>
                 <FormControl>
-                  <Input placeholder="יש להזין אימייל אישי" {...field}
-                    name={field.name}
-                    value={field.value}
-                    onChange={handleInputChange(field)} />
+                  <div className="relative">
+                    <Input
+                      placeholder="יש להזין אימייל אישי"
+                      name={field.name}
+                      {...field}
+                      value={field.value}
+                      onChange={handleInputChange(field)}
+                    />
+                    {fieldState.error && (
+                      <TooltipValid tooltipText={fieldState.error.message} />
+                    )}
+                  </div>
                 </FormControl>
                 <FormDescription>אימייל זה מיועד לקשר אישי ואינו אימייל העסק.</FormDescription>
                 {isEmailValid && <CodeVerificationFlow placeholder="אימייל" />}
@@ -159,6 +187,7 @@ export function RegisterForm2({ OkFunction, contactId, canDelete }) {
               </FormItem>
             )}
           />
+
           {contactMans?.length > 1 && (
             <>
               <FormField

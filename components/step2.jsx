@@ -71,7 +71,7 @@ export default function StepTwo({ brunch: propBrunch }) {
     const newId = Math.max(...brunches.map(b => b.id)) + 1;
     const newBrunch = {
       id: newId,
-      name: newBranchName || `סניף ${brunches.length + 1}`,
+      name: newBranchName || `${brunches.length + 1}`,
       address: "",
       location: {
         lat: 32.0853,
