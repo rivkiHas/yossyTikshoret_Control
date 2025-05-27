@@ -40,7 +40,12 @@ export default function AddressSearchMap({ typeMarketer }) {
 
     const [localInputValue, setLocalInputValue] = useState(address || "");
     const [isEditing, setIsEditing] = useState(false);
-    const [brunchName, setBrunchName] = useState(`כתובת סניף  ${brunches.findIndex(b => b.id === activeBrunch) }`);
+    const defaultBrunchName =
+        brunch?.name?.trim() !== ""
+            ? brunch.name
+            : `${brunches.findIndex((b) => b.id === activeBrunch) + 1}`;
+    const [brunchName, setBrunchName] = useState(defaultBrunchName);
+
 
     useEffect(() => {
         setLocalInputValue(address);
@@ -84,22 +89,26 @@ export default function AddressSearchMap({ typeMarketer }) {
     const handleLoad = (autocomplete) => {
         autocompleteRef.current = autocomplete;
     };
-    const setNameBrunch = () => {
-        dispatch
-    }
+
 
     const handleEditBrunch = () => {
         setIsEditing(true);
     };
+    const handleInputChange = (brunchId, value) => {
+        setLocalInputValues(prev => ({
+            ...prev,
+            [brunchId]: value
+        }));
+    };
 
-    const handleSaveBrunch = (e) => {
-
+    const handleSaveBrunch = () => {
         setIsEditing(false);
         dispatch(updateBrunchDetails({
             id: brunch.id,
-            name: brunchName
-        }))
+            name: brunchName,
+        }));
     };
+
     const handlePlaceChanged = () => {
         if (autocompleteRef.current) {
             const place = autocompleteRef.current.getPlace();
@@ -122,48 +131,57 @@ export default function AddressSearchMap({ typeMarketer }) {
 
     return (
         <div>
-            <div className="flex items-center w-5/6">
-                {isEditing ? (
-                    <input
-                        type="text"
-                        value={brunchName}
-                        onChange={(e) => setBrunchName(e.target.value)}
-                        onBlur={handleSaveBrunch}
-                        onKeyPress={(e) => e.key === "Enter" && handleSaveBrunch()}
-                        autoFocus
-                        className="text-[24px] font-bold mb-4 block border-b border-gray-300 "
-                    />
-                ) : (
-                    <Typography className="text-[24px] font-bold mb-4 block w-full">
-                        {typeMarketer === "סוכן"
-                            ? "אזור פעילות"
-                            : brunches.length > 1
-                                ? brunchName
-                                : "כתובת העסק"}
-                    </Typography>
-                )}
+            <div className="flex items-center justify-between w-5/6 gap-2">
+                <div className="flex flex-row items-start text-[24px] font-bold mb-4">
+                    <span className="block">כתובת סניף&nbsp;</span>
 
-                {typeMarketer === "חנות" && brunches.length > 1 && !isEditing && (
-                    <button onClick={handleEditBrunch} className=" cursor-pointer p-1 hover:bg-gray-100 rounded-full">
-                        <PencilSquareIcon className="h-6 w-6 text-black font-bold cursor-pointer" />
+                    {isEditing ? (
+                        <input
+                            type="text"
+                            value={brunchName}
+                            onChange={(e) => setBrunchName(e.target.value)}
+                            onBlur={handleSaveBrunch}
+                            onKeyPress={(e) => e.key === "Enter" && handleSaveBrunch()}
+                            autoFocus
+                            className="outline-none px-1 w-1/2"
+                            style={{
+                                fontSize: "24px",
+                                fontWeight: "bold",
+                            }}
+                        />
+                    ) : (
+                        <span className="block">{brunchName}</span>
+                    )}
+                </div>
+
+                {typeMarketer === "חנות" && brunches.length > 1 && (
+                    <button
+                        onClick={handleEditBrunch}
+                        className="cursor-pointer p-1 hover:bg-gray-100 rounded-full"
+                    >
+                        <PencilSquareIcon className="h-7 w-7 text-black" />
                     </button>
                 )}
             </div>
+
+
             <Typography className="text-[16px] font-medium mb-1">
                 {typeMarketer === "סוכן"
                     ? "אזור פעילות"
-                    : brunches.length > 1
-                        ? `כתובת חנות מס ${brunches.findIndex(b => b.id === activeBrunch)+1 }`
-                        : "כתובת החנות"}
+                    : `כתובת סניף${brunch?.name} ` && brunch.name.trim() !== ""
+                        ? brunch.name
+                        : brunches.length > 1
+                            ? brunchName
+                            : "כתובת העסק"}
             </Typography>
 
             <div className="w-5/6 space-y-3 flex flex-col gap-4">
                 <Autocomplete onLoad={handleLoad} onPlaceChanged={handlePlaceChanged}>
                     <input
                         type="text"
-                        placeholder={typeMarketer=="חנות"? "הכנס כתובת...": "חפש מיקום נוסף"}
+                        placeholder={typeMarketer == "חנות" ? "הכנס כתובת..." : "חפש מיקום נוסף"}
                         value={localInputValue}
-                        onChange={(e) => setLocalInputValue(e.target.value)}
+                        onChange={(e) => handleInputChange(e.target.value)}
                         className="w-full flex justify-between items-center h-11 px-4 border border-input rounded-md bg-background text-sm text-muted-foreground peer-hover:border-primary peer-focus-visible:ring-1 peer-focus-visible:ring-ring transition-colors"
                     />
                 </Autocomplete>

@@ -9,7 +9,7 @@ import { Button } from "./ui/button";
 import { ArrowLongLeftIcon, PlusCircleIcon, ArrowLongRightIcon } from '@heroicons/react/24/outline'
 import IconButton from './icon_button';
 import { useState, useEffect } from 'react';
-import { AddBrunchDialog } from './alert_dialog_delete'
+import { AlertDialogEdit } from './alert_dialog_edit'
 
 
 export default function StepTwo({ brunch: propBrunch }) {
@@ -168,7 +168,7 @@ export default function StepTwo({ brunch: propBrunch }) {
           </div>
         </div>
       </div>
-      <AddBrunchDialog
+      <AlertDialogEdit
         open={showDialog}
         value={newBranchName}
         onChange={setNewBranchName}

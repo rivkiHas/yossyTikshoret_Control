@@ -14,20 +14,13 @@ import { Typography } from "./typhography";
 import { setFormData } from "../store/form_store";
 import { useDispatch, useSelector } from "react-redux";
 import { ArrowUpTrayIcon } from '@heroicons/react/24/outline'
+import TooltipValid from "./tooltip_valid";
 
-export function RegisterForm1() {
+export function RegisterForm1({ form }) {
     const dispatch = useDispatch();
     const user = useSelector((state) => state.form.pertip);
 
-    const form = useForm({
-        defaultValues: {
-            name: user?.name || "",
-            mail: user?.mail || "",
-            id: user?.id || "",
-            phone: user?.phone || "",
-            logo: null,
-        },
-    });
+
 
     const onSubmit = () => {
         const formData = form.getValues();
@@ -35,13 +28,63 @@ export function RegisterForm1() {
         dispatch(setFormData(formData));
     };
 
-
     const handleInputChange = (field) => (e) => {
         const { name, value, files } = e.target;
         const newValue = files ? files[0] : value;
         field.onChange(e);
         dispatch(setFormData({ [name]: newValue }));
     };
+
+    const fields = [
+        {
+            name: "name",
+            label: "שם העסק",
+            placeholder: "יש להזין שם העסק",
+            rules: {
+                required: "יש להזין שם עסק",
+                minLength: {
+                    value: 2,
+                    message: "שם העסק חייב להכיל לפחות 2 תווים",
+                },
+            },
+        },
+        {
+            name: "mail",
+            label: "אימייל העסק",
+            placeholder: "יש להזין את אימייל העסק",
+            rules: {
+                required: "יש להזין אימייל",
+                pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: "אימייל לא תקין",
+                },
+            },
+        },
+        {
+            name: "id",
+            label: "ח.פ / ע.מ העסק",
+            placeholder: "יש להזין ח.פ / ע.מ העסק",
+            rules: {
+                required: "יש להזין מספר זיהוי עסק",
+                minLength: {
+                    value: 7,
+                    message: "מספר לא תקין",
+                },
+            },
+        },
+        {
+            name: "phone",
+            label: "טלפון העסק",
+            placeholder: "יש להזין את טלפון העסק",
+            rules: {
+                required: "יש להזין טלפון",
+                pattern: {
+                    value: /^0\d{1,2}-?\d{7}$/,
+                    message: "מספר טלפון לא תקין",
+                },
+            },
+        },
+    ];
 
     return (
         <div>
@@ -53,32 +96,34 @@ export function RegisterForm1() {
                     onSubmit={form.handleSubmit(onSubmit)}
                     className="w-5/6 space-y-7.5 flex flex-col"
                 >
-                    {[
-                        { name: "name", label: "שם העסק", placeholder: "יש להזין שם העסק" },
-                        { name: "mail", label: "אימייל העסק", placeholder: "יש להזין את אימייל העסק" },
-                        { name: "id", label: "ח.פ / ע.מ העסק", placeholder: "יש להזין ח.פ / ע.מ העסק" },
-                        { name: "phone", label: "טלפון העסק", placeholder: "יש להזין את טלפון העסק" },
-                    ].map(({ name, label, placeholder }) => (
+                    {fields.map(({ name, label, placeholder, rules }) => (
                         <FormField
                             key={name}
                             control={form.control}
                             name={name}
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>{label}</FormLabel>
+                            rules={rules}
+                            render={({ field, fieldState }) => (
+                                <FormItem className="relative">
+                                    <FormLabel className={fieldState.error ? "text-[#000]" : ""}>
+                                        {label}</FormLabel>
                                     <FormControl>
-                                        <Input
-                                            name={name}
-                                            placeholder={placeholder}
-                                            {...field}
-                                            onChange={handleInputChange(field)}
-                                        />
+                                        <div className="relative">
+                                            <Input
+                                                name={name}
+                                                placeholder={placeholder}
+                                                {...field}
+                                                onChange={handleInputChange(field)}
+                                            />
+
+                                            {fieldState.error && (
+                                                <TooltipValid tooltipText={fieldState.error.message} />
+                                            )}
+                                        </div>
                                     </FormControl>
                                 </FormItem>
                             )}
                         />
                     ))}
-
 
                     <FormField
                         control={form.control}
@@ -103,11 +148,9 @@ export function RegisterForm1() {
                                                 }}
                                             />
                                             <div className="flex justify-between items-center h-9 px-4 border border-input rounded-md bg-background text-sm text-muted-foreground peer-hover:border-primary peer-focus-visible:ring-1 peer-focus-visible:ring-ring transition-colors">
-
                                                 <span className="truncate">
                                                     {file?.name || "יש לבחור קובץ"}
                                                 </span>
-
                                                 {file ? (
                                                     <button
                                                         type="button"
@@ -133,9 +176,8 @@ export function RegisterForm1() {
                             );
                         }}
                     />
-
-                </form >
-            </Form >
+                </form>
+            </Form>
         </div >
     );
 }

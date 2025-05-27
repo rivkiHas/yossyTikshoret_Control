@@ -12,7 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { ArrowLongLeftIcon } from '@heroicons/react/24/outline';
 
-export function AddBrunchDialog({ open, onConfirm, onCancel, value, onChange }) {
+export function AlertDialogEdit({ open, onConfirm, onCancel, value, onChange }) {
   return (
     <AlertDialogRoot open={open} dir="rtl" className={'font-assistant'}>
       <AlertDialogContent
@@ -21,7 +21,7 @@ export function AddBrunchDialog({ open, onConfirm, onCancel, value, onChange }) 
       >
         <AlertDialogHeader className="w-full">
           <AlertDialogTitle
-            className="text-right text-black  text-[25px] font-semibold"
+            className="text-right text-black text-[25px] font-semibold"
           >
             כינוי שם לסניף
           </AlertDialogTitle>

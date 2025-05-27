@@ -144,7 +144,7 @@ export function Tabs({ className, ...props }) {
                     </div>
                     <div className="ps-12">
                         <div className="relative border-s-2 border-amber-300">
-                            <TabList className="flex translate-x-10.5 flex-col space-y-9">
+                            <TabList className="flex translate-x-10.5 flex-col space-y-9 ">
                                 {steps.map((step, index) => (
                                     <Tab
                                         key={`${step.id}-${index}`}
@@ -154,7 +154,7 @@ export function Tabs({ className, ...props }) {
                                         {({ selected }) => (
                                             <button className={getTabClass(step, selected)}>
                                                 <div>{renderStepIcon(step, index, selected)}</div>
-                                                <div className="flex flex-col justify-center">
+                                                <div className="flex flex-col justify-center cursor-pointer">
                                                     {step.type === 'branch' ? (
                                                         <span className="text-[16px] font-normal leading-snug">
                                                             {step.title}

@@ -52,7 +52,7 @@ export default function IconButton({ text, onConfirm, contactId , headerText}) {
           </AlertDialogCancel>
           <AlertDialogAction
             onClick={handleConfirm}
-            className="flex px-10 py-3 justify-center items-center gap-2 border border-[#F8BD00] bg-[#F8BD00] text-black rounded-full hover:bg-white">
+            className="flex px-10 py-3 justify-center items-center gap-2 cursor-pointer border border-[#F8BD00] bg-[#F8BD00] text-black rounded-full hover:bg-white">
             אישור
             <CheckCircleIcon />
           </AlertDialogAction>

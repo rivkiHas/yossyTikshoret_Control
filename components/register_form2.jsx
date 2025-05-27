@@ -26,7 +26,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { useState } from "react"
 
 const FormSchema = z.object({
   contactManName: z.string().min(2, {
@@ -57,15 +56,12 @@ export function RegisterForm2({ OkFunction, contactId, canDelete }) {
   const contactMans = useSelector((state) => state.conectMan.contactMans || []);
   const contactIndex = contactMans.findIndex((c) => c.id === contactId);
   const brunches = useSelector((state) => state.brunch.brunches || [])
-  // const [query, setQuery] = useState('')
-  // const [selected, setSelected] = useState(brunches[1])
-  // const [open, setOpen] = useState(false);
+
 
 
   const form = useForm({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-
       contactManName: contactMan?.contactManName || "",
       contactManPhone: contactMan?.contactManPhone || "",
       contactManEmail: contactMan?.contactManEmail || "",
@@ -95,7 +91,7 @@ export function RegisterForm2({ OkFunction, contactId, canDelete }) {
 
 
   return (
-    <div className="w-85 ">
+    <div className="w-85 mb-30">
       <div className="flex justify-between items-center">
         <div className="flex flex-row justify-between items-center mb-4 w-full">
           <Typography className="text-2xl font-bold">איש קשר</Typography>
