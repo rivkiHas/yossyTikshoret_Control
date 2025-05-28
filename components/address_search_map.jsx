@@ -133,7 +133,13 @@ export default function AddressSearchMap({ typeMarketer }) {
         <div>
             <div className="flex items-center justify-between w-5/6 gap-2">
                 <div className="flex flex-row items-start text-[24px] font-bold mb-4">
-                    <span className="block">כתובת סניף&nbsp;</span>
+                    <span className="block">
+                        {typeMarketer === "סוכן" ? (
+                            <>אזור פעילות&nbsp;</>
+                        ) : (
+                            <>כתובת&nbsp;</>
+                        )}
+                    </span>
                     {isEditing ? (
                         <input
                             type="text"

@@ -139,7 +139,7 @@ export function Tabs({ className, ...props }) {
         >
             <div className={cn('flex space-x-[36px]', className)} {...props}>
                 <div className="w-[368px] flex-none rounded-[40px] bg-white p-6">
-                    <div className="w-[280px] pr-5">
+                    <div className="w-[280px] pr-10">
                         <Header />
                     </div>
                     <div className="ps-12">

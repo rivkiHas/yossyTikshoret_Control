@@ -13,12 +13,12 @@ export function RegisterFormButton() {
         {
             value: "סוכן",
             label: "סוכן",
-            image: "https://cdn.pixabay.com/photo/2016/03/27/21/16/businessman-1284463_1280.jpg",
+            image: "images/agent.png",
         },
         {
             value: "חנות",
             label: "חנות",
-            image: "https://cdn.pixabay.com/photo/2017/03/28/12/10/supermarket-2182905_1280.jpg",
+            image: "images/store.png",
         }
     ];
 
@@ -26,17 +26,18 @@ export function RegisterFormButton() {
         {
             value: "קווי",
             label: "קווי",
-            image: "https://cdn.pixabay.com/photo/2017/08/02/00/49/cables-2567688_1280.jpg",
+            image: "images/line.png",
         },
         {
             value: "סלולרי",
             label: "סלולרי",
-            image: "https://cdn.pixabay.com/photo/2014/04/05/11/40/phone-316859_1280.jpg",
+            image: "images/phone.png",
         },
         {
             value: "רכבים",
             label: "רכבים",
-            image: "https://cdn.pixabay.com/photo/2015/01/19/13/51/car-604019_1280.jpg",
+            image: "images/cars.png",
+
         }
     ];
 
@@ -52,7 +53,7 @@ export function RegisterFormButton() {
     };
 
     return (
-        
+
         <div className="flex flex-col items-start w-full max-w-[488px]">
             <Typography className="text-[24px] font-bold mb-4">סוג משווק</Typography>
 

@@ -14,8 +14,7 @@ export function CustomButton({ item, selected, handleSelect }) {
             `}
 
         >
-            <img src="/images/AlbedoBase_XL_A_clean_modern_illustration_of_a_business_profes_2.jpg" alt="לוגו קונטרול" width={300} />
-
+            <img src={item.image} alt={item.label} className="w-full h-full object-cover absolute top-0 left-0" />
             <div className="absolute bottom-[14px] left-[16px] bg-white rounded-[30px] text-[16px] px-4 py-2 shadow-sm">
                 {item.label}
             </div>
@@ -34,9 +33,11 @@ export function CustomButtonRectangle({ item, selected, handleSelect }) {
                 shadow-md bg-cover bg-center cursor-pointer
                 ${selected ? 'border-2 border-yellow-400' : 'border-2 border-transparent'}
             `}
-            // style={{ backgroundImage: `url(${item.image})`, aspectRatio: '368 / 62' }}
+
             style={{ background: 'grey', aspectRatio: '368 / 62' }}
         >
+            <img src={item.image} alt={item.label} className="w-full h-full object-cover absolute top-0 left-0" />
+
             <div className="absolute bottom-[14px] left-[16px] bg-white px-4 py-2 rounded-[20px] text-[16px] shadow-sm">
                 {item.label}
             </div>

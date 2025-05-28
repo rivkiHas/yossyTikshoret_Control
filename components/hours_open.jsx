@@ -25,13 +25,8 @@ const HoursOpen = ({ typeMarketer }) => {
   }, [brunch]);
 
   const handleChange = (day, period, type, value, index) => {
-    // day - מחרוזת: שם היום
-    // period - "morning" או "evening"
-    // type - "open" או "close"
-    // value - השעה שנבחרה
-    // index - אינדקס היום במספרים, לפי איך שהקוד עובד (1-5 וכו')
 
-    if (!index) {
+    if (index === undefined || index === null) {
       console.warn("index לא מוגדר ב-handleChange");
       return;
     }
@@ -39,7 +34,6 @@ const HoursOpen = ({ typeMarketer }) => {
     let updatedHours = [...localHoursOpen];
 
     if (isGrouped) {
-      // אם מקובץ, נעדכן את הימים א-ה (1-5)
       const daysToUpdate = [1, 2, 3, 4, 5];
 
       daysToUpdate.forEach((dayIndex) => {
@@ -49,7 +43,6 @@ const HoursOpen = ({ typeMarketer }) => {
       });
 
     } else {
-      // לא מקובץ - רק יום אחד מתעדכן
       if (!updatedHours[index]) updatedHours[index] = { morning: {}, evening: {} };
       if (!updatedHours[index][period]) updatedHours[index][period] = {};
       updatedHours[index][period][type] = value;
@@ -99,7 +92,7 @@ const HoursOpen = ({ typeMarketer }) => {
         {isSwitchOn && (
           <div className="absolute inset-0 bg-white/20 backdrop-blur-sm backdrop-saturate-100 z-10 rounded-xl shadow-[4px_4px_160.2px_0px_rgba(0,0,0,0.06)]" />
         )}
-        {!isGrouped ? (
+        {isGrouped ? (
           <DayRow
             day="one"
             label="ימים א'-ה'"
@@ -130,20 +123,24 @@ const HoursOpen = ({ typeMarketer }) => {
         <DayRow
           day="שישי"
           label="יום ו'"
-          hours={localHoursOpen?.[6]}  // שים לב, לפי מה שהגדרת, כנראה שימי השבוע מסודרים מ-1 עד 6
+          hours={localHoursOpen?.[5]}
           handleChange={handleChange}
-          index={6}
+          index={5}
           disabled={isSwitchOn}
+          isFriday={true}
         />
       </div>
     </div>
   );
 };
 
-const DayRow = ({ day, label, hours, handleChange, hover, index, disabled }) => {
+const DayRow = ({ day, label, hours, handleChange, hover, index, disabled, isFriday = false }) => {
   const [isEveningVisible, setIsEveningVisible] = useState(false);
 
-  const toggleEvening = () => setIsEveningVisible(prev => !prev);
+  const toggleEvening = () => {
+    if (isFriday) return;
+    setIsEveningVisible(prev => !prev);
+  };
 
   return (
     <div className="flex flex-col bg-white rounded-xl p-2 relative group">
@@ -153,17 +150,19 @@ const DayRow = ({ day, label, hours, handleChange, hover, index, disabled }) => 
           {isEveningVisible && <span className='text-sm text-black text-left'> בוקר</span>}
         </div>
         <div className="flex flex-row-reverse items-center justify-start gap-5 p-2 rounded-xl">
-          <button
-            onClick={toggleEvening}
-            disabled={disabled}
-            className="group cursor-pointer outline-none hover:rotate-90 duration-300"
-          >
-            {!isEveningVisible ? (
-              <PlusCircleIcon className="h-[40px] w-[40px] fill-black text-white stroke-white hover:fill-[#F8BD00]" />
-            ) : <div className="h-[40px] w-[40px] text-black" />}
-          </button>
+          {!isFriday && (
+            <button
+              onClick={toggleEvening}
+              disabled={disabled}
+              className="group cursor-pointer outline-none hover:rotate-90 duration-300"
+            >
+              {!isEveningVisible ? (
+                <PlusCircleIcon className="h-[40px] w-[40px] fill-black text-white stroke-white hover:fill-[#F8BD00]" />
+              ) : <div className="h-[40px] w-[40px] text-black" />}
+            </button>
+          )}
 
-          <div className='flex flex-row gap-3 items-end' >
+          <div className={`flex flex-row gap-3 items-end ${isFriday ? 'ml-[60px]' : ''}`}>
 
             <div className="flex flex-col gap-1">
               <label className="text-sm text-black">שעת פתיחה</label>
@@ -185,7 +184,7 @@ const DayRow = ({ day, label, hours, handleChange, hover, index, disabled }) => 
           </div>
         </div>
       </div>
-      {isEveningVisible && (
+      {isEveningVisible && !isFriday && (
         <div className="flex flex-row-reverse items-center justify-start gap-4 p-3 rounded-xl">
           <button
             onClick={toggleEvening}
