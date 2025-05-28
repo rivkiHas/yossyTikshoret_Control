@@ -128,7 +128,7 @@ export function RegisterForm2({ OkFunction, contactId, canDelete, setValidator }
                     )}
                   </div>
                 </FormControl>
-                <FormMessage />
+                {/* <FormMessage /> */}
               </FormItem>
             )}
           />
@@ -155,7 +155,7 @@ export function RegisterForm2({ OkFunction, contactId, canDelete, setValidator }
                 </FormControl>
                 <FormDescription>מספר זה מיועד לקשר אישי ואינו מספר העסק.</FormDescription>
                 {isPhoneValid && <CodeVerificationFlow placeholder="טלפון" />}
-                <FormMessage />
+                {/* <FormMessage /> */}
               </FormItem>
             )}
           />
@@ -182,7 +182,7 @@ export function RegisterForm2({ OkFunction, contactId, canDelete, setValidator }
                 </FormControl>
                 <FormDescription>אימייל זה מיועד לקשר אישי ואינו אימייל העסק.</FormDescription>
                 {isEmailValid && <CodeVerificationFlow placeholder="אימייל" />}
-                <FormMessage />
+                {/* <FormMessage /> */}
               </FormItem>
             )}
           />
@@ -233,7 +233,7 @@ export function RegisterForm2({ OkFunction, contactId, canDelete, setValidator }
                         <SelectItem value="seller">מוכר</SelectItem>
                       </SelectContent>
                     </Select>
-                    <FormMessage />
+                    {/* <FormMessage /> */}
                   </FormItem>
                 )}
               />
