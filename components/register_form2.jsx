@@ -31,15 +31,14 @@ import TooltipValid from './tooltip_valid'
 
 const FormSchema = z.object({
   contactManName: z.string().min(2, {
-    message: "יש להזין שם בעל לפחות שני תווים.",
   }),
   contactManPhone: z
     .string()
     .min(9, { message: "מספר טלפון קצר מדי." })
     .regex(/^0\d{1,2}-?\d{7}$/, {
-      message: "יש להזין מספר טלפון תקני בפורמט ישראלי.",
     }),
-  contactManEmail: z.string().email({ message: "יש להזין כתובת אימייל תקינה." }),
+  contactManEmail: z.string().email({
+    }),
   email: z
     .string({
       required_error: "",
