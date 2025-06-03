@@ -1,14 +1,13 @@
-// בקובץ StepOne.jsx
 'use client';
 
 import React from "react";
 import { useForm } from "react-hook-form";
-import { RegisterForm1 } from "./register_form1";
-import { RegisterFormButton } from "./register_form_button";
-import { Button } from "./ui/button";
+import { RegisterForm1 } from "../register_form1";
+import { RegisterFormButton } from "../register_form_button";
+import { Button } from "../ui/button";
 import { useDispatch, useSelector } from "react-redux";
-import { setActiveStep } from "../store/step_store";
-import { setFormData } from "../store/form_store";
+import { setActiveStep } from "../../store/step_store";
+import { setFormData } from "../../store/form_store";
 import { ArrowLongLeftIcon } from '@heroicons/react/24/outline'
 
 export default function StepOne({ index }) {
@@ -19,7 +18,7 @@ export default function StepOne({ index }) {
   const form = useForm({
     defaultValues: {
       name: user?.name || "",
-      mail: user?.mail || "",
+      email: user?.email || "",
       id: user?.id || "",
       phone: user?.phone || "",
       logo: null,

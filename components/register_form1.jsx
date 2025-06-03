@@ -18,7 +18,6 @@ import TooltipValid from "./tooltip_valid";
 
 export function RegisterForm1({ form }) {
     const dispatch = useDispatch();
-    const user = useSelector((state) => state.form.pertip);
 
     const onSubmit = () => {
         const formData = form.getValues();

@@ -2,12 +2,12 @@
 
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { nextStep, prevStep, setActiveStep } from "../store/step_store";
-import { addContactMan, deleteContactMan } from "../store/contact_man_store";
-import { Button } from "./ui/button";
-import { RegisterForm2 } from "./register_form2";
+import { nextStep, prevStep, setActiveStep } from "../../store/step_store";
+import { addContactMan, deleteContactMan } from "../../store/contact_man_store";
+import { Button } from "../ui/button";
+import { RegisterForm2 } from "../register_form2";
 import { ArrowLongLeftIcon, PlusCircleIcon, ArrowLongRightIcon } from '@heroicons/react/24/outline'
-import AlertSuccess from './alert_sucsses'
+import AlertSuccess from '../alert_sucsses'
 
 
 

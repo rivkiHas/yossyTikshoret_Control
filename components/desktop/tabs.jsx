@@ -7,11 +7,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import StepOne from './step1'
 import StepTwo from './step2'
 import StepThree from './step3'
-import icons from './icons'
-import { Header } from './header'
+import icons from '../icons'
+import { Header } from '../header'
 import { setActiveBrunch } from '@/store/brunch_store'
 import { setActiveStep } from '@/store/step_store'
-import { isContactStepComplete, isPertipStepComplete, isBrunchStepComplete } from '../store/selectors'
+import { isContactStepComplete, isPertipStepComplete, isBrunchStepComplete } from '@/store/selectors'
 
 export function Tabs({ className, ...props }) {
     const brunches = useSelector((state) => state.brunch.brunches || [])

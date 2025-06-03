@@ -1,15 +1,15 @@
 'use client';
 import { Tab } from '@headlessui/react'
-import AddressSearchMap from './address_search_map';
-import HoursOpen from './hours_open';
+import AddressSearchMap from '../address_search_map';
+import HoursOpen from '../hours_open';
 import { useDispatch, useSelector } from "react-redux";
-import { nextStep, prevStep, setActiveStep } from "../store/step_store";
-import { addBrunch, removeBrunch, setActiveBrunch } from "../store/brunch_store";
-import { Button } from "./ui/button";
+import { nextStep, prevStep, setActiveStep } from "../../store/step_store";
+import { addBrunch, removeBrunch, setActiveBrunch } from "../../store/brunch_store";
+import { Button } from "../ui/button";
 import { ArrowLongLeftIcon, PlusCircleIcon, ArrowLongRightIcon } from '@heroicons/react/24/outline'
-import IconButton from './icon_button';
+import IconButton from '../icon_button';
 import { useState, useEffect } from 'react';
-import { AlertDialogEdit } from './alert_dialog_edit'
+import { AlertDialogEdit } from '../alert_dialog_edit'
 
 
 export default function StepTwo({ brunch: propBrunch }) {
