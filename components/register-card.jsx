@@ -11,11 +11,11 @@ export function RegisterCard({ className, ...props }) {
 
   return (
     // isMobile ? (
-      <MobileTabs/>
+    //   <MobileTabs/>
     // ) : (
     //   <div className={cn('flex space-x-[28px]', className)} {...props}>
-    //     <Tabs />
-    //   </div>
+        <Tabs />
+      // </div>
     // )
   );
 }

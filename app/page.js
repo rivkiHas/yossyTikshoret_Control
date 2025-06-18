@@ -31,7 +31,7 @@ export default function Home() {
 
           {!showSplash && (
             <div className="flex min-h-svh flex-col items-center justify-center">
-              <main className="w-[1376px] p-10">
+              <main className="w-full lg:max-w-[1376px] p-10">
                 <RegisterCard />
               </main>
             </div>

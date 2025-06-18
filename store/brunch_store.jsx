@@ -16,7 +16,6 @@ const initialState = {
                 { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
                 { morning: { open: "", close: "" }, evening: { open: "", close: "" } }
             ],
-            // weekday: { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
             name: " מספר 01"
         }
     ],
@@ -51,20 +50,7 @@ const brunchSlice = createSlice({
             if (location !== undefined) brunch.location = location;
             if (name !== undefined) brunch.name = name;
 
-            // if (weekday) {
-            //     const { period, type, value } = weekday;
-            //     if (!brunch.weekday) brunch.weekday = {};
-            //     if (!brunch.weekday[period]) brunch.weekday[period] = {};
-            //     brunch.weekday[period][type] = value;
-            // }
 
-            // if (hoursOpen) {
-            //     const { day, period, type, value } = hoursOpen;
-            //     if (!brunch.hoursOpen) brunch.hoursOpen = [];
-            //     if (!brunch.hoursOpen[day]) brunch.hoursOpen[day] = { morning: {}, evening: {} };
-            //     if (!brunch.hoursOpen[day][period]) brunch.hoursOpen[day][period] = {};
-            //     brunch.hoursOpen[day][period][type] = value;
-            // }
             if (hoursOpen) {
                 brunch.hoursOpen = hoursOpen; // מחליף את המערך כולו
             }
