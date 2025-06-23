@@ -18,6 +18,7 @@ import TooltipValid from "./tooltip_valid";
 
 export function RegisterForm1({ form }) {
     const dispatch = useDispatch();
+    const errorsPertip = useSelector((state) => state.formErrors.pertip);
 
     const onSubmit = () => {
         const formData = form.getValues();
@@ -101,7 +102,8 @@ export function RegisterForm1({ form }) {
                             render={({ field, fieldState }) => (
                                 <FormItem className="relative">
                                     <FormLabel className={fieldState.error ? "text-[#000]" : ""}>
-                                        {label}</FormLabel>
+                                        {label}
+                                    </FormLabel>
                                     <FormControl>
                                         <div className="relative">
                                             <Input
@@ -111,14 +113,15 @@ export function RegisterForm1({ form }) {
                                                 onChange={handleInputChange(field)}
                                             />
 
-                                            {fieldState.error && (
-                                                <TooltipValid tooltipText={fieldState.error.message} />
+                                            {(fieldState.error?.message || errorsPertip[name]) && (
+                                                <TooltipValid tooltipText={fieldState.error?.message || errorsPertip[name]} />
                                             )}
                                         </div>
                                     </FormControl>
                                 </FormItem>
                             )}
                         />
+
                     ))}
 
                     <FormField

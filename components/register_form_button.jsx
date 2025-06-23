@@ -53,38 +53,40 @@ export function RegisterFormButton() {
     };
 
     return (
+        <div className="flex flex-col w-full items-start lg:bg-transparent lg:p-0 lg:gap-[36px] gap-6">
+            <div className="flex flex-col w-full justify-center  p-4 bg-white rounded-[40px]">
+                <Typography className="text-[24px] font-bold">סוג משווק</Typography>
 
-        <div className="flex flex-col items-start w-full max-w-[488px]">
-            <Typography className="text-[24px] font-bold mb-4">סוג משווק</Typography>
-
-            <div className="flex items-center justify-between w-full gap-4 mb-[30px]">
-                {marketerOptions.map((item) => (
-                    <CustomButton
-                        key={item.value}
-                        item={item}
-                        selected={typeMarketer === item.value}
-                        handleSelect={handleSelectMarketer}
-                    />
-                ))}
+                <div className="flex flex-col gap-4 lg:flex-row lg:justify-between">
+                    {marketerOptions.map((item) => (
+                        <CustomButton
+                            key={item.value}
+                            item={item}
+                            selected={typeMarketer === item.value}
+                            handleSelect={handleSelectMarketer}
+                        />
+                    ))}
+                </div>
             </div>
 
-            <div className="flex flex-row justify-between items-center w-full mb-4">
-                <Typography className="text-[24px] font-bold">סוג המכירות</Typography>
-                <Typography className="text-sm text-black-500 font-medium">
-                    אפשר לבחור יותר מאפשרות אחת
-                </Typography>
-            </div>
+            <div className="flex flex-col w-full justify-center gap-6 p-4 bg-white rounded-[40px]">
+                <div className="flex flex-row sm:flex-row justify-between items-start sm:items-center w-full gap-2 sm:gap-0">
+                    <Typography className="text-[24px] font-bold">סוג המכירות</Typography>
+                    <Typography className="text-sm text-black-500 font-medium">אפשר לבחור יותר מאפשרות אחת</Typography>
+                </div>
 
-            <div className="flex flex-col gap-6 w-full">
-                {salesOptions.map((item) => (
-                    <CustomButtonRectangle
-                        key={item.value}
-                        item={item}
-                        selected={typeSales.includes(item.value)}
-                        handleSelect={handleSelectSales}
-                    />
-                ))}
+                <div className="flex flex-col gap-6 w-full">
+                    {salesOptions.map((item) => (
+                        <CustomButtonRectangle
+                            key={item.value}
+                            item={item}
+                            selected={typeSales.includes(item.value)}
+                            handleSelect={handleSelectSales}
+                        />
+                    ))}
+                </div>
             </div>
         </div>
+
     );
 }

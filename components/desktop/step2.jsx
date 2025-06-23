@@ -123,19 +123,19 @@ export default function StepTwo({ brunch: propBrunch }) {
 
   return (
     <div className="flex justify-center">
-      <div className="flex flex-col items-end w-full max-w-[1440px] px-[50px] py-[30px]">
-        <div className="flex w-full items-start">
-          <div className="flex flex-col w-1/2 text-right">
+      <div className="flex flex-col items-end w-full max-w-[1440px] px-[20px] md:px-[50px] py-[30px] ">
+        <div className="flex flex-col lg:flex-row w-full items-start gap-[24px] lg:gap-[36px]">
+          <div className="flex flex-col w-full lg:w-1/2 bg-white rounded-[40px] p-4 justify-center items-center">
             <AddressSearchMap typeMarketer={typeMarketer} />
           </div>
-          <div className="flex flex-col w-1/2 text-right">
+          <div className="flex flex-col w-full lg:w-1/2 bg-white rounded-[40px] p-4 justify-center items-center">
             <HoursOpen typeMarketer={typeMarketer} />
           </div>
         </div>
 
         <div className={`flex flex-row w-full ${typeMarketer === "חנות" ? "justify-between" : "justify-end"}`}>
           {typeMarketer == "חנות" && <div>
-            <div className='flex flex-row gap-4'>
+            <div className='hidden lg:flex flex-row gap-4'>
               <Button onClick={handleAddBranchClick}
                 className="cursor-pointer bg-black border hover:bg-white hover:text-black hover:border-black text-white p-5 gap-2 rounded-full"
               >
@@ -153,7 +153,7 @@ export default function StepTwo({ brunch: propBrunch }) {
               }
             </div>
           </div>}
-          <div className="flex gap-4 ">
+<div className="hidden lg:flex gap-4">
             <Button onClick={previousStepInRedux}
               className="cursor-pointer flex items-center gap-1 bg-white text-black border border-[#F8BD00]  p-5 gap-2 rounded-full hover:bg-white hover:text-black hover:border-black"
             >

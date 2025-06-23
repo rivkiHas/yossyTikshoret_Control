@@ -7,6 +7,9 @@ import { Input } from "@/components/ui/input"
 import { Typography } from "./typhography"
 import { CodeVerificationFlow } from "./code_verification_flow"
 import IconButton from './icon_button'
+import { Button } from "./ui/button";
+import { PlusCircleIcon, } from '@heroicons/react/24/outline'
+import { addContactMan, deleteContactMan } from "@/store/contact_man_store";
 import { useSelector, useDispatch } from "react-redux"
 import { setFormData } from "@/store/contact_man_store"
 import {
@@ -38,7 +41,7 @@ const FormSchema = z.object({
     .regex(/^0\d{1,2}-?\d{7}$/, {
     }),
   contactManEmail: z.string().email({
-    }),
+  }),
   email: z
     .string({
       required_error: "",
@@ -58,7 +61,9 @@ export function RegisterForm2({ OkFunction, contactId, canDelete, setValidator }
   const contactIndex = contactMans.findIndex((c) => c.id === contactId);
   const brunches = useSelector((state) => state.brunch.brunches || [])
 
-
+  const addContactManHandler = () => {
+    dispatch(addContactMan());
+  };
 
   const form = useForm({
     mode: "onBlur",
@@ -94,10 +99,10 @@ export function RegisterForm2({ OkFunction, contactId, canDelete, setValidator }
 
 
   return (
-    <div className="w-85 mb-30">
+    <div className="flex flex-col gap-[15px] ">
       <div className="flex justify-between items-center">
         <div className="flex flex-row justify-between items-center mb-4 w-full">
-          <Typography className="text-2xl font-bold">איש קשר</Typography>
+          <Typography className="text-2xl font-bold"> פרטי איש קשר  </Typography>
           <div>
             {canDelete && contactIndex > 0 &&
               <IconButton headerText="מחיקה" onConfirm={(co) => { OkFunction(co) }} contactId={contactId} text={"האם ברצונך למחוק את איש קשר זה?"} />
@@ -242,6 +247,14 @@ export function RegisterForm2({ OkFunction, contactId, canDelete, setValidator }
 
         </form>
       </Form>
+      <Button
+        onClick={addContactManHandler}
+        className="lg:hidden w-full mt-[15px] cursor-pointer bg-black border hover:bg-white hover:text-black hover:border-black text-white p-5 gap-2 rounded-full">
+        <PlusCircleIcon />
+        הוספת איש קשר נוסף
+      </Button>
+
+
     </div>
   )
 }

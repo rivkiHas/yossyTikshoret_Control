@@ -137,7 +137,7 @@ export function Tabs({ className, ...props }) {
             onChange={handleTabChange}
             vertical
         >
-            <div className={cn('lg:flex lg:space-x-[36px]', className)} {...props}>
+            <div className={cn('flex flex-col lg:flex-row gap-[15px] lg:gap-[36px]', className)} {...props}>
                 <div className="lg:max-w-[368px] flex-none rounded-[40px] bg-white p-6">
                     <div className="lg:max-w-[280px] pr-10">
                         <Header />
@@ -175,7 +175,7 @@ export function Tabs({ className, ...props }) {
                     </div>
                 </div>
 
-                <div className="lg:max-w-[980px] flex-none rounded-[40px] bg-white">
+                <div className="lg:max-w-[980px] flex-none rounded-[40px] lg:bg-white">
                     <TabPanels>
                         {steps.map((step, index) => (
                             <TabPanel key={`panel-${step.id}-${index}`} className="rounded-xl bg-white/5 p-3">
@@ -186,5 +186,6 @@ export function Tabs({ className, ...props }) {
                 </div>
             </div>
         </TabGroup>
+
     )
 }

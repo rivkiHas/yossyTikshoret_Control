@@ -9,12 +9,12 @@ import { Button } from "../ui/button";
 import { RegisterForm2 } from "../register_form2";
 import { ArrowLongLeftIcon, PlusCircleIcon, ArrowLongRightIcon } from '@heroicons/react/24/outline'
 import AlertSuccess from '../alert_sucsses'
-import { 
-  isPertipStepComplete, 
-  isContactStepComplete, 
+import {
+  isPertipStepComplete,
+  isContactStepComplete,
   isBrunchStepComplete,
-  isAllStepsComplete 
-} from '@/store/selectors'; // Adjust path as needed
+  isAllStepsComplete
+} from '@/store/selectors'; 
 
 export default function StepThree() {
   const dispatch = useDispatch();
@@ -22,14 +22,13 @@ export default function StepThree() {
   const [showErrorAlert, setShowErrorAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const contactMans = useSelector(state => state.conectMan.contactMans || []);
   const activeStep = useSelector(state => state.stepper.activeStep);
   const [validators, setValidators] = useState({});
   const user = useSelector((state) => state.form.pertip);
   const brunches = useSelector((state) => state.brunch.brunches);
-  
-  // Validation selectors
+
   const isPertipComplete = useSelector(isPertipStepComplete);
   const isContactComplete = useSelector(isContactStepComplete);
   const isBrunchComplete = useSelector(isBrunchStepComplete);
@@ -41,19 +40,19 @@ export default function StepThree() {
 
   const validateAllSteps = () => {
     const validationErrors = [];
-    
+
     if (!isPertipComplete) {
       validationErrors.push('אנא השלם את כל השדות בשלב פרטי העסק');
     }
-    
+
     if (!isContactComplete) {
       validationErrors.push('אנא השלם את כל השדות של אנשי הקשר');
     }
-    
+
     if (!isBrunchComplete) {
       validationErrors.push('אנא השלם את כל השדות של הסניפים');
     }
-    
+
     return {
       isValid: validationErrors.length === 0,
       errors: validationErrors
@@ -68,8 +67,7 @@ export default function StepThree() {
       phone: user.phone,
       type: user.typeMarketer,
       brunches: brunches.map(b => ({
-       // address: b.address,
-        address: 'ינאי',
+        address: b.address,
         brunchName: b.name,
         hours_open: b.hoursOpen.map(day => ({
           morning: [{ open: day.morning.open, close: day.morning.close }],
@@ -81,26 +79,26 @@ export default function StepThree() {
         contactPhone: c.phone,
         contactEmail: c.email,
         contactRole: c.role
-      }
+      }))
     };
 
     try {
       const response = await axios.post(
         'https://api.yossi-tikshoret.test/api/register',
         payload,
-       
+
       );
 
       return response.data;
     } catch (error) {
       // Handle different types of errors
       let errorMsg = 'שגיאה בשליחת הנתונים לשרת';
-      
+
       if (error.response) {
         // Server responded with error status
         const status = error.response.status;
         const data = error.response.data;
-        
+
         switch (status) {
           case 400:
             errorMsg = data.message || 'נתונים לא תקינים';
@@ -130,7 +128,7 @@ export default function StepThree() {
         // Other error
         errorMsg = error.message || 'שגיאה לא צפויה';
       }
-      
+
       throw new Error(errorMsg);
     }
   };
@@ -140,17 +138,17 @@ export default function StepThree() {
     //  console.log("יש שגיאות בטופס הנוכחי");
     //  setErrorMessage('אנא מלא את כל השדות הנדרשים');
     //  setShowErrorAlert(true);
-     // return;
-  //  }
+    // return;
+    //  }
 
-     if (activeStep === 2) {
-    //  // const validation = validateAllSteps();
-      
-    //   if (!validators.isValid) {
-    //     setErrorMessage(validation.errors.join('\n'));
-    //     setShowErrorAlert(true);
-    //     return;
-    //   }
+    if (activeStep === 2) {
+      //  // const validation = validateAllSteps();
+
+      //   if (!validators.isValid) {
+      //     setErrorMessage(validation.errors.join('\n'));
+      //     setShowErrorAlert(true);
+      //     return;
+      //   }
 
       setIsLoading(true);
       try {
@@ -194,39 +192,41 @@ export default function StepThree() {
   };
 
   return (
-    <div className="flex flex-col gap-6 max-w-[1440px] px-[50px] py-[30px] direction-rtl ">
-      <div className="grid grid-cols-1 md:grid-cols-1 gap-30 max-h-[70vh] overflow-y-auto pr-2">
-        {contactMans.map((x) => (
-          <div key={x.id} className="ml-20">
-            <RegisterForm2
-              contactId={x.id}
-              canDelete={contactMans.length > 1}
-              OkFunction={handleDeleteConfirmation}
-              setValidator={(fn) => {
-                setValidators((prev) => ({ ...prev, [x.id]: fn }));
-              }}
-            />
-          </div>
-        ))}
+    <div className="flex flex-col gap-6 max-w-[1440px] px-[20px] md:px-[50px] py-[30px] direction-rtl">
+      <div className="grid grid-cols-1 md:grid-cols-1 pr-2 justify-center lg:max-h-[70vh] lg:overflow-y-auto w-full gap-6">
+        <div className="flex flex-col gap-6 pr-2">
+          {contactMans.map((x) => (
+            <div key={x.id} className="w-full flex justify-center bg-white rounded-[40px] p-4">
+              <RegisterForm2
+                contactId={x.id}
+                canDelete={contactMans.length > 1}
+                OkFunction={handleDeleteConfirmation}
+                setValidator={(fn) => {
+                  setValidators((prev) => ({ ...prev, [x.id]: fn }));
+                }}
+              />
+            </div>
+          ))}
+        </div>
       </div>
 
-      <div className='flex flex-row w-full justify-between'>
+      <div className="hidden lg:flex w-full justify-between">
         <Button onClick={addContactManHandler}
-          className=" cursor-pointer bg-black border hover:bg-white hover:text-black hover:border-black text-white p-5 gap-2 rounded-full">
+          className="cursor-pointer bg-black border hover:bg-white hover:text-black hover:border-black text-white p-5 gap-2 rounded-full">
           <PlusCircleIcon />
           הוספת איש קשר נוסף
         </Button>
 
-        <div className="flex gap-4">
+        <div className="hidden lg:flex gap-4">
           <Button onClick={previousStepInRedux}
-            className=" cursor-pointer flex items-center gap-1 bg-white text-black border border-[#F8BD00]  p-5 gap-2 rounded-full hover:bg-white hover:text-black hover:border-black">
+            className="cursor-pointer flex items-center gap-1 bg-white text-black border border-[#F8BD00] p-5 rounded-full hover:border-black">
             <ArrowLongRightIcon />
             שלב קודם
           </Button>
-          <Button 
+          <Button
             onClick={nextStepInRedux}
             disabled={isLoading}
-            className="flex cursor-pointer items-center gap-3 text-black border border-black p-5 rounded-full relative overflow-hidden bg-white transition-all duration-400 ease-in-out shadow-md hover:scale-105 hover:text-black hover:shadow-lg active:scale-90 
+            className="flex cursor-pointer items-center gap-3 text-black border border-black p-5 rounded-full relative overflow-hidden bg-white transition-all duration-400 ease-in-out shadow-md hover:scale-105 hover:text-black hover:shadow-lg active:scale-90
 before:absolute before:top-0 before:-right-full before:w-full before:h-full 
 before:bg-[#F8BD00] before:transition-all before:duration-500 before:ease-in-out 
 before:z-[-1] before:rounded-full hover:before:right-0 disabled:opacity-50 disabled:hover:scale-100"
@@ -237,33 +237,7 @@ before:z-[-1] before:rounded-full hover:before:right-0 disabled:opacity-50 disab
         </div>
       </div>
 
-      {/* Success Alert */}
-      {showAlert && <AlertSuccess onClose={() => setShowAlert(false)} />}
-      
-      {/* Error Alert */}
-      {showErrorAlert && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg max-w-md w-full mx-4">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center">
-                <span className="text-white text-sm">!</span>
-              </div>
-              <h3 className="text-lg font-semibold text-red-600">שגיאה</h3>
-            </div>
-            <div className="mb-4 text-gray-700 whitespace-pre-line">
-              {errorMessage}
-            </div>
-            <div className="flex justify-end">
-              <Button 
-                onClick={closeErrorAlert}
-                className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
-              >
-                סגור
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
-    </div >
+    </div>
+
   );
 }

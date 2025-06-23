@@ -36,20 +36,23 @@ export default function StepOne({ index }) {
 
   return (
     <div className="flex justify-center">
-      <div className="flex flex-col items-end w-full max-w-[1440px] px-[50px] py-[30px] gap-10">
-        <div className="flex w-full items-start">
-          <div className="flex flex-col w-1/2 text-right">
+      <div className="flex flex-col items-end w-full max-w-[1440px] px-[20px] md:px-[50px] py-[30px] ">
+        <div className="flex flex-col lg:flex-row w-full items-start gap-[24px] lg:gap-[36px]">
+          <div className="flex flex-col w-full lg:w-1/2 bg-white rounded-[40px] p-4 justify-center items-center">
             <RegisterForm1 form={form} />
           </div>
-          <div className="flex flex-col w-1/2 text-right">
+
+          <div className="flex flex-col w-full lg:w-1/2 rounded-[40px] p-4 justify-center items-center">
             <RegisterFormButton />
           </div>
+
         </div>
 
-        <div>
+
+        <div className="hidden lg:block">
           <Button
             onClick={handleNextStep}
-            className="flex cursor-pointer items-center gap-2 font-[16px] bg-yellow-400 text-black p-5 rounded-full border border-transparent hover:bg-white hover:text-black hover:border-[#F8BD03]"
+            className="flex cursor-pointer items-center gap-2 text-[16px] bg-yellow-400 text-black p-5 rounded-full border border-transparent hover:bg-white hover:text-black hover:border-[#F8BD03]"
           >
             שלב הבא
             <ArrowLongLeftIcon />
@@ -57,5 +60,7 @@ export default function StepOne({ index }) {
         </div>
       </div>
     </div>
+
+
   );
 }
