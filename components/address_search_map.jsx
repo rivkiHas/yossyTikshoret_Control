@@ -9,7 +9,7 @@ import { MagnifyingGlassIcon, PencilSquareIcon } from "@heroicons/react/24/outli
 import Carusel from "./carusel";
 
 const containerStyle = {
-    height: "50vh",
+    height: "100%",
     width: "100%",
     flexShrink: 0,
     alignSelf: "stretch",
@@ -18,6 +18,7 @@ const containerStyle = {
         "url('<path-to-image>') -212.782px -5.3px / 237.14% 102.469% no-repeat lightgray",
     position: "relative",
     overflow: "hidden",
+    minHeight: "300px", // Ensure minimum height on mobile
 };
 
 const customMarkerIcon = {
@@ -94,11 +95,9 @@ export default function AddressSearchMap({ typeMarketer }) {
     const handleEditBrunch = () => {
         setIsEditing(true);
     };
-    const handleInputChange = (brunchId, value) => {
-        setLocalInputValues(prev => ({
-            ...prev,
-            [brunchId]: value
-        }));
+    
+    const handleInputChange = (value) => {
+        setLocalInputValue(value);
     };
 
     const handleSaveBrunch = () => {
@@ -130,9 +129,9 @@ export default function AddressSearchMap({ typeMarketer }) {
     };
 
     return (
-        <div>
-            <div className="flex items-center justify-between w-5/6 gap-2">
-                <div className="flex flex-row items-start text-[24px] font-bold mb-4">
+        <div className="h-full flex flex-col p-4 bg-white rounded-[40px]">
+            <div className="flex items-center justify-between w-5/6 gap-2 mb-4">
+                <div className="flex flex-row items-start text-[24px] font-bold">
                     <span className="block">
                         {typeMarketer === "סוכן" ? (
                             <>אזור פעילות&nbsp;</>
@@ -169,8 +168,7 @@ export default function AddressSearchMap({ typeMarketer }) {
                 )}
             </div>
 
-
-            <Typography className="text-[16px] font-medium mb-1">
+            <Typography className="text-[16px] font-medium mb-4">
                 {typeMarketer === "סוכן"
                     ? "אזור פעילות"
                     : `כתובת סניף ${brunch?.name}` && brunch.name.trim() !== ""
@@ -180,7 +178,7 @@ export default function AddressSearchMap({ typeMarketer }) {
                             : "כתובת העסק"}
             </Typography>
 
-            <div className="w-5/6 space-y-3 flex flex-col gap-4">
+            <div className="w-5/6 flex-1 flex flex-col gap-4">
                 <Autocomplete onLoad={handleLoad} onPlaceChanged={handlePlaceChanged}>
                     <input
                         type="text"
@@ -191,13 +189,15 @@ export default function AddressSearchMap({ typeMarketer }) {
                     />
                 </Autocomplete>
 
-                <GoogleMap
-                    mapContainerStyle={containerStyle}
-                    center={location || { lat: 32.0853, lng: 34.7818 }}
-                    zoom={location ? 15 : 10}
-                >
-                    {location && <Marker position={location} icon={customMarkerIcon} />}
-                </GoogleMap>
+                <div className="flex-1 min-h-[300px]">
+                    <GoogleMap
+                        mapContainerStyle={containerStyle}
+                        center={location || { lat: 32.0853, lng: 34.7818 }}
+                        zoom={location ? 15 : 10}
+                    >
+                        {location && <Marker position={location} icon={customMarkerIcon} />}
+                    </GoogleMap>
+                </div>
 
                 {typeMarketer === "סוכן" && <Carusel activeBrunch={activeBrunch} />}
             </div>

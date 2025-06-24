@@ -53,10 +53,9 @@ export function RegisterFormButton() {
     };
 
     return (
-        <div className="flex flex-col w-full items-start lg:bg-transparent lg:p-0 lg:gap-[36px] gap-6">
-            <div className="flex flex-col w-full justify-center  p-4 bg-white rounded-[40px]">
+        <div className="flex flex-col w-full items-start lg:bg-transparent lg:p-0 lg:gap-[24px] gap-6 ">
+            <div className="flex flex-col w-full justify-center p-4 bg-white rounded-[40px]">
                 <Typography className="text-[24px] font-bold">סוג משווק</Typography>
-
                 <div className="flex flex-col gap-4 lg:flex-row lg:justify-between">
                     {marketerOptions.map((item) => (
                         <CustomButton

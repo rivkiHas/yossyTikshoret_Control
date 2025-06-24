@@ -27,9 +27,7 @@ export default function StepOne({ index }) {
   });
 
   const handleNextStep = async () => {
-    const isValid = await form.trigger();
 
-    if (!isValid) return;
     dispatch(setFormData(form.getValues()));
     dispatch(setActiveStep(activeStep + 1));
   };
@@ -37,13 +35,15 @@ export default function StepOne({ index }) {
   return (
     <div className="flex justify-center">
       <div className="flex flex-col items-end w-full max-w-[1440px] px-[20px] md:px-[50px] py-[30px] ">
-        <div className="flex flex-col lg:flex-row w-full items-start gap-[24px] lg:gap-[36px]">
-          <div className="flex flex-col w-full lg:w-1/2 bg-white rounded-[40px] p-4 justify-center items-center">
-            <RegisterForm1 form={form} />
-          </div>
+        <div className="flex flex-col lg:flex-row w-full gap-[24px] lg:gap-[36px]">
+          <div className="flex flex-col lg:flex-row w-full gap-6">
+            <div className="flex flex-col lg:w-1/2 w-full max-w-[500px] mx-auto p-4 rounded-[40px]">
+              <RegisterForm1 form={form} />
+            </div>
 
-          <div className="flex flex-col w-full lg:w-1/2 rounded-[40px] p-4 justify-center items-center">
-            <RegisterFormButton />
+            <div className="flex flex-col lg:w-1/2 w-full max-w-[500px] mx-auto  p-4 rounded-[40px]">
+              <RegisterFormButton />
+            </div>
           </div>
 
         </div>

@@ -22,9 +22,9 @@ export default function StepTwo({ brunch: propBrunch }) {
   const brunch = propBrunch || brunches.find(b => b.id === activeBrunch);
 
   useEffect(() => {
-    if (propBrunch &&propBrunch.id && propBrunch.id !== activeBrunch) {
-      console.log("step2", propBrunch.id );
-      
+    if (propBrunch && propBrunch.id && propBrunch.id !== activeBrunch) {
+      console.log("step2", propBrunch.id);
+
       dispatch(setActiveBrunch(propBrunch.id));
 
     }
@@ -122,18 +122,27 @@ export default function StepTwo({ brunch: propBrunch }) {
   }
 
   return (
-    <div className="flex justify-center">
-      <div className="flex flex-col items-end w-full max-w-[1440px] px-[20px] md:px-[50px] py-[30px] ">
-        <div className="flex flex-col lg:flex-row w-full items-start gap-[24px] lg:gap-[36px]">
-          <div className="flex flex-col w-full lg:w-1/2 bg-white rounded-[40px] p-4 justify-center items-center">
-            <AddressSearchMap typeMarketer={typeMarketer} />
-          </div>
-          <div className="flex flex-col w-full lg:w-1/2 bg-white rounded-[40px] p-4 justify-center items-center">
-            <HoursOpen typeMarketer={typeMarketer} />
+    <div className="flex justify-center min-h-screen">
+      <div className="flex flex-col items-end w-full max-w-[1440px] px-[20px]  py-[30px]">
+        <div className="flex flex-col lg:flex-row w-full h-full gap-[24px] lg:gap-[36px]">
+          <div className="flex flex-col lg:flex-row w-full h-full gap-6">
+            <div className="flex flex-col lg:w-1/2 w-full h-full lg:h-auto">
+              <AddressSearchMap typeMarketer={typeMarketer} />
+            </div>
+            
+            <div className="flex flex-col lg:w-1/2 w-full h-full lg:h-auto p-4 bg-white rounded-[40px]">
+              <HoursOpen typeMarketer={typeMarketer} />
+                            <Button onClick={handleAddBranchClick}
+                className="lg:hidden cursor-pointer bg-black border hover:bg-white hover:text-black hover:border-black text-white p-5 gap-2 rounded-full"
+              >
+                <PlusCircleIcon />
+                הוספת סניף נוסף
+              </Button>
+            </div>
           </div>
         </div>
 
-        <div className={`flex flex-row w-full ${typeMarketer === "חנות" ? "justify-between" : "justify-end"}`}>
+        <div className={`flex flex-row w-full mt-6 ${typeMarketer === "חנות" ? "justify-between" : "justify-end"}`}>
           {typeMarketer == "חנות" && <div>
             <div className='hidden lg:flex flex-row gap-4'>
               <Button onClick={handleAddBranchClick}
@@ -153,9 +162,9 @@ export default function StepTwo({ brunch: propBrunch }) {
               }
             </div>
           </div>}
-<div className="hidden lg:flex gap-4">
+          <div className="hidden lg:flex gap-4">
             <Button onClick={previousStepInRedux}
-              className="cursor-pointer flex items-center gap-1 bg-white text-black border border-[#F8BD00]  p-5 gap-2 rounded-full hover:bg-white hover:text-black hover:border-black"
+              className="cursor-pointer flex items-center bg-white text-black border border-[#F8BD00]  p-5 gap-3 rounded-full hover:bg-white hover:text-black hover:border-black"
             >
               <ArrowLongRightIcon />
               שלב קודם

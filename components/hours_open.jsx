@@ -63,7 +63,7 @@ const HoursOpen = ({ typeMarketer }) => {
   };
 
   return (
-    <div className="flex flex-col h-[80vh]">
+    <div className="h-full flex flex-col p-4 bg-white rounded-[40px]">
       <div className="flex flex-row justify-between mb-4">
         <Typography className='text-2xl font-bold'>
           {typeMarketer === "סוכן" ? "שעות זמינות  " : "שעות פתיחה "}
@@ -81,54 +81,57 @@ const HoursOpen = ({ typeMarketer }) => {
         </button>
       </div>
 
-      <div className="mb-1 bg-[#F4F4F4] rounded-4xl p-2 w-fit">
+      <div className="mb-4 bg-[#F4F4F4] rounded-4xl p-2 w-fit">
         <div dir="ltr" className="flex items-center gap-2 w-fit">
           <span className="text-sm text-[#111928] font-semibold">שעות בתיאום מראש</span>
           <Switch checked={isSwitchOn} onCheckedChange={handleSwitchChange} className={'duration-300 cursor-pointer '} />
         </div>
       </div>
 
-      <div className="relative max-h-[400px] overflow-y-auto scrollbar-custom flex flex-col text-[23px] font-semibold text-[#F8BD00]">
+      <div className="flex-1 relative">
         {isSwitchOn && (
           <div className="absolute inset-0 bg-white/20 backdrop-blur-sm backdrop-saturate-100 z-10 rounded-xl shadow-[4px_4px_160.2px_0px_rgba(0,0,0,0.06)]" />
         )}
-        {isGrouped ? (
+        
+        <div className="h-full lg:max-h-[400px] lg:overflow-y-auto lg:scrollbar-custom overflow-visible flex flex-col text-[23px] font-semibold text-[#F8BD00] gap-2">
+          {isGrouped ? (
+            <DayRow
+              day="one"
+              label="ימים א'-ה'"
+              hours={localHoursOpen?.[1]}
+              handleChange={handleChange}
+              index={1}
+              disabled={isSwitchOn}
+            />
+          ) : (
+            ["ראשון", "שני", "שלישי", "רביעי", "חמישי"].map((day, idx) => (
+              <div
+                key={idx}
+                onMouseEnter={() => setHover(idx)}
+                onMouseLeave={() => setHover(-1)}
+              >
+                <DayRow
+                  day={day}
+                  label={`יום ${day}`}
+                  hours={localHoursOpen?.[idx + 1]}
+                  handleChange={handleChange}
+                  hover={hover === idx}
+                  index={idx + 1}
+                  disabled={isSwitchOn}
+                />
+              </div>
+            ))
+          )}
           <DayRow
-            day="one"
-            label="ימים א'-ה'"
-            hours={localHoursOpen?.[1]}
+            day="שישי"
+            label="יום ו'"
+            hours={localHoursOpen?.[5]}
             handleChange={handleChange}
-            index={1}
+            index={5}
             disabled={isSwitchOn}
+            isFriday={true}
           />
-        ) : (
-          ["ראשון", "שני", "שלישי", "רביעי", "חמישי"].map((day, idx) => (
-            <div
-              key={idx}
-              onMouseEnter={() => setHover(idx)}
-              onMouseLeave={() => setHover(-1)}
-            >
-              <DayRow
-                day={day}
-                label={`יום ${day}`}
-                hours={localHoursOpen?.[idx + 1]}
-                handleChange={handleChange}
-                hover={hover === idx}
-                index={idx + 1}
-                disabled={isSwitchOn}
-              />
-            </div>
-          ))
-        )}
-        <DayRow
-          day="שישי"
-          label="יום ו'"
-          hours={localHoursOpen?.[5]}
-          handleChange={handleChange}
-          index={5}
-          disabled={isSwitchOn}
-          isFriday={true}
-        />
+        </div>
       </div>
     </div>
   );
@@ -143,7 +146,7 @@ const DayRow = ({ day, label, hours, handleChange, hover, index, disabled, isFri
   };
 
   return (
-    <div className="flex flex-col bg-white rounded-xl p-2 relative group">
+    <div className="flex-shrink-0 bg-white rounded-xl p-2 relative group">
       <div className='flex flex-row justify-between items-center'>
         <div className='flex flex-col'>
           <Typography className="text-[24px] font-bold text-[#F8BD00] mb-2 text-left">{label}</Typography>
