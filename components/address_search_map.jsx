@@ -6,7 +6,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { updateBrunchDetails, setActiveBrunch } from "../store/brunch_store";
 import { Typography } from "./typhography";
 import { MagnifyingGlassIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
-import Carusel from "./carusel";
 
 const containerStyle = {
     height: "100%",
@@ -199,7 +198,6 @@ export default function AddressSearchMap({ typeMarketer }) {
                     </GoogleMap>
                 </div>
 
-                {typeMarketer === "סוכן" && <Carusel activeBrunch={activeBrunch} />}
             </div>
         </div >
     );

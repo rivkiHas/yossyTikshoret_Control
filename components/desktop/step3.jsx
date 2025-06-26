@@ -91,11 +91,9 @@ export default function StepThree() {
 
       return response.data;
     } catch (error) {
-      // Handle different types of errors
       let errorMsg = 'שגיאה בשליחת הנתונים לשרת';
 
       if (error.response) {
-        // Server responded with error status
         const status = error.response.status;
         const data = error.response.data;
 
@@ -107,7 +105,6 @@ export default function StepThree() {
             errorMsg = 'שגיאת הרשאה - אנא התחבר מחדש';
             break;
           case 422:
-            // Validation errors from server
             if (data.errors) {
               const serverErrors = Object.values(data.errors).flat();
               errorMsg = serverErrors.join(', ');
@@ -122,10 +119,8 @@ export default function StepThree() {
             errorMsg = data.message || `שגיאה ${status}`;
         }
       } else if (error.request) {
-        // Network error
         errorMsg = 'שגיאת חיבור לשרת - אנא בדק את החיבור לאינטרנט';
       } else {
-        // Other error
         errorMsg = error.message || 'שגיאה לא צפויה';
       }
 
@@ -194,9 +189,9 @@ export default function StepThree() {
   return (
     <div className="flex flex-col gap-6 max-w-[1440px] px-[20px] md:px-[50px] py-[30px] direction-rtl">
       <div className="grid grid-cols-1 md:grid-cols-1 pr-2 justify-center lg:max-h-[70vh] lg:overflow-y-auto w-full gap-6">
-        <div className="flex flex-col gap-6 pr-2">
+        <div className="flex flex-col gap-6 pr-2 h-full">
           {contactMans.map((x) => (
-            <div key={x.id} className="w-full flex justify-center bg-white rounded-[40px] p-4">
+            <div key={x.id} className="w-full flex justify-start bg-white rounded-[40px] p-4 h-full gap-10">
               <RegisterForm2
                 contactId={x.id}
                 canDelete={contactMans.length > 1}

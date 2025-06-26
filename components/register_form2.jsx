@@ -99,7 +99,7 @@ export function RegisterForm2({ OkFunction, contactId, canDelete, setValidator }
 
 
   return (
-    <div className="flex flex-col gap-[15px] ">
+    <div className="flex flex-col gap-[15px] h-full w-1/2 mb-6">
       <div className="flex justify-between items-center">
         <div className="flex flex-row justify-between items-center mb-4 w-full">
           <Typography className="text-2xl font-bold"> פרטי איש קשר  </Typography>
@@ -133,7 +133,6 @@ export function RegisterForm2({ OkFunction, contactId, canDelete, setValidator }
                     )}
                   </div>
                 </FormControl>
-                {/* <FormMessage /> */}
               </FormItem>
             )}
           />
@@ -160,7 +159,6 @@ export function RegisterForm2({ OkFunction, contactId, canDelete, setValidator }
                 </FormControl>
                 <FormDescription>מספר זה מיועד לקשר אישי ואינו מספר העסק.</FormDescription>
                 {isPhoneValid && <CodeVerificationFlow placeholder="טלפון" />}
-                {/* <FormMessage /> */}
               </FormItem>
             )}
           />
@@ -187,7 +185,6 @@ export function RegisterForm2({ OkFunction, contactId, canDelete, setValidator }
                 </FormControl>
                 <FormDescription>אימייל זה מיועד לקשר אישי ואינו אימייל העסק.</FormDescription>
                 {isEmailValid && <CodeVerificationFlow placeholder="אימייל" />}
-                {/* <FormMessage /> */}
               </FormItem>
             )}
           />
@@ -238,7 +235,6 @@ export function RegisterForm2({ OkFunction, contactId, canDelete, setValidator }
                         <SelectItem value="seller">מוכר</SelectItem>
                       </SelectContent>
                     </Select>
-                    {/* <FormMessage /> */}
                   </FormItem>
                 )}
               />

@@ -84,7 +84,7 @@ export function RegisterForm1({ form }) {
     ];
 
     return (
-        <div className="flex flex-col lg:gap-2.5 gap-6 w-full p-4 justify-center bg-white rounded-[40px]">
+        <div className="flex flex-col lg:gap-2.5 gap-6 w-full p-4 justify-center bg-white rounded-2xl">
             <Typography className="text-[24px] font-bold mb-6 block w-full">
                 פרטים על העסק
             </Typography>
