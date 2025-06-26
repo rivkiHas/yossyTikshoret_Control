@@ -4,8 +4,8 @@ export const isPertipStepComplete = createSelector(
     state => state.form.pertip,
     (pertip) => {
         const { name, email, id, phone, typeMarketer, typeSales } = pertip;
-        console.log({name, email, id, phone, typeMarketer, typeSales });
-    
+        console.log({ name, email, id, phone, typeMarketer, typeSales });
+
         return (name && email && id && phone && typeMarketer && typeSales.length > 0);
     }
 
@@ -42,4 +42,7 @@ export const isAllStepsComplete = createSelector(
     isBrunchStepComplete,
     (pertipComplete, contactComplete, brunchComplete) =>
         pertipComplete && contactComplete && brunchComplete
+
 );
+
+

@@ -11,7 +11,7 @@ const conectManSlice = createSlice({
                 contactManEmail: '',
                 brunch: '',
                 role: ''
-            }],  // הוספת מזהה לכל איש קשר
+            }],  
     },
     reducers: {
         setFormData: (state, action) => {
@@ -23,7 +23,7 @@ const conectManSlice = createSlice({
         },
 
         addContactMan: (state) => {
-            const newId = state.contactMans.length > 0 ? state.contactMans[state.contactMans.length - 1].id + 1 : 1; // חישוב מזהה ייחודי חדש
+            const newId = state.contactMans.length > 0 ? state.contactMans[state.contactMans.length - 1].id + 1 : 1; 
             state.contactMans.push({
                 id: newId,
                 contactManName: '',
@@ -35,12 +35,12 @@ const conectManSlice = createSlice({
         },
 
         deleteContactMan: (state, action) => {
-            state.contactMans = state.contactMans.filter(contact => contact.id !== action.payload); // מחיקת איש קשר לפי מזהה
+            state.contactMans = state.contactMans.filter(contact => contact.id !== action.payload); 
         },
 
         removeLastContactMan: (state) => {
             if (state.contactMans.length > 1) {
-                state.contactMans.splice(-1, 1); // מחיקת האובייקט האחרון במערך
+                state.contactMans.splice(-1, 1); 
             }
         },
         

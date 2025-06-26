@@ -18,7 +18,7 @@ import TooltipValid from "./tooltip_valid";
 
 export function RegisterForm1({ form }) {
     const dispatch = useDispatch();
-    const user = useSelector((state) => state.form.pertip);
+    const errorsPertip = useSelector((state) => state.formErrors.pertip);
 
     const onSubmit = () => {
         const formData = form.getValues();
@@ -84,14 +84,14 @@ export function RegisterForm1({ form }) {
     ];
 
     return (
-        <div>
+        <div className="flex flex-col lg:gap-2.5 gap-6 w-full p-4 justify-center bg-white rounded-2xl">
             <Typography className="text-[24px] font-bold mb-6 block w-full">
                 פרטים על העסק
             </Typography>
             <Form {...form}>
                 <form
                     onSubmit={form.handleSubmit(onSubmit)}
-                    className="w-5/6 space-y-7.5 flex flex-col"
+                    className="space-y-8.5 flex flex-col"
                 >
                     {fields.map(({ name, label, placeholder, rules }) => (
                         <FormField
@@ -102,7 +102,8 @@ export function RegisterForm1({ form }) {
                             render={({ field, fieldState }) => (
                                 <FormItem className="relative">
                                     <FormLabel className={fieldState.error ? "text-[#000]" : ""}>
-                                        {label}</FormLabel>
+                                        {label}
+                                    </FormLabel>
                                     <FormControl>
                                         <div className="relative">
                                             <Input
@@ -112,14 +113,15 @@ export function RegisterForm1({ form }) {
                                                 onChange={handleInputChange(field)}
                                             />
 
-                                            {fieldState.error && (
-                                                <TooltipValid tooltipText={fieldState.error.message} />
+                                            {(fieldState.error?.message || errorsPertip[name]) && (
+                                                <TooltipValid tooltipText={fieldState.error?.message || errorsPertip[name]} />
                                             )}
                                         </div>
                                     </FormControl>
                                 </FormItem>
                             )}
                         />
+
                     ))}
 
                     <FormField
