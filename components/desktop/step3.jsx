@@ -188,7 +188,7 @@ export default function StepThree() {
 
   return (
     <div className="flex flex-col gap-6 max-w-[1440px] px-[20px] md:px-[50px] py-[30px] direction-rtl">
-      <div className="grid grid-cols-1 md:grid-cols-1 pr-2 justify-center lg:max-h-[70vh] lg:overflow-y-auto w-full gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-1 pr-2 justify-center lg:max-h-[60vh] lg:overflow-y-auto w-full gap-6">
         <div className="flex flex-col gap-6 pr-2 h-full">
           {contactMans.map((x) => (
             <div key={x.id} className="w-full flex justify-start bg-white rounded-[40px] p-4 h-full gap-10">

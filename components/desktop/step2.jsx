@@ -1,99 +1,197 @@
-// components/desktop/step2.js
 'use client';
-
-import { Formik, Form } from 'formik';
-import { useDispatch, useSelector } from "react-redux";
-import { setActiveStep } from "../../store/step_store";
-import { addBrunch, removeBrunch, setActiveBrunch, updateBrunch } from "../../store/brunch_store";
-import { branchSchema } from "@/lib/validation_schema"; 
+import { Tab } from '@headlessui/react'
 import AddressSearchMap from '../address_search_map';
 import HoursOpen from '../hours_open';
-import { Button } from '../ui/button';
-import { ArrowLongLeftIcon, PlusCircleIcon, ArrowLongRightIcon } from '@heroicons/react/24/outline';
+import { useDispatch, useSelector } from "react-redux";
+import { nextStep, prevStep, setActiveStep } from "../../store/step_store";
+import { addBrunch, removeBrunch, setActiveBrunch } from "../../store/brunch_store";
+import { Button } from "../ui/button";
+import { ArrowLongLeftIcon, PlusCircleIcon, ArrowLongRightIcon } from '@heroicons/react/24/outline'
+import IconButton from '../icon_button';
+import { useState, useEffect } from 'react';
+import { AlertDialogEdit } from '../alert_dialog_edit'
+import Carusel from "../carusel";
 
 
-export default function StepTwo({ brunch }) { 
-    const dispatch = useDispatch();
-    const activeStep = useSelector((state) => state.stepper.activeStep);
-    const brunches = useSelector((state) => state.brunch.brunches);
-    const typeMarketer = useSelector((state) => state.form.pertip.typeMarketer);
+export default function StepTwo({ brunch: propBrunch }) {
+  const dispatch = useDispatch();
+  const brunches = useSelector((state) => state.brunch.brunches);
+  const typeMarketer = useSelector((state) => state.form.pertip.typeMarketer)
+  const activeStep = useSelector((state) => state.stepper.activeStep)
+  const activeBrunch = useSelector((state) => state.brunch.activeBrunch);
 
-    if (!brunch) {
-        return null;
+  const brunch = propBrunch || brunches.find(b => b.id === activeBrunch);
+
+  useEffect(() => {
+    if (propBrunch && propBrunch.id && propBrunch.id !== activeBrunch) {
+      console.log("step2", propBrunch.id);
+
+      dispatch(setActiveBrunch(propBrunch.id));
+
     }
-    
-    const updateReduxState = (values) => {
-        dispatch(updateBrunch(values));
-    };
+  }, [propBrunch, activeBrunch, dispatch]);
 
-    const handleNext = (values) => {
-        updateReduxState(values);
-        // לוגיקת ניווט מורכבת נשארת כפי שהייתה
-        const currentBrunchIndex = brunches.findIndex(b => b.id === brunch.id);
-        if (typeMarketer !== "חנות" || currentBrunchIndex === brunches.length - 1) {
-            dispatch(setActiveStep(activeStep + 1));
-        } else {
-            const nextBrunch = brunches[currentBrunchIndex + 1];
-            dispatch(setActiveBrunch(nextBrunch.id));
-        }
-    };
-    
-    const handlePrev = (values) => {
-        updateReduxState(values);
-        dispatch(setActiveStep(activeStep - 1));
-    };
+  const [showDialog, setShowDialog] = useState(false);
+  const [newBranchName, setNewBranchName] = useState('');
 
-    return (
-        <Formik
-            initialValues={brunch}
-            validationSchema={branchSchema}
-            onSubmit={(values) => handleNext(values)}
-            enableReinitialize // קריטי! מאתחל את Formik כשה-prop `brunch` משתנה
-        >
-            {({ values, setFieldValue }) => (
-                <Form onBlur={() => updateReduxState(values)}>
-                    <div className="flex justify-center ">
-                        <div className="flex flex-col items-end w-full max-w-[1440px] px-[20px]  py-[30px]">
-                            <div className="flex flex-col lg:flex-row w-full h-full gap-[24px] lg:gap-[36px]">
-                                <div className="flex flex-col lg:w-1/2 w-full h-full">
-                                    {/* העבר את setFieldValue לקומפוננטת המפה כדי שתוכל לעדכן את הכתובת והמיקום */}
-                                    <AddressSearchMap 
-                                       setFieldValue={setFieldValue} 
-                                       currentLocation={values.location}
-                                    />
-                                </div>
-                                <div className="flex flex-col lg:w-1/2 w-full h-full lg:h-auto p-4 bg-white rounded-[40px]">
-                                     {/* העבר את setFieldValue לקומפוננטת השעות */}
-                                    <HoursOpen 
-                                       setFieldValue={setFieldValue} 
-                                       hours={values.hoursOpen}
-                                    />
-                                    {/* ... */}
-                                </div>
-                            </div>
-                            <div className="flex w-full mt-6 items-start justify-between">
-                                {/* לוגיקת כפתורי הוספה/מחיקה נשארת זהה */}
-                                <div>
-                                    {/* ... */}
-                                </div>
-                                
-                                <div className="hidden lg:flex gap-4">
-                                     <Button type="button" onClick={() => handlePrev(values)}
-                                        className="cursor-pointer flex items-center gap-1 bg-white text-black border border-[#F8BD00] p-5 rounded-full hover:border-black">
-                                        <ArrowLongRightIcon className="h-6 w-6"/>
-                                        שלב קודם
-                                    </Button>
-                                    <Button type="button" onClick={() => handleNext(values)}
-                                        className="cursor-pointer flex items-center gap-2 bg-yellow-400 text-black p-5 rounded-full border border-transparent hover:bg-white hover:text-black hover:border-[#F8BD03]">
-                                        שלב הבא
-                                        <ArrowLongLeftIcon className="h-6 w-6"/>
-                                    </Button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </Form>
-            )}
-        </Formik>
-    );
+  const nextStepInRedux = () => {
+    if (brunches.length === 1) {
+      dispatch(setActiveStep(activeStep + 1));
+    } else {
+      const currentBrunchIndex = brunches.findIndex(b => b.id === activeBrunch);
+      if (currentBrunchIndex < brunches.length - 1) {
+        const nextBrunch = brunches[currentBrunchIndex + 1];
+        dispatch(setActiveBrunch(nextBrunch.id));
+        dispatch(setActiveStep(2 + currentBrunchIndex + 1));
+      } else {
+        dispatch(setActiveStep(2 + brunches.length));
+      }
+    }
+  };
+
+  const previousStepInRedux = () => {
+    if (brunches.length === 1) {
+      dispatch(setActiveStep(activeStep - 1));
+    } else {
+      const currentBrunchIndex = brunches.findIndex(b => b.id === activeBrunch);
+      if (currentBrunchIndex > 0) {
+        const prevBrunch = brunches[currentBrunchIndex - 1];
+        dispatch(setActiveBrunch(prevBrunch.id));
+        dispatch(setActiveStep(2 + currentBrunchIndex - 1));
+      } else {
+        dispatch(setActiveStep(0));
+      }
+    }
+  };
+
+  const handleAddBranchClick = () => {
+    setShowDialog(true);
+  };
+
+  const handleConfirmAddBranch = () => {
+    const newId = Math.max(...brunches.map(b => b.id)) + 1;
+    const newBrunch = {
+      id: newId,
+      name: newBranchName || `${brunches.length + 1}`,
+      address: "",
+      location: {
+        lat: 32.0853,
+        lng: 34.7818
+      },
+      hoursOpen: [
+        { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
+        { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
+        { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
+        { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
+        { morning: { open: "", close: "" }, evening: { open: "", close: "" } }
+      ],
+      weekday: { morning: { open: "", close: "" }, evening: { open: "", close: "" } }
+    };
+    dispatch(addBrunch(newBrunch));
+    dispatch(setActiveBrunch(newId));
+
+    const newBrunchIndex = brunches.length;
+    dispatch(setActiveStep(2 + newBrunchIndex));
+
+    setShowDialog(false);
+    setNewBranchName('');
+  };
+
+  const handleDeleteConfirmation = (brunch) => {
+    if (brunches.length > 1) {
+      const brunchIndex = brunches.findIndex(b => b.id === brunch.id);
+      dispatch(removeBrunch(brunch.id));
+
+      if (brunchIndex > 0) {
+        const prevBrunch = brunches[brunchIndex - 1];
+        dispatch(setActiveBrunch(prevBrunch.id));
+        dispatch(setActiveStep(2 + brunchIndex - 1));
+      } else if (brunches.length > 1) {
+        const nextBrunch = brunches[1];
+        dispatch(setActiveBrunch(nextBrunch.id));
+        dispatch(setActiveStep(2));
+      } else {
+        dispatch(setActiveStep(1));
+      }
+    } else {
+      console.log("לא ניתן למחוק, חייב להיות לפחות סניף אחד");
+    }
+  };
+
+  if (!brunch) {
+    return null;
+  }
+
+  return (
+    <div className="flex justify-center ">
+      <div className="flex flex-col items-end w-full max-w-[1440px] px-[20px]  py-[30px]">
+        <div className="flex flex-col lg:flex-row w-full h-full gap-[24px] lg:gap-[36px]">
+          <div className="flex flex-col lg:flex-row w-full h-full gap-6">
+            <div className="flex flex-col lg:w-1/2 w-full h-full">
+              <AddressSearchMap typeMarketer={typeMarketer} />
+            </div>
+
+            <div className="flex flex-col lg:w-1/2 w-full h-full lg:h-auto p-4 bg-white rounded-[40px]">
+              <HoursOpen typeMarketer={typeMarketer} />
+              <Button onClick={handleAddBranchClick}
+                className="lg:hidden cursor-pointer bg-black border hover:bg-white hover:text-black hover:border-black text-white p-5 gap-2 rounded-full"
+              >
+                <PlusCircleIcon />
+                הוספת סניף נוסף
+              </Button>
+            </div>
+          </div>
+        </div>
+
+             <div className={`flex flex-row w-full mt-6 items-start ${typeMarketer === "חנות" ? "justify-between" : "justify-end"}`}>
+        {typeMarketer === "חנות" ? (
+          <div>
+            <div className='hidden lg:flex flex-row gap-4'>
+              <Button onClick={handleAddBranchClick}
+                className="cursor-pointer bg-black border hover:bg-white hover:text-black hover:border-black text-white p-5 gap-2 rounded-full"
+              >
+                <PlusCircleIcon />
+                הוספת סניף נוסף
+              </Button>
+
+              {brunches.length > 1 && brunch && (
+                <IconButton
+                  headerText="מחיקה"
+                  onConfirm={() => handleDeleteConfirmation(brunch)}
+                  contactId={brunch.id}
+                  text="האם ברצונך למחוק את הסניף הזה?"
+                />
+              )}
+            </div>
+          </div>
+        ) : (
+          <Carusel activeBrunch={activeBrunch} />
+        )}
+
+        <div className="hidden lg:flex gap-4">
+          <Button onClick={previousStepInRedux}
+            className="cursor-pointer flex items-center bg-white text-black border border-[#F8BD00]  p-5 gap-3 rounded-full hover:bg-white hover:text-black hover:border-black"
+          >
+            <ArrowLongRightIcon />
+            שלב קודם
+          </Button>
+          <Button onClick={nextStepInRedux}
+            className="cursor-pointer flex items-center gap-2 bg-yellow-400 text-black p-5 rounded-full border border-transparent hover:bg-white hover:text-black hover:border-[#F8BD03]">
+            שלב הבא
+            <ArrowLongLeftIcon />
+          </Button>
+        </div>
+      </div>
+
+      <AlertDialogEdit
+        open={showDialog}
+        value={newBranchName}
+        onChange={setNewBranchName}
+        onConfirm={handleConfirmAddBranch}
+        onCancel={() => setShowDialog(false)}
+      />
+    </div>
+  </div>
+
+  );
 }

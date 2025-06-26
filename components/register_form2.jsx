@@ -99,7 +99,7 @@ export function RegisterForm2({ OkFunction, contactId, canDelete, setValidator }
 
 
   return (
-    <div className="flex flex-col gap-[15px] h-full w-1/2 mb-6">
+    <div className="flex flex-col gap-[15px] h-[60vh] w-1/2 mb-6">
       <div className="flex justify-between items-center">
         <div className="flex flex-row justify-between items-center mb-4 w-full">
           <Typography className="text-2xl font-bold"> פרטי איש קשר  </Typography>
