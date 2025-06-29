@@ -7,6 +7,7 @@ import { Switch } from "@/components/ui/switch";
 import { Typography } from '../typhography';
 import { PencilSquareIcon } from '@heroicons/react/24/solid';
 import { PlusCircleIcon, MinusCircleIcon } from "@heroicons/react/24/outline";
+import { TimeInput } from '../ui/time-input';
 
 const HoursOpen = ({ typeMarketer }) => {
     const dispatch = useDispatch();
@@ -25,7 +26,6 @@ const HoursOpen = ({ typeMarketer }) => {
     }, [brunch]);
 
     const handleChange = (day, period, type, value, index) => {
-
         if (index === undefined || index === null) {
             console.warn("index לא מוגדר ב-handleChange");
             return;
@@ -163,24 +163,24 @@ const DayRow = ({ day, label, hours, handleChange, hover, index, disabled, isFri
                     )}
 
                     <div className={`flex flex-row gap-3 items-end ${isFriday ? 'ml-[60px]' : ''}`}>
-
                         <div className="flex flex-col gap-1">
                             <label className="text-sm text-black">שעת פתיחה</label>
-                            <InputTime
+                            <TimeInput
                                 value={hours?.morning?.open || ""}
                                 onChange={(e) => handleChange(day, "morning", "open", e.target.value, index)}
                                 disabled={disabled}
+                                placeholder="בחר שעה"
                             />
                         </div>
                         <div className="flex flex-col gap-1">
                             <label className="text-sm text-black">שעת סגירה</label>
-                            <InputTime
+                            <TimeInput
                                 value={hours?.morning?.close || ""}
                                 onChange={(e) => handleChange(day, "morning", "close", e.target.value, index)}
                                 disabled={disabled}
+                                placeholder="בחר שעה"
                             />
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -200,47 +200,29 @@ const DayRow = ({ day, label, hours, handleChange, hover, index, disabled, isFri
                         </div>
                     </div>
                     <div className='flex flex-row gap-3 items-end'>
-
                         <div className="flex flex-col gap-1">
                             <label className="text-sm text-black">שעת סגירה</label>
-                            <InputTime
+                            <TimeInput
                                 value={hours?.evening?.close || ""}
                                 onChange={(e) => handleChange(day, "evening", "close", e.target.value, index)}
                                 disabled={disabled}
+                                placeholder="בחר שעה"
                             />
                         </div>
                         <div className="flex flex-col gap-1">
                             <label className="text-sm text-black">שעת פתיחה</label>
-                            <InputTime
+                            <TimeInput
                                 value={hours?.evening?.open || ""}
                                 onChange={(e) => handleChange(day, "evening", "open", e.target.value, index)}
                                 disabled={disabled}
+                                placeholder="בחר שעה"
                             />
                         </div>
                     </div>
                 </div>
             )}
-
         </div>
-
     );
-
 };
-
-const InputTime = ({ onChange, value, disabled }) => (
-    <div className="flex flex-col">
-        <input
-            type="time"
-            dir="ltr"
-            step="1800"
-            onChange={onChange}
-            value={value}
-            disabled={disabled}
-            className="flex items-center justify-end w-[100px] h-[40px] px-[20px] pr-[16px] gap-[10px]
-                border border-[#DBDEDE] rounded-[6px] bg-white 
-                text-[#4C585B] text-[16px] leading-[24px] font-[400] text-right disabled:opacity-50"
-        />
-    </div>
-);
 
 export default HoursOpen;
