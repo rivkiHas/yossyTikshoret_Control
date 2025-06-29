@@ -6,6 +6,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { updateBrunchDetails, setActiveBrunch } from "../store/brunch_store";
 import { Typography } from "./typhography";
 import { MagnifyingGlassIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
+import { useFormikContext } from 'formik';
+import TooltipValid from "./tooltip_valid";
 
 const containerStyle = {
     height: "100%",
@@ -31,6 +33,7 @@ const customMarkerIcon = {
 
 export default function AddressSearchMap({ typeMarketer }) {
     const dispatch = useDispatch();
+    const formik = useFormikContext();
     const autocompleteRef = useRef(null);
     const brunches = useSelector((state) => state.brunch.brunches);
     const activeBrunch = useSelector((state) => state.brunch.activeBrunch);
@@ -46,6 +49,11 @@ export default function AddressSearchMap({ typeMarketer }) {
             : `${brunches.findIndex((b) => b.id === activeBrunch) + 1}`;
     const [brunchName, setBrunchName] = useState(defaultBrunchName);
 
+    // Get current branch index for validation
+    const currentBranchIndex = brunches.findIndex(b => b.id === activeBrunch);
+    const addressFieldName = `brunches.${currentBranchIndex}.address`;
+    const nameFieldName = `brunches.${currentBranchIndex}.name`;
+    const locationFieldName = `brunches.${currentBranchIndex}.location`;
 
     useEffect(() => {
         setLocalInputValue(address);
@@ -77,6 +85,9 @@ export default function AddressSearchMap({ typeMarketer }) {
                             dispatch(
                                 updateBrunchDetails({ id: activeBrunch, location: newLocation })
                             );
+                            
+                            // Update Formik
+                            formik.setFieldValue(locationFieldName, newLocation);
                         }
                     }
                 });
@@ -84,12 +95,11 @@ export default function AddressSearchMap({ typeMarketer }) {
         }, 300);
 
         return () => clearInterval(interval);
-    }, [address]);
+    }, [address, activeBrunch, dispatch, formik, locationFieldName, location]);
 
     const handleLoad = (autocomplete) => {
         autocompleteRef.current = autocomplete;
     };
-
 
     const handleEditBrunch = () => {
         setIsEditing(true);
@@ -97,6 +107,8 @@ export default function AddressSearchMap({ typeMarketer }) {
     
     const handleInputChange = (value) => {
         setLocalInputValue(value);
+        // Update Formik field
+        formik.setFieldValue(addressFieldName, value);
     };
 
     const handleSaveBrunch = () => {
@@ -105,6 +117,9 @@ export default function AddressSearchMap({ typeMarketer }) {
             id: brunch.id,
             name: brunchName,
         }));
+        
+        // Update Formik
+        formik.setFieldValue(nameFieldName, brunchName);
     };
 
     const handlePlaceChanged = () => {
@@ -123,9 +138,21 @@ export default function AddressSearchMap({ typeMarketer }) {
                     })
                 );
                 setLocalInputValue(place.formatted_address);
+                
+                // Update Formik
+                formik.setFieldValue(addressFieldName, place.formatted_address);
+                formik.setFieldValue(locationFieldName, newLocation);
             }
         }
     };
+
+    // Check for validation errors
+    const addressError = formik.touched.brunches?.[currentBranchIndex]?.address && 
+                        formik.errors.brunches?.[currentBranchIndex]?.address;
+    const nameError = formik.touched.brunches?.[currentBranchIndex]?.name && 
+                     formik.errors.brunches?.[currentBranchIndex]?.name;
+    const locationError = formik.touched.brunches?.[currentBranchIndex]?.location && 
+                         formik.errors.brunches?.[currentBranchIndex]?.location;
 
     return (
         <div className="h-full flex flex-col p-4 bg-white rounded-[40px]">
@@ -139,19 +166,32 @@ export default function AddressSearchMap({ typeMarketer }) {
                         )}
                     </span>
                     {isEditing ? (
-                        <input
-                            type="text"
-                            value={brunchName}
-                            onChange={(e) => setBrunchName(e.target.value)}
-                            onBlur={handleSaveBrunch}
-                            onKeyPress={(e) => e.key === "Enter" && handleSaveBrunch()}
-                            autoFocus
-                            className="outline-none px-1 w-1/2"
-                            style={{
-                                fontSize: "24px",
-                                fontWeight: "bold",
-                            }}
-                        />
+                        <div className="relative">
+                            <input
+                                type="text"
+                                value={brunchName}
+                                onChange={(e) => setBrunchName(e.target.value)}
+                                onBlur={() => {
+                                    handleSaveBrunch();
+                                    formik.setFieldTouched(nameFieldName, true);
+                                }}
+                                onKeyPress={(e) => {
+                                    if (e.key === "Enter") {
+                                        handleSaveBrunch();
+                                        formik.setFieldTouched(nameFieldName, true);
+                                    }
+                                }}
+                                autoFocus
+                                className={`outline-none px-1 w-1/2 ${nameError ? 'border-b border-red-500' : ''}`}
+                                style={{
+                                    fontSize: "24px",
+                                    fontWeight: "bold",
+                                }}
+                            />
+                            {nameError && (
+                                <TooltipValid tooltipText={nameError} className="top-8" />
+                            )}
+                        </div>
                     ) : (
                         <span className="block">{brunchName}</span>
                     )}
@@ -178,17 +218,25 @@ export default function AddressSearchMap({ typeMarketer }) {
             </Typography>
 
             <div className="w-5/6 flex-1 flex flex-col gap-4">
-                <Autocomplete onLoad={handleLoad} onPlaceChanged={handlePlaceChanged}>
-                    <input
-                        type="text"
-                        placeholder={typeMarketer == "חנות" ? "הכנס כתובת..." : "חפש מיקום נוסף"}
-                        value={localInputValue}
-                        onChange={(e) => handleInputChange(e.target.value)}
-                        className="w-full flex justify-between items-center h-11 px-4 border border-input rounded-md bg-background text-sm text-muted-foreground peer-hover:border-primary peer-focus-visible:ring-1 peer-focus-visible:ring-ring transition-colors"
-                    />
-                </Autocomplete>
+                <div className="relative">
+                    <Autocomplete onLoad={handleLoad} onPlaceChanged={handlePlaceChanged}>
+                        <input
+                            type="text"
+                            placeholder={typeMarketer == "חנות" ? "הכנס כתובת..." : "חפש מיקום נוסף"}
+                            value={localInputValue}
+                            onChange={(e) => handleInputChange(e.target.value)}
+                            onBlur={() => formik.setFieldTouched(addressFieldName, true)}
+                            className={`w-full flex justify-between items-center h-11 px-4 border rounded-md bg-background text-sm text-muted-foreground peer-hover:border-primary peer-focus-visible:ring-1 peer-focus-visible:ring-ring transition-colors ${
+                                addressError ? 'border-red-500' : 'border-input'
+                            }`}
+                        />
+                    </Autocomplete>
+                    {addressError && (
+                        <TooltipValid tooltipText={addressError} className="top-12" />
+                    )}
+                </div>
 
-                <div className="flex-1 min-h-[300px]">
+                <div className="flex-1 min-h-[300px] relative">
                     <GoogleMap
                         mapContainerStyle={containerStyle}
                         center={location || { lat: 32.0853, lng: 34.7818 }}
@@ -196,9 +244,13 @@ export default function AddressSearchMap({ typeMarketer }) {
                     >
                         {location && <Marker position={location} icon={customMarkerIcon} />}
                     </GoogleMap>
+                    {locationError && (
+                        <div className="absolute top-2 right-2 bg-red-100 border border-red-400 text-red-700 px-2 py-1 rounded text-xs">
+                            נדרש מיקום תקין
+                        </div>
+                    )}
                 </div>
-
             </div>
-        </div >
+        </div>
     );
 }

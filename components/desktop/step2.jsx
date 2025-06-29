@@ -11,7 +11,7 @@ import IconButton from '../icon_button';
 import { useState, useEffect } from 'react';
 import { AlertDialogEdit } from '../alert_dialog_edit'
 import Carusel from "../carusel";
-
+import { useFormikContext } from 'formik';
 
 export default function StepTwo({ brunch: propBrunch }) {
     const dispatch = useDispatch();
@@ -19,6 +19,7 @@ export default function StepTwo({ brunch: propBrunch }) {
     const typeMarketer = useSelector((state) => state.form.pertip.typeMarketer)
     const activeStep = useSelector((state) => state.stepper.activeStep)
     const activeBrunch = useSelector((state) => state.brunch.activeBrunch);
+    const formik = useFormikContext();
 
     const brunch = propBrunch || brunches.find(b => b.id === activeBrunch);
 
@@ -28,22 +29,49 @@ export default function StepTwo({ brunch: propBrunch }) {
         }
     }, [propBrunch, activeBrunch, dispatch]);
 
+    // Sync Redux brunches with Formik
+    useEffect(() => {
+        const formikBrunches = brunches.map(b => ({
+            name: b.name || '',
+            address: b.address || '',
+            location: b.location || { lat: '', lng: '' },
+            hoursOpen: b.hoursOpen || []
+        }));
+        
+        formik.setFieldValue('brunches', formikBrunches);
+    }, [brunches]);
+
     const [showDialog, setShowDialog] = useState(false);
     const [newBranchName, setNewBranchName] = useState('');
 
     const nextStepInRedux = () => {
-        if (brunches.length === 1) {
-            dispatch(setActiveStep(activeStep + 1));
-        } else {
-            const currentBrunchIndex = brunches.findIndex(b => b.id === activeBrunch);
-            if (currentBrunchIndex < brunches.length - 1) {
-                const nextBrunch = brunches[currentBrunchIndex + 1];
-                dispatch(setActiveBrunch(nextBrunch.id));
-                dispatch(setActiveStep(2 + currentBrunchIndex + 1));
+        // Validate current step but don't block navigation
+        formik.validateForm().then(() => {
+            // Update Formik with current branch data
+            const currentBranchData = {
+                ...formik.values,
+                brunches: brunches.map(b => ({
+                    name: b.name || '',
+                    address: b.address || '',
+                    location: b.location || { lat: '', lng: '' },
+                    hoursOpen: b.hoursOpen || []
+                }))
+            };
+            formik.setValues(currentBranchData);
+
+            if (brunches.length === 1) {
+                dispatch(setActiveStep(activeStep + 1));
             } else {
-                dispatch(setActiveStep(2 + brunches.length));
+                const currentBrunchIndex = brunches.findIndex(b => b.id === activeBrunch);
+                if (currentBrunchIndex < brunches.length - 1) {
+                    const nextBrunch = brunches[currentBrunchIndex + 1];
+                    dispatch(setActiveBrunch(nextBrunch.id));
+                    dispatch(setActiveStep(2 + currentBrunchIndex + 1));
+                } else {
+                    dispatch(setActiveStep(2 + brunches.length));
+                }
             }
-        }
+        });
     };
 
     const previousStepInRedux = () => {
@@ -88,6 +116,16 @@ export default function StepTwo({ brunch: propBrunch }) {
         dispatch(setActiveBrunch(newId));
         const newBrunchIndex = brunches.length;
         dispatch(setActiveStep(2 + newBrunchIndex));
+        
+        // Add to Formik
+        const newFormikBranch = {
+            name: newBrunch.name,
+            address: newBrunch.address,
+            location: newBrunch.location,
+            hoursOpen: newBrunch.hoursOpen
+        };
+        formik.setFieldValue('brunches', [...formik.values.brunches, newFormikBranch]);
+        
         setShowDialog(false);
         setNewBranchName('');
     };
@@ -96,6 +134,10 @@ export default function StepTwo({ brunch: propBrunch }) {
         if (brunches.length > 1) {
             const brunchIndex = brunches.findIndex(b => b.id === brunch.id);
             dispatch(removeBrunch(brunch.id));
+
+            // Remove from Formik
+            const updatedBrunches = formik.values.brunches.filter((_, index) => index !== brunchIndex);
+            formik.setFieldValue('brunches', updatedBrunches);
 
             if (brunchIndex > 0) {
                 const prevBrunch = brunches[brunchIndex - 1];
@@ -116,6 +158,11 @@ export default function StepTwo({ brunch: propBrunch }) {
     if (!brunch) {
         return null;
     }
+
+    // Check for validation errors in current branch
+    const currentBranchIndex = brunches.findIndex(b => b.id === activeBrunch);
+    const branchErrors = formik.errors.brunches?.[currentBranchIndex];
+    const hasErrors = branchErrors && Object.keys(branchErrors).length > 0;
 
     return (
         <div className="flex justify-center ">
@@ -168,8 +215,12 @@ export default function StepTwo({ brunch: propBrunch }) {
                             <ArrowLongRightIcon className="w-5 h-5" />
                             שלב קודם
                         </Button>
-                        <Button onClick={nextStepInRedux}
-                            className="cursor-pointer flex items-center gap-2 bg-yellow-400 text-black p-5 rounded-full border border-transparent hover:bg-white hover:text-black hover:border-[#F8BD03]">
+                        <Button 
+                            onClick={nextStepInRedux}
+                            className={`cursor-pointer flex items-center gap-2 p-5 rounded-full border border-transparent hover:bg-white hover:text-black hover:border-[#F8BD03] ${
+                                hasErrors ? 'bg-orange-400 text-black border-orange-500' : 'bg-yellow-400 text-black'
+                            }`}
+                        >
                             שלב הבא
                             <ArrowLongLeftIcon className="w-5 h-5" />
                         </Button>

@@ -7,9 +7,12 @@ import { Switch } from "@/components/ui/switch";
 import { Typography } from './typhography';
 import { PencilSquareIcon } from '@heroicons/react/24/solid';
 import { PlusCircleIcon, MinusCircleIcon } from "@heroicons/react/24/outline";
+import { useFormikContext } from 'formik';
+import TooltipValid from './tooltip_valid';
 
 const HoursOpen = ({ typeMarketer }) => {
   const dispatch = useDispatch();
+  const formik = useFormikContext();
   const [isGrouped, setIsGrouped] = useState(false);
   const [hover, setHover] = useState(-1);
   const [isSwitchOn, setIsSwitchOn] = useState(false);
@@ -18,6 +21,10 @@ const HoursOpen = ({ typeMarketer }) => {
   const brunch = brunches.find((b) => b.id === activeBrunch) || null;
   const [localHoursOpen, setLocalHoursOpen] = useState([]);
 
+  // Get current branch index for validation
+  const currentBranchIndex = brunches.findIndex(b => b.id === activeBrunch);
+  const hoursFieldName = `brunches.${currentBranchIndex}.hoursOpen`;
+
   useEffect(() => {
     if (brunch?.hoursOpen) {
       setLocalHoursOpen(JSON.parse(JSON.stringify(brunch.hoursOpen)));
@@ -25,7 +32,6 @@ const HoursOpen = ({ typeMarketer }) => {
   }, [brunch]);
 
   const handleChange = (day, period, type, value, index) => {
-
     if (index === undefined || index === null) {
       console.warn("index לא מוגדר ב-handleChange");
       return;
@@ -55,6 +61,10 @@ const HoursOpen = ({ typeMarketer }) => {
         id: brunch.id,
         hoursOpen: updatedHours,
       }));
+      
+      // Update Formik
+      formik.setFieldValue(hoursFieldName, updatedHours);
+      formik.setFieldTouched(hoursFieldName, true);
     }
   };
 
@@ -62,12 +72,36 @@ const HoursOpen = ({ typeMarketer }) => {
     setIsSwitchOn(checked);
   };
 
+  // Validate if at least one day has complete hours
+  const validateHours = () => {
+    if (!localHoursOpen || localHoursOpen.length === 0) return false;
+    
+    return localHoursOpen.some(day => {
+      if (!day) return false;
+      
+      const morningValid = day.morning?.open && day.morning?.close;
+      const eveningValid = day.evening?.open && day.evening?.close;
+      
+      return morningValid || eveningValid;
+    });
+  };
+
+  const hasValidHours = validateHours();
+  const hoursError = formik.touched.brunches?.[currentBranchIndex]?.hoursOpen && 
+                    !hasValidHours && 
+                    "יש להגדיר לפחות שעות פתיחה ליום אחד";
+
   return (
     <div className="h-full flex flex-col p-4 bg-white rounded-[40px]">
       <div className="flex flex-row justify-between mb-4">
-        <Typography className='text-2xl font-bold'>
-          {typeMarketer === "סוכן" ? "שעות זמינות  " : "שעות פתיחה "}
-        </Typography>
+        <div className="relative">
+          <Typography className='text-2xl font-bold'>
+            {typeMarketer === "סוכן" ? "שעות זמינות  " : "שעות פתיחה "}
+          </Typography>
+          {hoursError && (
+            <TooltipValid tooltipText={hoursError} className="top-8" />
+          )}
+        </div>
         <button
           onClick={() => setIsGrouped((prev) => !prev)}
           type="button"
@@ -93,7 +127,9 @@ const HoursOpen = ({ typeMarketer }) => {
           <div className="absolute inset-0 bg-white/20 backdrop-blur-sm backdrop-saturate-100 z-10 rounded-xl shadow-[4px_4px_160.2px_0px_rgba(0,0,0,0.06)]" />
         )}
         
-        <div className="h-full lg:max-h-[400px] lg:overflow-y-auto lg:scrollbar-custom overflow-visible flex flex-col text-[23px] font-semibold text-[#F8BD00] gap-2">
+        <div className={`h-full lg:max-h-[400px] lg:overflow-y-auto lg:scrollbar-custom overflow-visible flex flex-col text-[23px] font-semibold text-[#F8BD00] gap-2 ${
+          hoursError ? 'border border-red-500 rounded-lg p-2' : ''
+        }`}>
           {isGrouped ? (
             <DayRow
               day="one"
