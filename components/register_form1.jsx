@@ -41,19 +41,20 @@ export function RegisterForm1() {
             <Typography className="text-[24px] font-bold mb-6 block w-full">
                 פרטים על העסק
             </Typography>
-            <form className="space-y-8.5 flex flex-col">
+            <div className="space-y-8.5 flex flex-col">
                 {fields.map(({ name, label, placeholder }) => (
                     <div key={name} className="relative flex flex-col gap-1">
                         <label className="text-sm font-medium">{label}</label>
                         <Input
                             name={name}
                             placeholder={placeholder}
-                            value={formik.values[name]}
+                            value={formik.values[name] || ''}
                             onChange={(e) => {
                                 formik.handleChange(e);
                                 dispatch(setFormData({ [name]: e.target.value }));
                             }}
                             onBlur={formik.handleBlur}
+                            className={formik.touched[name] && formik.errors[name] ? 'border-red-500' : ''}
                         />
                         {formik.touched[name] && (formik.errors[name] || errorsPertip[name]) && (
                             <TooltipValid tooltipText={formik.errors[name] || errorsPertip[name]} />
@@ -75,7 +76,9 @@ export function RegisterForm1() {
                                 dispatch(setFormData({ logo: selectedFile }));
                             }}
                         />
-                        <div className="flex justify-between items-center h-9 px-4 border border-input rounded-md bg-background text-sm text-muted-foreground peer-hover:border-primary peer-focus-visible:ring-1 peer-focus-visible:ring-ring transition-colors">
+                        <div className={`flex justify-between items-center h-9 px-4 border rounded-md bg-background text-sm text-muted-foreground peer-hover:border-primary peer-focus-visible:ring-1 peer-focus-visible:ring-ring transition-colors ${
+                            formik.touched.logo && formik.errors.logo ? 'border-red-500' : 'border-input'
+                        }`}>
                             <span className="truncate">
                                 {formik.values.logo?.name || "יש לבחור קובץ"}
                             </span>
@@ -100,7 +103,7 @@ export function RegisterForm1() {
                         <TooltipValid tooltipText={formik.errors.logo} />
                     )}
                 </div>
-            </form>
+            </div>
         </div>
     );
 }
