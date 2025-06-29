@@ -37,7 +37,7 @@ export function RegisterForm2({ OkFunction, contactId, canDelete }) {
         )}
       </div>
 
-      <form className="space-y-5 h-60vh">
+      <div className="space-y-5 h-60vh">
         {/* שם מלא */}
         <div className="relative">
           <label className="block mb-1">שם מלא</label>
@@ -130,7 +130,7 @@ export function RegisterForm2({ OkFunction, contactId, canDelete }) {
             </div>
           </>
         )}
-      </form>
+      </div>
     </div>
   );
 }
