@@ -17,6 +17,7 @@ const HoursOpen = ({ typeMarketer }) => {
   const [isGrouped, setIsGrouped] = useState(false);
   const [hover, setHover] = useState(-1);
   const [isSwitchOn, setIsSwitchOn] = useState(false);
+  const [timeErrors, setTimeErrors] = useState({});
   const brunches = useSelector((state) => state.brunch.brunches);
   const activeBrunch = useSelector((state) => state.brunch.activeBrunch);
   const brunch = brunches.find((b) => b.id === activeBrunch) || null;
@@ -31,6 +32,65 @@ const HoursOpen = ({ typeMarketer }) => {
       setLocalHoursOpen(JSON.parse(JSON.stringify(brunch.hoursOpen)));
     }
   }, [brunch]);
+
+  // Convert time string to minutes for comparison
+  const timeToMinutes = (timeString) => {
+    if (!timeString) return null;
+    const [hours, minutes] = timeString.split(':').map(Number);
+    return hours * 60 + minutes;
+  };
+
+  // Validate time ranges
+  const validateTimeRange = (openTime, closeTime, dayIndex, period) => {
+    if (!openTime || !closeTime) return null;
+    
+    const openMinutes = timeToMinutes(openTime);
+    const closeMinutes = timeToMinutes(closeTime);
+    
+    if (openMinutes >= closeMinutes) {
+      return 'שעת הפתיחה חייבת להיות לפני שעת הסגירה';
+    }
+    
+    return null;
+  };
+
+  // Validate all time ranges and update errors
+  const validateAllTimes = (hours) => {
+    const errors = {};
+    
+    hours.forEach((day, dayIndex) => {
+      if (day) {
+        // Validate morning hours
+        if (day.morning?.open && day.morning?.close) {
+          const morningError = validateTimeRange(day.morning.open, day.morning.close, dayIndex, 'morning');
+          if (morningError) {
+            errors[`${dayIndex}-morning`] = morningError;
+          }
+        }
+        
+        // Validate evening hours
+        if (day.evening?.open && day.evening?.close) {
+          const eveningError = validateTimeRange(day.evening.open, day.evening.close, dayIndex, 'evening');
+          if (eveningError) {
+            errors[`${dayIndex}-evening`] = eveningError;
+          }
+        }
+        
+        // Validate that morning close is before evening open (if both exist)
+        if (day.morning?.close && day.evening?.open) {
+          const morningCloseMinutes = timeToMinutes(day.morning.close);
+          const eveningOpenMinutes = timeToMinutes(day.evening.open);
+          
+          if (morningCloseMinutes >= eveningOpenMinutes) {
+            errors[`${dayIndex}-overlap`] = 'שעת סגירת הבוקר חייבת להיות לפני שעת פתיחת הערב';
+          }
+        }
+      }
+    });
+    
+    setTimeErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
 
   const handleChange = (day, period, type, value, index) => {
     if (index === undefined || index === null) {
@@ -56,6 +116,9 @@ const HoursOpen = ({ typeMarketer }) => {
     }
 
     setLocalHoursOpen(updatedHours);
+
+    // Validate times after update
+    validateAllTimes(updatedHours);
 
     if (brunch) {
       dispatch(updateBrunchDetails({
@@ -88,9 +151,10 @@ const HoursOpen = ({ typeMarketer }) => {
   };
 
   const hasValidHours = validateHours();
+  const hasTimeErrors = Object.keys(timeErrors).length > 0;
   const hoursError = formik.touched.brunches?.[currentBranchIndex]?.hoursOpen && 
-                    !hasValidHours && 
-                    "יש להגדיר לפחות שעות פתיחה ליום אחד";
+                    (!hasValidHours || hasTimeErrors) && 
+                    (hasTimeErrors ? "יש שגיאות בשעות הפתיחה" : "יש להגדיר לפחות שעות פתיחה ליום אחד");
 
   return (
     <div className="h-full flex flex-col p-4 bg-white rounded-[40px]">
@@ -139,6 +203,7 @@ const HoursOpen = ({ typeMarketer }) => {
               handleChange={handleChange}
               index={1}
               disabled={isSwitchOn}
+              timeErrors={timeErrors}
             />
           ) : (
             ["ראשון", "שני", "שלישי", "רביעי", "חמישי"].map((day, idx) => (
@@ -155,6 +220,7 @@ const HoursOpen = ({ typeMarketer }) => {
                   hover={hover === idx}
                   index={idx + 1}
                   disabled={isSwitchOn}
+                  timeErrors={timeErrors}
                 />
               </div>
             ))
@@ -167,6 +233,7 @@ const HoursOpen = ({ typeMarketer }) => {
             index={5}
             disabled={isSwitchOn}
             isFriday={true}
+            timeErrors={timeErrors}
           />
         </div>
       </div>
@@ -174,13 +241,18 @@ const HoursOpen = ({ typeMarketer }) => {
   );
 };
 
-const DayRow = ({ day, label, hours, handleChange, hover, index, disabled, isFriday = false }) => {
+const DayRow = ({ day, label, hours, handleChange, hover, index, disabled, isFriday = false, timeErrors = {} }) => {
   const [isEveningVisible, setIsEveningVisible] = useState(false);
 
   const toggleEvening = () => {
     if (isFriday) return;
     setIsEveningVisible(prev => !prev);
   };
+
+  // Get error messages for this day
+  const morningError = timeErrors[`${index}-morning`];
+  const eveningError = timeErrors[`${index}-evening`];
+  const overlapError = timeErrors[`${index}-overlap`];
 
   return (
     <div className="flex-shrink-0 bg-white rounded-xl p-2 relative group">
@@ -203,27 +275,37 @@ const DayRow = ({ day, label, hours, handleChange, hover, index, disabled, isFri
           )}
 
           <div className={`flex flex-row gap-3 items-end ${isFriday ? 'ml-[60px]' : ''}`}>
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col gap-1 relative">
               <label className="text-sm text-black">שעת פתיחה</label>
               <TimeInput
                 value={hours?.morning?.open || ""}
                 onChange={(e) => handleChange(day, "morning", "open", e.target.value, index)}
                 disabled={disabled}
                 placeholder="בחר שעה"
+                hasError={morningError || overlapError}
               />
             </div>
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col gap-1 relative">
               <label className="text-sm text-black">שעת סגירה</label>
               <TimeInput
                 value={hours?.morning?.close || ""}
                 onChange={(e) => handleChange(day, "morning", "close", e.target.value, index)}
                 disabled={disabled}
                 placeholder="בחר שעה"
+                hasError={morningError || overlapError}
               />
             </div>
           </div>
         </div>
       </div>
+      
+      {/* Morning time error display */}
+      {(morningError || overlapError) && (
+        <div className="text-red-500 text-xs mt-1 text-right">
+          {morningError || overlapError}
+        </div>
+      )}
+
       {isEveningVisible && !isFriday && (
         <div className="flex flex-row-reverse items-center justify-start gap-4 p-3 rounded-xl">
           <button
@@ -238,25 +320,34 @@ const DayRow = ({ day, label, hours, handleChange, hover, index, disabled, isFri
             <div className='text-start p-3'>
               <span className='text-sm text-black'> ערב</span>
             </div>
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col gap-1 relative">
               <label className="text-sm text-black">שעת סגירה</label>
               <TimeInput
                 value={hours?.evening?.close || ""}
                 onChange={(e) => handleChange(day, "evening", "close", e.target.value, index)}
                 disabled={disabled}
                 placeholder="בחר שעה"
+                hasError={eveningError}
               />
             </div>
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col gap-1 relative">
               <label className="text-sm text-black">שעת פתיחה</label>
               <TimeInput
                 value={hours?.evening?.open || ""}
                 onChange={(e) => handleChange(day, "evening", "open", e.target.value, index)}
                 disabled={disabled}
                 placeholder="בחר שעה"
+                hasError={eveningError || overlapError}
               />
             </div>
           </div>
+        </div>
+      )}
+      
+      {/* Evening time error display */}
+      {eveningError && isEveningVisible && (
+        <div className="text-red-500 text-xs mt-1 text-right">
+          {eveningError}
         </div>
       )}
     </div>

@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 
-const TimeInput = ({ value, onChange, disabled, placeholder = "בחר שעה" }) => {
+const TimeInput = ({ value, onChange, disabled, placeholder = "בחר שעה", hasError = false }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedTime, setSelectedTime] = useState(value || '');
   const [inputValue, setInputValue] = useState(value || '');
@@ -175,10 +175,10 @@ const TimeInput = ({ value, onChange, disabled, placeholder = "בחר שעה" })
         className={`
           flex w-[124px] h-[46px] px-[20px] pr-[16px] py-[12px] 
           justify-end items-center gap-[10px] flex-shrink-0
-          border border-[#DBDEDE] rounded-[6px] bg-white cursor-pointer
+          border rounded-[6px] bg-white cursor-pointer
           transition-colors duration-200
           ${disabled ? 'opacity-50 cursor-not-allowed' : 'hover:border-gray-400'}
-          ${isOpen ? 'border-[#F8BD00]' : ''}
+          ${isOpen ? 'border-[#F8BD00]' : hasError ? 'border-red-500' : 'border-[#DBDEDE]'}
         `}
         onClick={handleInputClick}
       >
