@@ -83,10 +83,10 @@ const Tabs2 = () => {
 
   return (
     <div>
-      <div id="step-one" ref={el => sectionRefs.current[0] = el} data-step-id="1"><StepOne /></div>
-      <div id="step-two" ref={el => sectionRefs.current[1] = el} data-step-id="2"><StepTwo /></div>
+      <div id="step-one" ref={el => sectionRefs.current[0] = el} data-step-id="1"><StepOne/></div>
+      <div id="step-two" ref={el => sectionRefs.current[1] = el} data-step-id="2"><StepTwo/></div>
       <div id="step-three" ref={el => sectionRefs.current[2] = el} data-step-id="3">
-        <StepThree onComplete={completeProcess} />
+        <StepThree onComplete={completeProcess}/>
       </div>
 
       <div className="fixed bottom-4 left-0 right-0 z-50 flex justify-center px-4">

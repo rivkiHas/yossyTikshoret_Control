@@ -12,6 +12,7 @@ import { Header } from '../header'
 import { setActiveBrunch } from '@/store/brunch_store'
 import { setActiveStep } from '@/store/step_store'
 import { isContactStepComplete, isPertipStepComplete, isBrunchStepComplete } from '@/store/selectors'
+import { useFormikContext } from 'formik';
 
 export function Tabs({ className, ...props }) {
     const brunches = useSelector((state) => state.brunch.brunches || [])
@@ -20,6 +21,9 @@ export function Tabs({ className, ...props }) {
     const contactValid = useSelector(isContactStepComplete)
     const brunchValid = useSelector(isBrunchStepComplete)
     const typeMarketer = useSelector((state) => state.form.pertip.typeMarketer)
+    const formik = useFormikContext();
+
+    console.log(formik.values, "formik");
 
     const dispatch = useDispatch()
 
@@ -117,11 +121,11 @@ export function Tabs({ className, ...props }) {
         }
 
         if (step.id === 'step2') {
-            return <StepTwo brunch={{}} />;
+            return <StepTwo brunch={{}}  />;
         }
 
         if (step.id === 'step3') {
-            return <StepThree />;
+            return <StepThree  />;
         }
 
         if (step.type === 'branch') {
