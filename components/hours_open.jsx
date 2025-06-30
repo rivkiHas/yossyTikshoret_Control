@@ -16,7 +16,8 @@ const HoursOpen = ({ typeMarketer }) => {
   const formik = useFormikContext();
   const [isGrouped, setIsGrouped] = useState(false);
   const [hover, setHover] = useState(-1);
-  const [isSwitchOn, setIsSwitchOn] = useState(false);
+  // Default to limited hours (switch OFF = limited, switch ON = extended)
+  const [isExtendedHours, setIsExtendedHours] = useState(false);
   const [timeErrors, setTimeErrors] = useState({});
   const brunches = useSelector((state) => state.brunch.brunches);
   const activeBrunch = useSelector((state) => state.brunch.activeBrunch);
@@ -133,7 +134,7 @@ const HoursOpen = ({ typeMarketer }) => {
   };
 
   const handleSwitchChange = (checked) => {
-    setIsSwitchOn(checked);
+    setIsExtendedHours(checked);
   };
 
   // Validate if at least one day has complete hours
@@ -182,19 +183,32 @@ const HoursOpen = ({ typeMarketer }) => {
 
       <div className="mb-4 bg-[#F4F4F4] rounded-4xl p-2 w-fit">
         <div dir="ltr" className="flex items-center gap-2 w-fit">
-          <span className="text-sm text-[#111928] font-semibold">שעות בתיאום מראש</span>
-          <Switch checked={isSwitchOn} onCheckedChange={handleSwitchChange} className={'duration-300 cursor-pointer '} />
+          <span className="text-sm text-[#111928] font-semibold">
+            {isExtendedHours ? "שעות פתיחה מורחבות" : "שעות פתיחה מוגבלות"}
+          </span>
+          <Switch 
+            checked={isExtendedHours} 
+            onCheckedChange={handleSwitchChange} 
+            className={'duration-300 cursor-pointer '} 
+          />
         </div>
       </div>
 
       <div className="flex-1 relative">
-        {isSwitchOn && (
-          <div className="absolute inset-0 bg-white/20 backdrop-blur-sm backdrop-saturate-100 z-10 rounded-xl shadow-[4px_4px_160.2px_0px_rgba(0,0,0,0.06)]" />
-        )}
-        
-        <div className={`h-full lg:max-h-[400px] lg:overflow-y-auto lg:scrollbar-custom overflow-visible flex flex-col text-[23px] font-semibold text-[#F8BD00] gap-2 ${
-          hoursError ? 'border border-red-500 rounded-lg p-2' : ''
-        }`}>
+        <div 
+          className={`
+            flex w-[490px] h-[646px] flex-col items-end gap-4
+            ${hoursError ? 'border border-red-500 rounded-lg p-2' : ''}
+          `}
+          style={{
+            display: 'flex',
+            width: '490px',
+            height: '646px',
+            flexDirection: 'column',
+            alignItems: 'flex-end',
+            gap: '16px'
+          }}
+        >
           {isGrouped ? (
             <DayRow
               day="one"
@@ -202,8 +216,9 @@ const HoursOpen = ({ typeMarketer }) => {
               hours={localHoursOpen?.[1]}
               handleChange={handleChange}
               index={1}
-              disabled={isSwitchOn}
+              disabled={!isExtendedHours}
               timeErrors={timeErrors}
+              isExtendedHours={isExtendedHours}
             />
           ) : (
             ["ראשון", "שני", "שלישי", "רביעי", "חמישי"].map((day, idx) => (
@@ -219,8 +234,9 @@ const HoursOpen = ({ typeMarketer }) => {
                   handleChange={handleChange}
                   hover={hover === idx}
                   index={idx + 1}
-                  disabled={isSwitchOn}
+                  disabled={!isExtendedHours}
                   timeErrors={timeErrors}
+                  isExtendedHours={isExtendedHours}
                 />
               </div>
             ))
@@ -231,9 +247,10 @@ const HoursOpen = ({ typeMarketer }) => {
             hours={localHoursOpen?.[5]}
             handleChange={handleChange}
             index={5}
-            disabled={isSwitchOn}
+            disabled={!isExtendedHours}
             isFriday={true}
             timeErrors={timeErrors}
+            isExtendedHours={isExtendedHours}
           />
         </div>
       </div>
@@ -241,11 +258,22 @@ const HoursOpen = ({ typeMarketer }) => {
   );
 };
 
-const DayRow = ({ day, label, hours, handleChange, hover, index, disabled, isFriday = false, timeErrors = {} }) => {
+const DayRow = ({ 
+  day, 
+  label, 
+  hours, 
+  handleChange, 
+  hover, 
+  index, 
+  disabled, 
+  isFriday = false, 
+  timeErrors = {},
+  isExtendedHours = false 
+}) => {
   const [isEveningVisible, setIsEveningVisible] = useState(false);
 
   const toggleEvening = () => {
-    if (isFriday) return;
+    if (isFriday || !isExtendedHours) return;
     setIsEveningVisible(prev => !prev);
   };
 
@@ -255,14 +283,20 @@ const DayRow = ({ day, label, hours, handleChange, hover, index, disabled, isFri
   const overlapError = timeErrors[`${index}-overlap`];
 
   return (
-    <div className="flex-shrink-0 bg-white rounded-xl p-2 relative group">
-      <div className='flex flex-row justify-between items-center'>
-        <div className='flex flex-col'>
-          <Typography className="text-[24px] font-bold text-[#F8BD00] mb-2 text-left">{label}</Typography>
-          {isEveningVisible && <span className='text-sm text-black text-left'> בוקר</span>}
+    <div className="w-full bg-white rounded-xl p-4 relative group border border-gray-200">
+      {/* Main row - all elements in one line when collapsed */}
+      <div className='flex flex-row justify-between items-center w-full'>
+        {/* Day label */}
+        <div className='flex flex-col items-end'>
+          <Typography className="text-[24px] font-bold text-[#F8BD00] text-right">
+            {label}
+          </Typography>
         </div>
-        <div className="flex flex-row-reverse items-center justify-start gap-5 p-2 rounded-xl">
-          {!isFriday && (
+
+        {/* Time inputs and controls */}
+        <div className="flex flex-row items-center gap-4">
+          {/* Plus/Minus button for evening hours */}
+          {!isFriday && isExtendedHours && (
             <button
               onClick={toggleEvening}
               disabled={disabled}
@@ -270,26 +304,29 @@ const DayRow = ({ day, label, hours, handleChange, hover, index, disabled, isFri
             >
               {!isEveningVisible ? (
                 <PlusCircleIcon className="h-[40px] w-[40px] fill-black text-white stroke-white hover:fill-[#F8BD00]" />
-              ) : <div className="h-[40px] w-[40px] text-black" />}
+              ) : (
+                <MinusCircleIcon className="h-[40px] w-[40px] fill-black text-white stroke-white hover:fill-[#F8BD00]" />
+              )}
             </button>
           )}
 
-          <div className={`flex flex-row gap-3 items-end ${isFriday ? 'ml-[60px]' : ''}`}>
-            <div className="flex flex-col gap-1 relative">
-              <label className="text-sm text-black">שעת פתיחה</label>
+          {/* Morning time inputs */}
+          <div className="flex flex-row gap-3 items-center">
+            <div className="flex flex-col gap-1 items-end">
+              <label className="text-sm text-black text-right">שעת סגירה</label>
               <TimeInput
-                value={hours?.morning?.open || ""}
-                onChange={(e) => handleChange(day, "morning", "open", e.target.value, index)}
+                value={hours?.morning?.close || ""}
+                onChange={(e) => handleChange(day, "morning", "close", e.target.value, index)}
                 disabled={disabled}
                 placeholder="בחר שעה"
                 hasError={morningError || overlapError}
               />
             </div>
-            <div className="flex flex-col gap-1 relative">
-              <label className="text-sm text-black">שעת סגירה</label>
+            <div className="flex flex-col gap-1 items-end">
+              <label className="text-sm text-black text-right">שעת פתיחה</label>
               <TimeInput
-                value={hours?.morning?.close || ""}
-                onChange={(e) => handleChange(day, "morning", "close", e.target.value, index)}
+                value={hours?.morning?.open || ""}
+                onChange={(e) => handleChange(day, "morning", "open", e.target.value, index)}
                 disabled={disabled}
                 placeholder="בחר שעה"
                 hasError={morningError || overlapError}
@@ -301,53 +338,64 @@ const DayRow = ({ day, label, hours, handleChange, hover, index, disabled, isFri
       
       {/* Morning time error display */}
       {(morningError || overlapError) && (
-        <div className="text-red-500 text-xs mt-1 text-right">
+        <div className="text-red-500 text-xs mt-2 text-right">
           {morningError || overlapError}
         </div>
       )}
 
-      {isEveningVisible && !isFriday && (
-        <div className="flex flex-row-reverse items-center justify-start gap-4 p-3 rounded-xl">
-          <button
-            onClick={toggleEvening}
-            disabled={disabled}
-            className="group cursor-pointer outline-none hover:rotate-90 duration-300"
-          >
-            <MinusCircleIcon className="h-[40px] w-[40px] fill-black text-white stroke-white hover:fill-[#F8BD00]" />
-          </button>
+      {/* Evening hours section - appears below when expanded */}
+      {isEveningVisible && !isFriday && isExtendedHours && (
+        <div className="mt-4 pt-4 border-t border-gray-100">
+          {/* Evening label */}
+          <div className="flex flex-col items-end mb-3">
+            <Typography className="text-[20px] font-semibold text-[#F8BD00] text-right">
+              שעות ערב
+            </Typography>
+          </div>
 
-          <div className='flex flex-row gap-3 items-end'>
-            <div className='text-start p-3'>
-              <span className='text-sm text-black'> ערב</span>
-            </div>
-            <div className="flex flex-col gap-1 relative">
-              <label className="text-sm text-black">שעת סגירה</label>
-              <TimeInput
-                value={hours?.evening?.close || ""}
-                onChange={(e) => handleChange(day, "evening", "close", e.target.value, index)}
-                disabled={disabled}
-                placeholder="בחר שעה"
-                hasError={eveningError}
-              />
-            </div>
-            <div className="flex flex-col gap-1 relative">
-              <label className="text-sm text-black">שעת פתיחה</label>
-              <TimeInput
-                value={hours?.evening?.open || ""}
-                onChange={(e) => handleChange(day, "evening", "open", e.target.value, index)}
-                disabled={disabled}
-                placeholder="בחר שעה"
-                hasError={eveningError || overlapError}
-              />
+          {/* Evening time inputs */}
+          <div className="flex flex-row justify-end items-center gap-4">
+            <div className="flex flex-row gap-3 items-center">
+              <div className="flex flex-col gap-1 items-end">
+                <label className="text-sm text-black text-right">שעת סגירה</label>
+                <TimeInput
+                  value={hours?.evening?.close || ""}
+                  onChange={(e) => handleChange(day, "evening", "close", e.target.value, index)}
+                  disabled={disabled}
+                  placeholder="בחר שעה"
+                  hasError={eveningError}
+                />
+              </div>
+              <div className="flex flex-col gap-1 items-end">
+                <label className="text-sm text-black text-right">שעת פתיחה</label>
+                <TimeInput
+                  value={hours?.evening?.open || ""}
+                  onChange={(e) => handleChange(day, "evening", "open", e.target.value, index)}
+                  disabled={disabled}
+                  placeholder="בחר שעה"
+                  hasError={eveningError || overlapError}
+                />
+              </div>
             </div>
           </div>
+          
+          {/* Evening time error display */}
+          {eveningError && (
+            <div className="text-red-500 text-xs mt-2 text-right">
+              {eveningError}
+            </div>
+          )}
         </div>
       )}
-      
-      {/* Evening time error display */}
-      {eveningError && isEveningVisible && (
-        <div className="text-red-500 text-xs mt-1 text-right">
-          {eveningError}
+
+      {/* Disabled overlay for limited hours mode */}
+      {!isExtendedHours && (
+        <div className="absolute inset-0 bg-white/60 backdrop-blur-[1px] rounded-xl flex items-center justify-center">
+          <div className="bg-white/90 px-4 py-2 rounded-lg border border-gray-200 shadow-sm">
+            <Typography className="text-sm text-gray-600 text-center">
+              הפעל שעות מורחבות לעריכה
+            </Typography>
+          </div>
         </div>
       )}
     </div>
