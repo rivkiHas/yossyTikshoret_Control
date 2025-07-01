@@ -14,7 +14,7 @@ import {
   isContactStepComplete,
   isBrunchStepComplete,
   isAllStepsComplete
-} from '@/store/selectors';
+} from '@/store/selectors'; 
 import { useFormikContext } from 'formik';
 
 export default function StepThree() {
@@ -23,7 +23,6 @@ export default function StepThree() {
   const [showErrorAlert, setShowErrorAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { isValid, isSubmitting } = useFormikContext();
 
   const contactMans = useSelector(state => state.conectMan.contactMans || []);
   const activeStep = useSelector(state => state.stepper.activeStep);
@@ -131,7 +130,7 @@ export default function StepThree() {
   };
 
   const nextStepInRedux = async () => {
-
+   
 
     if (activeStep === 2) {
 
@@ -195,7 +194,7 @@ export default function StepThree() {
         </div>
       </div>
 
-      <div className="hidden lg:flex w-full justify-between">
+      <div className="hidden lg:flex w-full justify-between px-8">
         <Button onClick={addContactManHandler}
           className="cursor-pointer bg-black border hover:bg-white hover:text-black hover:border-black text-white p-5 gap-2 rounded-full">
           <PlusCircleIcon />
@@ -210,7 +209,7 @@ export default function StepThree() {
           </Button>
           <Button
             onClick={nextStepInRedux}
-            disabled={!isValid || isSubmitting}
+            disabled={isLoading}
             className="flex cursor-pointer items-center gap-3 text-black border border-black p-5 rounded-full relative overflow-hidden bg-white transition-all duration-400 ease-in-out shadow-md hover:scale-105 hover:text-black hover:shadow-lg active:scale-90
 before:absolute before:top-0 before:-right-full before:w-full before:h-full 
 before:bg-[#F8BD00] before:transition-all before:duration-500 before:ease-in-out 

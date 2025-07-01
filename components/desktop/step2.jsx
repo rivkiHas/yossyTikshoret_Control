@@ -11,6 +11,7 @@ import IconButton from '../icon_button';
 import { useState, useEffect } from 'react';
 import { AlertDialogEdit } from '../alert_dialog_edit'
 import Carusel from "../carusel";
+import { useFormikContext } from 'formik';
 
 
 export default function StepTwo({ brunch: propBrunch }) {
@@ -19,12 +20,15 @@ export default function StepTwo({ brunch: propBrunch }) {
     const typeMarketer = useSelector((state) => state.form.pertip.typeMarketer)
     const activeStep = useSelector((state) => state.stepper.activeStep)
     const activeBrunch = useSelector((state) => state.brunch.activeBrunch);
+    const formik = useFormikContext();
 
     const brunch = propBrunch || brunches.find(b => b.id === activeBrunch);
 
     useEffect(() => {
         if (propBrunch && propBrunch.id && propBrunch.id !== activeBrunch) {
             dispatch(setActiveBrunch(propBrunch.id));
+            // dispatch(setFormData(formik.values));
+
         }
     }, [propBrunch, activeBrunch, dispatch]);
 
@@ -82,7 +86,6 @@ export default function StepTwo({ brunch: propBrunch }) {
                 { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
                 { morning: { open: "", close: "" }, evening: { open: "", close: "" } }
             ],
-            weekday: { morning: { open: "", close: "" }, evening: { open: "", close: "" } }
         };
         dispatch(addBrunch(newBrunch));
         dispatch(setActiveBrunch(newId));
@@ -96,7 +99,6 @@ export default function StepTwo({ brunch: propBrunch }) {
         if (brunches.length > 1) {
             const brunchIndex = brunches.findIndex(b => b.id === brunch.id);
             dispatch(removeBrunch(brunch.id));
-
             if (brunchIndex > 0) {
                 const prevBrunch = brunches[brunchIndex - 1];
                 dispatch(setActiveBrunch(prevBrunch.id));
@@ -118,15 +120,15 @@ export default function StepTwo({ brunch: propBrunch }) {
     }
 
     return (
-        <div className="flex justify-center ">
-            <div className="flex flex-col items-end w-full max-w-[1440px] px-[20px] py-[30px]">
-                <div className="flex flex-col lg:flex-row w-full h-full gap-[24px] lg:gap-[36px]">
-                    <div className="flex flex-col lg:flex-row w-full h-full gap-6">
-                        <div className="flex flex-col lg:w-1/2 w-full h-full">
+        <div className="flex justify-center">
+            <div className="flex flex-col w-full max-w-[1440px] px-[20px] py-[30px] items-end">
+                <div className="flex flex-col lg:flex-row w-full h-full gap-[24px] lg:gap-[30px]">
+                    <div className="flex flex-col lg:flex-row w-full h-full gap-8">
+                        <div className="flex flex-col w-5/11 h-full lg:p-4 p-4 ">
                             <AddressSearchMap typeMarketer={typeMarketer} />
                         </div>
 
-                        <div className="flex flex-col lg:w-1/2 w-full h-full lg:h-auto p-4 bg-white rounded-[40px]">
+                        <div className="flex flex-col lg:w-6/11 h-full lg:h-full lg:p-5 p-4 bg-white rounded-[40px]">
                             <HoursOpen typeMarketer={typeMarketer} />
                             <Button onClick={handleAddBranchClick}
                                 className="lg:hidden cursor-pointer bg-black border hover:bg-white hover:text-black hover:border-black text-white p-5 gap-2 rounded-full"
@@ -138,9 +140,9 @@ export default function StepTwo({ brunch: propBrunch }) {
                     </div>
                 </div>
 
-                <div className="flex w-full items-center justify-between mt-8">
+                <div className="flex w-full items-center justify-between px-8">
                     {typeMarketer === "חנות" ? (
-                        <div className='hidden lg:flex flex-row gap-4'>
+                        <div className="hidden lg:flex flex-row gap-4">
                             <Button onClick={handleAddBranchClick}
                                 className="cursor-pointer bg-black border hover:bg-white hover:text-black hover:border-black text-white p-5 gap-2 rounded-full"
                             >

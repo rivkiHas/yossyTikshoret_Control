@@ -3,22 +3,20 @@ import { TrashIcon } from "@heroicons/react/24/outline";
 import { motion } from "framer-motion";
 import { useSelector, useDispatch } from "react-redux";
 import { removeBrunch, setActiveBrunch } from "../store/brunch_store";
-import { setActiveStep } from "@/store/step_store";
+import { setActiveStep } from "../store/step_store";
 
-
-function BranchCard({ branch, isActive, onDelete, onSelect, index }) {
+function BranchCard({ branch, isActive, onSelect, onDelete, index }) {
     const [isHovered, setIsHovered] = useState(false);
     return (
         <div
             key={branch.id}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            onClick={() => onSelect(branch.id)}
-            className={`relative flex w-[132px] h-[84.9px] p-[12px_12px_8px_12px] flex-col justify-end items-start flex-shrink-0 rounded-[16px] cursor-pointer transition-all duration-300 ${
-                isActive
-                    ? "border-[2px] border-[#F8BD00] bg-yellow-100"
-                    : "border border-gray-300 bg-gray-200"
-            }`}
+            onClick={() => onSelect(index)}
+            className={`relative flex w-[132px] h-[84.9px] p-[12px_12px_8px_12px] flex-col justify-end items-start flex-shrink-0 rounded-[16px] cursor-pointer transition-all duration-300 ${isActive
+                ? "border-[2px] border-[#F8BD00] bg-yellow-100"
+                : "border border-gray-300 bg-gray-200"
+                }`}
         >
             {isHovered && (
                 <motion.div
@@ -51,29 +49,34 @@ export default function BranchCarousel() {
 
     const handleDelete = (branch, index) => {
         if (brunches.length > 1) {
+            const brunchIndex = brunches.findIndex(b => b.id === branch.id);
             dispatch(removeBrunch(branch.id));
-            if (index === activeBrunch) {
-                const newActiveBrunch = index === brunches.length - 1 ? Math.max(0, index - 1) : index;
-                dispatch(setActiveStep(newActiveBrunch));
-            } else if (index < activeBrunch) {
-                console.log("delete");
-                
-                dispatch(setActiveBrunch(activeBrunch - 1));
-                
+            if (brunchIndex > 0) {
+                const prevBrunch = brunches[brunchIndex - 1];
+                dispatch(setActiveBrunch(prevBrunch.id));
+                dispatch(setActiveStep(2 + brunchIndex - 1));
+            } else if (brunches.length > 1) {
+                const nextBrunch = brunches[1];
+                dispatch(setActiveBrunch(nextBrunch.id));
+                dispatch(setActiveStep(2));
+            } else {
+                dispatch(setActiveStep(1));
             }
         } else {
             console.log("לא ניתן למחוק, חייב להיות לפחות סניף אחד");
         }
     };
 
+
     const handleSelect = (index) => {
         dispatch(setActiveBrunch(index));
-        console.log("index" ,index );
-        
     };
 
     return (
-        <div className="w-full overflow-x-auto scrollbar-none cursor-pointer">
+        <div
+            className="w-2/5 overflow-x-auto scrollbar-none cursor-pointer"
+            dir="rtl"
+        >
             <div className="flex gap-2">
                 {brunches.map((branch, index) => (
                     <BranchCard

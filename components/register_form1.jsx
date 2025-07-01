@@ -37,11 +37,11 @@ export function RegisterForm1() {
     ];
 
     return (
-        <div className="flex flex-col lg:gap-2.5 gap-6 w-full p-4 justify-center bg-white rounded-2xl">
-            <Typography className="text-[24px] font-bold mb-6 block w-full">
+        <div className="flex flex-col lg:gap-2.5 gap-4 w-full lg:p-4 p-8 justify-center bg-white rounded-[40px]">
+            <Typography className="text-[24px] font-bold block w-full">
                 פרטים על העסק
             </Typography>
-            <form className="space-y-8.5 flex flex-col">
+            <div className="space-y-10 flex flex-col">
                 {fields.map(({ name, label, placeholder }) => (
                     <div key={name} className="relative flex flex-col gap-1">
                         <label className="text-sm font-medium">{label}</label>
@@ -95,12 +95,13 @@ export function RegisterForm1() {
                                 <ArrowUpTrayIcon className="w-5 h-5 text-gray-500" />
                             )}
                         </div>
+                        <label className="text-sm font-normal">ניתן להעלות קבצים בפורמטים JPG, PNG ו-PDF  בלבד.</label>
                     </div>
-                    {formik.touched.logo && formik.errors.logo && (
+                    {/* {formik.touched.logo && formik.errors.logo && (
                         <TooltipValid tooltipText={formik.errors.logo} />
-                    )}
+                    )} */}
                 </div>
-            </form>
+            </div>
         </div>
     );
 }

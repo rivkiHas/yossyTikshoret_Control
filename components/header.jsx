@@ -25,8 +25,7 @@ export function Header() {
             <div className="mb-4 hidden lg:block">
                 <Typography className='text-[24px] font-bold '>הצטרפות כמשווק</Typography>
                 <div className='text-[14px] font-normal'>
-                    להצטרפות כמשווק רשמי בחברת -’יוסי תקשורת’, יש למלא את פרטי העסק.
-                </div>
+להצטרפות כמשווק רשמי בחברת -’יוסי תקשורת’, יש למלא את פרטי העסק.המידע יסייע לנו להעניק לך את הכלים והמשאבים להצלחה מירבית.                </div>
             </div>
         </>
     )

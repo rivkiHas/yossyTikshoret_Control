@@ -7,6 +7,9 @@ import { Input } from "@/components/ui/input";
 import { Typography } from "./typhography";
 import IconButton from "./icon_button";
 import TooltipValid from "./tooltip_valid";
+import { addContactMan, deleteContactMan } from "@/store/contact_man_store";
+import { Button } from "./ui/button";
+import { PlusCircleIcon} from '@heroicons/react/24/outline'
 import {
   Select,
   SelectContent,
@@ -22,9 +25,11 @@ export function RegisterForm2({ OkFunction, contactId, canDelete }) {
   const contactMans = useSelector((state) => state.conectMan.contactMans || []);
   const brunches = useSelector((state) => state.brunch.brunches || []);
   const contactIndex = contactMans.findIndex((c) => c.id === contactId);
-
+  const addContactManHandler = () => {
+    dispatch(addContactMan());
+  };
   return (
-    <div className="flex flex-col gap-[15px] w-full lg:w-1/2 mb-6 h-[60vh]">
+    <div className="flex flex-col gap-[15px] w-full lg:w-1/2 mb-6 lg:h-[60vh]">
       <div className="flex justify-between items-center mb-4">
         <Typography className="text-2xl font-bold">פרטי איש קשר</Typography>
         {canDelete && contactIndex > 0 && (
@@ -37,7 +42,7 @@ export function RegisterForm2({ OkFunction, contactId, canDelete }) {
         )}
       </div>
 
-      <form className="space-y-5 h-60vh">
+      <div className="space-y-5 h-60vh">
         {/* שם מלא */}
         <div className="relative">
           <label className="block mb-1">שם מלא</label>
@@ -130,7 +135,14 @@ export function RegisterForm2({ OkFunction, contactId, canDelete }) {
             </div>
           </>
         )}
-      </form>
+      </div>
+      <div className=" lg:hidden">
+      <Button onClick={addContactManHandler}
+        className="w-full cursor-pointer bg-black border hover:bg-white hover:text-black hover:border-black text-white p-5 gap-2 rounded-full">
+        <PlusCircleIcon />
+        הוספת איש קשר נוסף
+      </Button>
+      </div>
     </div>
   );
 }

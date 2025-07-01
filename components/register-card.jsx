@@ -53,7 +53,6 @@ export function RegisterCard({ className, ...props }) {
   const handleSubmit = (values) => {
     console.log('Submitting...', values);
   };
-  debugger;
 
   return (
 
