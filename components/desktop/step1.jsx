@@ -28,7 +28,7 @@ export default function StepOne({ index }) {
 
   return (
     <div className="flex justify-center">
-      <div className="flex flex-col items-end w-full max-w-[1440px] px-[20px] md:px-[50px] py-[30px] ">
+      <div className="flex flex-col items-end w-full max-w-[1440px] lg:px-[20px] md:px-[50px] py-[30px] ">
         <div className="flex flex-col lg:flex-row w-full gap-[24px] lg:gap-[36px]">
           <div className="flex flex-col lg:flex-row w-full gap-4">
             <div className="flex flex-col lg:w-1/2 w-full lg:mx-auto p-4 rounded-[40px]">

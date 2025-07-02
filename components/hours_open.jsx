@@ -9,7 +9,6 @@ import { PencilSquareIcon } from '@heroicons/react/24/solid';
 import { PlusCircleIcon, MinusCircleIcon } from "@heroicons/react/24/outline";
 import CustomTimeInput from './custom_time_input';
 
-// פונקציית הולידציה נשארת זהה - היא תקינה
 const validateHours = (hoursData) => {
     const newErrors = {};
 
@@ -60,19 +59,16 @@ const HoursOpen = ({ typeMarketer }) => {
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    // *** התיקון המרכזי נמצא כאן ***
-    // במקום Array(7).fill(), ניצור מערך עם אובייקטים חדשים ועצמאיים לכל יום
+
     const initialHours = Array.from({ length: 7 }, () => ({ 
         morning: { open: '', close: '' }, 
         evening: { open: '', close: '' } 
     }));
 
     if (brunch?.hoursOpen) {
-      // מיזוג המידע הקיים לתוך המבנה החדש והבטוח
       const parsedHours = JSON.parse(JSON.stringify(brunch.hoursOpen));
       parsedHours.forEach((day, index) => {
         if (day) {
-            // מבטיח שגם אם ליום מסוים אין מידע, המבנה שלו יישאר תקין
             initialHours[index] = { ...initialHours[index], ...day };
         }
       });
@@ -86,10 +82,8 @@ const HoursOpen = ({ typeMarketer }) => {
   const handleChange = (day, period, type, value, index) => {
     if (index === undefined || index === null) return;
   
-    // חשוב להשתמש ב-JSON.parse(stringify) כדי ליצור עותק עמוק ולהימנע ממוטציות
     let updatedHours = JSON.parse(JSON.stringify(localHoursOpen));
   
-    // לוגיקת העדכון של ימים מקובצים או בודדים - היא הייתה תקינה ונשארת
     if (!isGrouped && index === 1) {
       const daysToUpdate = [1, 2, 3, 4, 5]; 
       daysToUpdate.forEach((dayIndex) => {
@@ -130,11 +124,12 @@ const HoursOpen = ({ typeMarketer }) => {
           type="button"
           className="group flex h-[40px] w-[40px] items-center justify-center rounded-full bg-[#FEF2CC] text-[#F8BD00] transition-[width] delay-1000 duration-100 ease-out hover:w-auto hover:rounded-3xl hover:px-3 hover:flex-row-reverse"
         >
+           <PencilSquareIcon className="w-5 h-5" />
           <span className="hidden group-hover:inline-block text-black text-base font-bold
              opacity-0 group-hover:opacity-100
              transition-opacity duration-300 ease-in-out
-             delay-[1500ms]">{isGrouped ? "קבץ ימים" : "עריכת שעות שבועיות"}</span>
-          <PencilSquareIcon className="w-5 h-5" />
+             delay-[1500ms]">{isGrouped ? " עריכת שעות פתיחה" : "  עריכת שעות פתיחה"}</span>
+         
         </button>
       </div>
 
@@ -150,7 +145,7 @@ const HoursOpen = ({ typeMarketer }) => {
           <div className="absolute inset-0 bg-white/20 backdrop-blur-sm backdrop-saturate-100 z-10 rounded-xl shadow-[4px_4px_160.2px_0px_rgba(0,0,0,0.06)]" />
         )}
         
-        <div className="h-full lg:max-h-[400px] lg:overflow-y-auto lg:scrollbar-custom overflow-visible flex flex-col text-[22px] font-semibold text-[#F8BD00] gap-2">
+        <div className="h-full lg:max-h-[400px] lg:overflow-y-auto lg:scrollbar-custom overflow-visible flex flex-col text-[22px] font-semibold text-[#F8BD00] ">
           {!isGrouped ? (
             <DayRow
               day="weekdays"
@@ -178,7 +173,7 @@ const HoursOpen = ({ typeMarketer }) => {
           )}
           <DayRow
             day="שישי"
-            label="יום ו'"
+            label="יום שישי"
             hours={localHoursOpen?.[6]}
             errors={errors?.[6]}
             handleChange={handleChange}
@@ -210,7 +205,7 @@ const DayRow = ({ day, label, hours, handleChange, errors, index, disabled, isFr
   };
 
   return (
-    <div className="flex-shrink-0 bg-white rounded-xl relative group p-3">
+    <div className="flex-shrink-0 bg-white rounded-xl relative group lg:w-full">
       <div className='flex flex-row justify-between items-center'>
         <div className='flex flex-col'>
           <Typography className="text-[24px] font-bold text-[#F8BD00] mb-2 text-left">{label}</Typography>
@@ -248,7 +243,7 @@ const DayRow = ({ day, label, hours, handleChange, errors, index, disabled, isFr
         </div>
       </div>
       {isEveningVisible && !isFriday && (
-        <div className="flex flex-row-reverse items-center justify-start gap-4 p-3 rounded-xl">
+        <div className="flex flex-row-reverse items-center justify-start gap-4 rounded-xl">
           <button onClick={toggleEvening} disabled={disabled} className="group cursor-pointer outline-none hover:rotate-90 duration-300">
             <MinusCircleIcon className="h-[40px] w-[40px] fill-black text-white stroke-white hover:fill-[#F8BD00]" />
           </button>
@@ -283,16 +278,15 @@ const DayRow = ({ day, label, hours, handleChange, errors, index, disabled, isFr
 };
 
 
-// InputTime נשאר זהה
 const InputTime = ({ onChange, value, disabled, error }) => (
-  <div className="flex flex-col min-h-[70px]"> {/* הוספת גובה מינימלי כדי למנוע קפיצות */}
+  <div className="flex flex-col min-h-[70px]"> 
      <CustomTimeInput 
         value={value} 
         onChange={onChange} 
         disabled={disabled}
         error={error}
       />
-      {error && <p className="text-red-600 text-xs mt-1 text-right w-[126px]">{error}</p>}
+      {error && <p className="text-red-600 text-xs mt-1 text-right w-[60px]">{error}</p>}
   </div>
 );
 

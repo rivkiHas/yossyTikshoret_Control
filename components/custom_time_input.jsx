@@ -6,7 +6,6 @@ const ChevronDownIcon = () => (
     </svg>
 );
 
-// *** הוספת prop של error ***
 const CustomTimeInput = ({ value, onChange, disabled, placeholder = "00:00", error }) => {
     const [isOpen, setIsOpen] = useState(false);
     const wrapperRef = useRef(null);
@@ -59,7 +58,7 @@ const CustomTimeInput = ({ value, onChange, disabled, placeholder = "00:00", err
     };
 
     return (
-        <div className="relative w-[126px]" ref={wrapperRef} dir="rtl">
+        <div className="relative w-[100px]" ref={wrapperRef} dir="rtl">
             <input
                 type="text"
                 value={value}
@@ -69,7 +68,6 @@ const CustomTimeInput = ({ value, onChange, disabled, placeholder = "00:00", err
                 disabled={disabled}
                 placeholder={placeholder}
                 autoComplete="off" 
-                // *** שינוי קלאסים דינמי בהתאם לקיום שגיאה ***
                 className={`w-full h-[46px] pr-4 pl-10 border rounded-[6px] bg-white
                    text-[#4C585B] text-right text-[16px] leading-[24px] font-[400]
                    disabled:opacity-50 disabled:cursor-not-allowed
@@ -100,7 +98,7 @@ const CustomTimeInput = ({ value, onChange, disabled, placeholder = "00:00", err
                             </li>
                         ))
                     ) : (
-                        <li className="px-4 py-3 text-gray-500 text-right">אין תוצאות</li>
+                        <li className="px-4 py-3 text-right">אין תוצאות</li>
                     )}
                 </ul>
             )}

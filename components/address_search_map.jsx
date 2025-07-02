@@ -126,20 +126,18 @@ export default function AddressSearchMap({ typeMarketer }) {
     }
   };
 
-  // --- שלב 1: הוספת הפונקציה ---
   const handleAddBranch = () => {
     if (!localInputValue.trim()) {
       alert("אנא הכנס כתובת להוספה");
       return;
     }
-    // החלף את addNewBrunch בשם הפעולה הנכון מה-store שלך
      dispatch(addBrunch({ address: localInputValue, name: localInputValue }));
     console.log(`Triggering Redux action to add branch: ${localInputValue}`);
     setLocalInputValue("");
   };
 
   return (
-    <div className="lg:h-[60vh] flex flex-col bg-white rounded-[40px] lg:p-5">
+    <div className="lg:h-[60vh] flex flex-col bg-white rounded-[40px] lg:p-5 p-5">
       <div className="flex items-center lg:justify-between gap-2 mb-4">
         <div className="flex flex-row items-center text-[24px] font-bold justify-around">
           {typeMarketer === "סוכן" ? (

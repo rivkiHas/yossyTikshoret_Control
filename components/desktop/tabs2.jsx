@@ -112,14 +112,14 @@ const Tabs2 = () => {
         <StepThree onComplete={completeProcess} />
       </div>
 
-      <div className="fixed bottom-14 left-0 right-0 z-50 flex justify-center px-4 w-full">
+      <div className="fixed bottom-4 left-4 right-4 flex">
         {isCompleted ? (
-          <div className="flex items-center justify-between bg-yellow-400 rounded-full mx-auto py-2 px-[22px] shadow-lg">
+          <div className="flex bg-yellow-400 rounded-full mx-auto shadow-lg">
             <div className="flex items-center">
               {stepsData.map(step => {
                 const Icon = step.icon;
                 return (
-                  <button key={step.id} onClick={() => handleStepClick(step)} className="relative bg-white rounded-full w-[43px] h-[43px] flex items-center justify-center mx-1 cursor-pointer">
+                  <button key={step.id} onClick={() => handleStepClick(step)} className="relative bg-white rounded-full w-[43px] h-[43px] flex items-center justify-between mx-1 cursor-pointer">
                     <Icon className="w-5 h-5 text-black" />
                     {step.statusIcon && (
                       <span className="absolute -top-1 -right-1 bg-black text-white text-xs rounded-full w-5 h-5 flex items-center justify-center border-2 border-yellow-400 font-bold">
@@ -136,7 +136,7 @@ const Tabs2 = () => {
             </button>
           </div>
         ) : (
-          <div className="flex items-center justify-evenly bg-yellow-400 rounded-full mx-auto w-full py-2 px-[22px] shadow-lg">
+          <div className="flex bg-yellow-400 justify-between rounded-full mx-auto p-2 w-full shadow-lg">
             {stepsData.map(step => {
               const Icon = step.icon;
               return (
@@ -146,11 +146,11 @@ const Tabs2 = () => {
                   className="flex items-center justify-center transition-all duration-300 ease-in-out"
                 >
                   {activeStep === step.id ? (
-                    <div className="flex items-center gap-2 px-2">
+                    <div className="flex items-center gap-2">
                       <div className="bg-black rounded-full w-[53px] h-[53px] flex items-center justify-center flex-shrink-0">
                         <Icon className="w-7 h-7 text-white" />
                       </div>
-                      <div className="text-left text-black">
+                      <div className="text-right text-black px-4">
                         <div className="text-sm font-bold">{step.title}</div>
                         <div className="text-xs">{step.subtitle}</div>
                       </div>

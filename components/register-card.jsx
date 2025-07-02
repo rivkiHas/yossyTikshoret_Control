@@ -65,7 +65,7 @@ export function RegisterCard({ className, ...props }) {
     >
       {(formik) => (
         <Form>
-          <div className={cn('flex space-x-[28px]', className)} {...props}>
+          <div className={cn('lg:flex lg:space-x-[28px]', className)} {...props}>
             <div className="block md:hidden">
               <Tabs2/>
             </div>

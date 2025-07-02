@@ -29,7 +29,7 @@ export function RegisterForm2({ OkFunction, contactId, canDelete }) {
     dispatch(addContactMan());
   };
   return (
-    <div className="flex flex-col gap-[15px] w-full lg:w-1/2 mb-6 lg:h-[60vh]">
+    <div className="flex flex-col w-full lg:w-1/2 p-5 gap-4 ">
       <div className="flex justify-between items-center mb-4">
         <Typography className="text-2xl font-bold">פרטי איש קשר</Typography>
         {canDelete && contactIndex > 0 && (
@@ -42,8 +42,7 @@ export function RegisterForm2({ OkFunction, contactId, canDelete }) {
         )}
       </div>
 
-      <div className="space-y-5 h-60vh">
-        {/* שם מלא */}
+      <div className="space-y-10 h-60vh">
         <div className="relative">
           <label className="block mb-1">שם מלא</label>
           <Input
@@ -59,7 +58,6 @@ export function RegisterForm2({ OkFunction, contactId, canDelete }) {
             )}
         </div>
 
-        {/* טלפון */}
         <div className="relative">
           <label className="block mb-1">טלפון אישי</label>
           <Input
@@ -75,7 +73,6 @@ export function RegisterForm2({ OkFunction, contactId, canDelete }) {
             )}
         </div>
 
-        {/* אימייל */}
         <div className="relative">
           <label className="block mb-1">אימייל אישי</label>
           <Input
@@ -91,7 +88,6 @@ export function RegisterForm2({ OkFunction, contactId, canDelete }) {
             )}
         </div>
 
-        {/* סניף */}
         {contactMans.length > 1 && (
           <>
             <div>
@@ -115,7 +111,6 @@ export function RegisterForm2({ OkFunction, contactId, canDelete }) {
               </Select>
             </div>
 
-            {/* תפקיד */}
             <div>
               <label className="block mb-1">תפקיד</label>
               <Select
