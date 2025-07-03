@@ -124,11 +124,11 @@ export default function StepTwo({ brunch: propBrunch }) {
             <div className="flex flex-col w-full max-w-[1440px] lg:px-[20px] py-[30px] items-end">
                 <div className="flex flex-col lg:flex-row w-full h-full gap-[24px] lg:gap-[30px]">
                     <div className="flex flex-col lg:flex-row w-full h-full gap-8">
-                        <div className="flex flex-col lg:w-5/11 h-full lg:p-4 p-5">
+                        <div className="flex flex-col w-full h-full lg:p-4 p-5">
                             <AddressSearchMap typeMarketer={typeMarketer} />
                         </div>
-                        <div className='lg:p-5 p-5'>
-                            <div className="flex flex-col  h-full lg:h-full lg:p-5 p-5 bg-white rounded-[40px]">
+                        <div className='lg:p-5 p-5 w-full'>
+                            <div className="flex flex-col h-full  lg:h-full bg-white rounded-[40px]">
                                 <HoursOpen typeMarketer={typeMarketer} />
                                 <Button onClick={handleAddBranchClick}
                                     className="lg:hidden cursor-pointer bg-black border hover:bg-white hover:text-black hover:border-black text-white p-5 gap-2 rounded-full"

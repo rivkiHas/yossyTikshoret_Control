@@ -10,40 +10,40 @@ import { PlusCircleIcon, MinusCircleIcon } from "@heroicons/react/24/outline";
 import CustomTimeInput from './custom_time_input';
 
 const validateHours = (hoursData) => {
-    const newErrors = {};
+  const newErrors = {};
 
-    hoursData.forEach((dayHours, index) => {
-        if (!dayHours) return;
+  hoursData.forEach((dayHours, index) => {
+    if (!dayHours) return;
 
-        const dayErrors = {};
-        const { morning, evening } = dayHours;
+    const dayErrors = {};
+    const { morning, evening } = dayHours;
 
-        if (morning?.open && morning?.close && morning.open >= morning.close) {
-            dayErrors.morning = { 
-                open: "שעת פתיחה חייבת להיות לפני שעת סגירה",
-                close: "שעת סגירה חייבת להיות אחרי שעת פתיחה"
-            };
-        }
-        
-        if (evening?.open && evening?.close && evening.open >= evening.close) {
-            dayErrors.evening = {
-                ...dayErrors.evening,
-                open: "שעת פתיחה חייבת להיות לפני שעת סגירה",
-                close: "שעת סגירה חייבת להיות אחרי שעת פתיחה"
-            };
-        }
+    if (morning?.open && morning?.close && morning.open >= morning.close) {
+      dayErrors.morning = {
+        open: "שעת פתיחה חייבת להיות לפני שעת סגירה",
+        close: "שעת סגירה חייבת להיות אחרי שעת פתיחה"
+      };
+    }
 
-        if (morning?.close && evening?.open && evening.open <= morning.close) {
-            dayErrors.morning = { ...dayErrors.morning, close: "סגירת בוקר חייבת להיות לפני פתיחת ערב" };
-            dayErrors.evening = { ...dayErrors.evening, open: "פתיחת ערב חייבת להיות אחרי סגירת בוקר" };
-        }
+    if (evening?.open && evening?.close && evening.open >= evening.close) {
+      dayErrors.evening = {
+        ...dayErrors.evening,
+        open: "שעת פתיחה חייבת להיות לפני שעת סגירה",
+        close: "שעת סגירה חייבת להיות אחרי שעת פתיחה"
+      };
+    }
 
-        if (Object.keys(dayErrors).length > 0) {
-            newErrors[index] = dayErrors;
-        }
-    });
+    if (morning?.close && evening?.open && evening.open <= morning.close) {
+      dayErrors.morning = { ...dayErrors.morning, close: "סגירת בוקר חייבת להיות לפני פתיחת ערב" };
+      dayErrors.evening = { ...dayErrors.evening, open: "פתיחת ערב חייבת להיות אחרי סגירת בוקר" };
+    }
 
-    return newErrors;
+    if (Object.keys(dayErrors).length > 0) {
+      newErrors[index] = dayErrors;
+    }
+  });
+
+  return newErrors;
 };
 
 
@@ -60,32 +60,32 @@ const HoursOpen = ({ typeMarketer }) => {
 
   useEffect(() => {
 
-    const initialHours = Array.from({ length: 7 }, () => ({ 
-        morning: { open: '', close: '' }, 
-        evening: { open: '', close: '' } 
+    const initialHours = Array.from({ length: 7 }, () => ({
+      morning: { open: '', close: '' },
+      evening: { open: '', close: '' }
     }));
 
     if (brunch?.hoursOpen) {
       const parsedHours = JSON.parse(JSON.stringify(brunch.hoursOpen));
       parsedHours.forEach((day, index) => {
         if (day) {
-            initialHours[index] = { ...initialHours[index], ...day };
+          initialHours[index] = { ...initialHours[index], ...day };
         }
       });
       setLocalHoursOpen(initialHours);
       setErrors(validateHours(initialHours));
     } else {
-        setLocalHoursOpen(initialHours);
+      setLocalHoursOpen(initialHours);
     }
   }, [brunch]);
 
   const handleChange = (day, period, type, value, index) => {
     if (index === undefined || index === null) return;
-  
+
     let updatedHours = JSON.parse(JSON.stringify(localHoursOpen));
-  
+
     if (!isGrouped && index === 1) {
-      const daysToUpdate = [1, 2, 3, 4, 5]; 
+      const daysToUpdate = [1, 2, 3, 4, 5];
       daysToUpdate.forEach((dayIndex) => {
         if (!updatedHours[dayIndex]) updatedHours[dayIndex] = { morning: {}, evening: {} };
         if (!updatedHours[dayIndex][period]) updatedHours[dayIndex][period] = {};
@@ -96,11 +96,11 @@ const HoursOpen = ({ typeMarketer }) => {
       if (!updatedHours[index][period]) updatedHours[index][period] = {};
       updatedHours[index][period][type] = value;
     }
-  
+
     setLocalHoursOpen(updatedHours);
     const validationErrors = validateHours(updatedHours);
     setErrors(validationErrors);
-  
+
     if (brunch && Object.keys(validationErrors).length === 0) {
       dispatch(updateBrunchDetails({
         id: brunch.id,
@@ -114,7 +114,7 @@ const HoursOpen = ({ typeMarketer }) => {
   };
 
   return (
-    <div className="h-full flex flex-col p-4 bg-white rounded-[40px] ">
+    <div className="h-full w-full flex flex-col bg-white rounded-[40px] ">
       <div className="flex flex-row justify-between mb-4">
         <Typography className='text-2xl font-bold'>
           {typeMarketer === "סוכן" ? "שעות זמינות  " : "שעות פתיחה "}
@@ -124,36 +124,36 @@ const HoursOpen = ({ typeMarketer }) => {
           type="button"
           className="group flex h-[40px] w-[40px] items-center justify-center rounded-full bg-[#FEF2CC] text-[#F8BD00] transition-[width] delay-1000 duration-100 ease-out hover:w-auto hover:rounded-3xl hover:px-3 hover:flex-row-reverse"
         >
-           <PencilSquareIcon className="w-5 h-5" />
+          <PencilSquareIcon className="w-5 h-5" />
           <span className="hidden group-hover:inline-block text-black text-base font-bold
              opacity-0 group-hover:opacity-100
              transition-opacity duration-300 ease-in-out
              delay-[1500ms]">{isGrouped ? " עריכת שעות פתיחה" : "  עריכת שעות פתיחה"}</span>
-         
+
         </button>
       </div>
 
-      <div className="mb-4 bg-[#F4F4F4] rounded-4xl p-2 w-fit">
+      <div className="mb-5 bg-[#F4F4F4] rounded-4xl p-2 w-fit">
         <div dir="ltr" className="flex items-center gap-2 w-fit">
           <span className="text-sm text-[#111928] font-semibold">שעות בתיאום מראש</span>
           <Switch checked={isSwitchOn} onCheckedChange={handleSwitchChange} className={'duration-300 cursor-pointer '} />
         </div>
       </div>
-      
+
       <div className="flex-1 relative">
         {isSwitchOn && (
-          <div className="absolute inset-0 bg-white/20 backdrop-blur-sm backdrop-saturate-100 z-10 rounded-xl shadow-[4px_4px_160.2px_0px_rgba(0,0,0,0.06)]" />
+          <div className="absolute inset-0 bg-white/20 backdrop-blur-sm backdrop-saturate-10 z-10 shadow-[4px_4px_160.2px_0px_rgba(0,0,0,0.01)]" />
         )}
-        
+
         <div className="h-full lg:max-h-[400px] lg:overflow-y-auto lg:scrollbar-custom overflow-visible flex flex-col text-[22px] font-semibold text-[#F8BD00] ">
           {!isGrouped ? (
             <DayRow
               day="weekdays"
               label="ימים א'-ה'"
-              hours={localHoursOpen?.[1]} 
+              hours={localHoursOpen?.[1]}
               errors={errors?.[1]}
               handleChange={handleChange}
-              index={1} 
+              index={1}
               disabled={isSwitchOn}
             />
           ) : (
@@ -188,14 +188,16 @@ const HoursOpen = ({ typeMarketer }) => {
 };
 
 
+
+
 const DayRow = ({ day, label, hours, handleChange, errors, index, disabled, isFriday = false }) => {
   const [isEveningVisible, setIsEveningVisible] = useState(false);
 
   useEffect(() => {
     if ((hours?.evening?.open || hours?.evening?.close) || errors?.evening) {
-        setIsEveningVisible(true);
+      setIsEveningVisible(true);
     } else {
-        setIsEveningVisible(false);
+      setIsEveningVisible(false);
     }
   }, [hours, errors]);
 
@@ -211,7 +213,7 @@ const DayRow = ({ day, label, hours, handleChange, errors, index, disabled, isFr
           <Typography className="text-[24px] font-bold text-[#F8BD00] mb-2 text-left">{label}</Typography>
           {isEveningVisible && <span className='text-sm text-black text-left'> בוקר</span>}
         </div>
-        <div className="flex flex-row-reverse items-center justify-start gap-5 p-2 rounded-xl">
+        <div className="flex flex-row-reverse items-center justify-start gap-5 rounded-xl">
           {!isFriday && (
             <button onClick={toggleEvening} disabled={disabled} className="group cursor-pointer outline-none hover:rotate-90 duration-300">
               {!isEveningVisible ? (
@@ -249,12 +251,12 @@ const DayRow = ({ day, label, hours, handleChange, errors, index, disabled, isFr
           </button>
 
           <div className='flex flex-row gap-3 items-end'>
-            <div className='text-start p-3'>
-              <span className='text-sm text-black'> ערב</span>
+            <div className='text-start p-5 self-center'>
+              <span className='text-sm text-black'>ערב</span>
             </div>
             <div className="flex flex-col gap-1">
               <label className="text-sm text-black">שעת פתיחה</label>
-               <InputTime
+              <InputTime
                 value={hours?.evening?.open || ""}
                 onChange={(e) => handleChange(day, "evening", "open", e.target.value, index)}
                 disabled={disabled}
@@ -271,6 +273,7 @@ const DayRow = ({ day, label, hours, handleChange, errors, index, disabled, isFr
               />
             </div>
           </div>
+
         </div>
       )}
     </div>
@@ -279,14 +282,14 @@ const DayRow = ({ day, label, hours, handleChange, errors, index, disabled, isFr
 
 
 const InputTime = ({ onChange, value, disabled, error }) => (
-  <div className="flex flex-col min-h-[70px]"> 
-     <CustomTimeInput 
-        value={value} 
-        onChange={onChange} 
-        disabled={disabled}
-        error={error}
-      />
-      {error && <p className="text-red-600 text-xs mt-1 text-right w-[60px]">{error}</p>}
+  <div className="flex flex-col min-h-[70px]">
+    <CustomTimeInput
+      value={value}
+      onChange={onChange}
+      disabled={disabled}
+      error={error}
+    />
+    {error && <p className="text-red-600 text-xs mt-1 text-right w-[60px]">{error}</p>}
   </div>
 );
 

@@ -56,6 +56,7 @@ export default function AddressSearchMap({ typeMarketer }) {
   }, [address]);
 
   useEffect(() => {
+    debugger
     if (!address.trim()) return;
     const interval = setInterval(() => {
       if (window.google && window.google.maps) {
@@ -175,16 +176,15 @@ export default function AddressSearchMap({ typeMarketer }) {
         )}
       </div>
 
-      {/* Subtitle */}
+
       <Typography className="text-[16px] font-medium mb-4">
         {typeMarketer === "סוכן"
           ? "אזור פעילות"
           : brunches.length > 1
-          ? `כתובת חנות: ${brunch.name}`
+          ? `כתובת חנות: ${brunchName}`
           : "כתובת חנות"}
       </Typography>
 
-      {/* --- שלב 2: תיקון מבנה ה-HTML וחיבור הפונקציה --- */}
       <div className="flex-1 flex flex-col gap-4">
         {typeMarketer === "סוכן" ? (
           <div className="relative w-full">
