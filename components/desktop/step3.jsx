@@ -178,7 +178,7 @@ export default function StepThree() {
   return (
     <div className="flex flex-col gap-6 max-w-[1440px] lg:pb-0 p-5 pb-18 direction-rtl">
       <div className="grid grid-cols-1 md:grid-cols-1 lg:pr-2 justify-center lg:h-[60vh]  lg:overflow-y-auto w-full ">
-        <div className="flex flex-col lg:pr-2">
+        <div className="flex flex-col lg:pr-2 lg:gap-6 gap-6">
           {contactMans.map((x) => (
             <div key={x.id} className="w-full flex justify-start bg-white rounded-[40px] p-4 gap-10">
               <RegisterForm2
@@ -203,7 +203,8 @@ export default function StepThree() {
 
         <div className="hidden lg:flex gap-4">
           <Button onClick={previousStepInRedux}
-            className="cursor-pointer flex items-center gap-1 bg-white text-black border border-[#F8BD00] p-5 rounded-full hover:border-black">
+                            className="cursor-pointer flex items-center bg-white text-black border border-[#F8BD00]  p-5 gap-3 rounded-full hover:bg-white hover:text-black hover:border-black"
+          >
             <ArrowLongRightIcon />
             שלב קודם
           </Button>

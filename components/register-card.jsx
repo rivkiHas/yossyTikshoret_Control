@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils'
 import { Tabs } from './desktop/tabs'
-import Tabs2 from './desktop/tabs2'
+import {Tabs2} from './desktop/tabs2'
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import {

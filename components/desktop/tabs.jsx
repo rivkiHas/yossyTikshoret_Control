@@ -23,8 +23,6 @@ export function Tabs({ className, ...props }) {
     const typeMarketer = useSelector((state) => state.form.pertip.typeMarketer)
     const formik = useFormikContext();
 
-    console.log(formik.values, "formik");
-
     const dispatch = useDispatch()
 
     const generateSteps = () => {

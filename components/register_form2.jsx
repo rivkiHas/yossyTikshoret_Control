@@ -42,7 +42,7 @@ export function RegisterForm2({ OkFunction, contactId, canDelete }) {
         )}
       </div>
 
-      <div className="space-y-10 h-60vh">
+      <div className="space-y-8 h-60vh">
         <div className="relative">
           <label className="block mb-1">שם מלא</label>
           <Input
