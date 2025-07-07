@@ -3,11 +3,12 @@
 import { useRef, useEffect, useState } from "react";
 import { GoogleMap, Marker, Autocomplete } from "@react-google-maps/api";
 import { useSelector, useDispatch } from "react-redux";
-// ודא שאתה מייבא את הפעולה להוספת סניף, לדוגמה:
-// import { updateBrunchDetails, setActiveBrunch, addNewBrunch } from "../store/brunch_store";
 import { updateBrunchDetails, setActiveBrunch } from "../store/brunch_store";
 import { Typography } from "./typhography";
 import { MagnifyingGlassIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
+import Carusel from "./carusel";
+import { addBrunch } from "../store/brunch_store";
+
 
 const containerStyle = {
   height: "100%",
@@ -56,7 +57,7 @@ export default function AddressSearchMap({ typeMarketer }) {
   }, [address]);
 
   useEffect(() => {
-    debugger
+
     if (!address.trim()) return;
     const interval = setInterval(() => {
       if (window.google && window.google.maps) {
@@ -126,13 +127,39 @@ export default function AddressSearchMap({ typeMarketer }) {
       }
     }
   };
+//   const handlePlaceChanged = () => {
+//   if (autocompleteRef.current) {
+//     const place = autocompleteRef.current.getPlace();
+//     if (place.geometry) {
+//       const newLocation = {
+//         lat: place.geometry.location.lat(),
+//         lng: place.geometry.location.lng(),
+//       };
+
+//       setLocalInputValue(place.formatted_address);
+
+//       if (typeMarketer !== "סוכן") {
+//         dispatch(
+//           updateBrunchDetails({
+//             id: brunch.id,
+//             address: place.formatted_address,
+//             location: newLocation,
+//           })
+//         );
+//       } else {
+//         // הוספה אוטומטית אחרי בחירה
+//         handleAddBranch();
+//       }
+//     }
+//   }
+// };
 
   const handleAddBranch = () => {
     if (!localInputValue.trim()) {
       alert("אנא הכנס כתובת להוספה");
       return;
     }
-     dispatch(addBrunch({ address: localInputValue, name: localInputValue }));
+    dispatch(addBrunch({ address: localInputValue, name: localInputValue }));
     console.log(`Triggering Redux action to add branch: ${localInputValue}`);
     setLocalInputValue("");
   };
@@ -181,8 +208,8 @@ export default function AddressSearchMap({ typeMarketer }) {
         {typeMarketer === "סוכן"
           ? "אזור פעילות"
           : brunches.length > 1
-          ? `כתובת חנות: ${brunchName}`
-          : "כתובת חנות"}
+            ? `כתובת חנות: ${brunchName}`
+            : "כתובת חנות"}
       </Typography>
 
       <div className="flex-1 flex flex-col gap-4">
@@ -194,21 +221,19 @@ export default function AddressSearchMap({ typeMarketer }) {
                 placeholder="חפש מיקום נוסף"
                 value={localInputValue}
                 onChange={(e) => handleInputChange(e.target.value)}
-                className="w-full h-11 pl-12 pr-4 border border-input rounded-md bg-background transition-colors focus:outline-none focus:ring-1 focus:ring-ring"
-                style={{
-                  color: "var(--Color-14, #4C585B)",
-                  textAlign: "right",
-                  fontFamily: "SimplerPro_HLAR",
-                  fontSize: "16px",
-                  fontStyle: "normal",
-                  fontWeight: 400,
-                  lineHeight: "24px",
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault(); // חשוב למנוע רפרוש
+                    handleAddBranch();
+                  }
                 }}
+                className="w-full h-11 px-4 border border-input rounded-md bg-background text-sm text-muted-foreground transition-colors focus:outline-none focus:ring-1 focus:ring-ring"
               />
             </Autocomplete>
+
             <button
               type="button"
-              onClick={handleAddBranch} // חיבור הפונקציה לכפתור
+              onClick={handleAddBranch}
               className="absolute left-0 top-0 h-11 flex items-center justify-center px-3 text-gray-500 hover:text-gray-700"
               aria-label="Add new location"
             >
@@ -239,6 +264,10 @@ export default function AddressSearchMap({ typeMarketer }) {
           </GoogleMap>
         </div>
       </div>
+      {typeMarketer === "סוכן" && (
+        <div className="lg:hidden mt-4">
+          <Carusel activeBrunch={activeBrunch} />
+        </div>)}
     </div>
   );
 }

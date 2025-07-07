@@ -2,6 +2,7 @@
 import { Tab } from '@headlessui/react'
 import AddressSearchMap from '../address_search_map';
 import HoursOpen from '../hours_open';
+import HoursOpenMobile from '../hours_open_mobile';
 import { useDispatch, useSelector } from "react-redux";
 import { nextStep, prevStep, setActiveStep } from "../../store/step_store";
 import { addBrunch, removeBrunch, setActiveBrunch } from "../../store/brunch_store";
@@ -27,7 +28,6 @@ export default function StepTwo({ brunch: propBrunch }) {
     useEffect(() => {
         if (propBrunch && propBrunch.id && propBrunch.id !== activeBrunch) {
             dispatch(setActiveBrunch(propBrunch.id));
-            // dispatch(setFormData(formik.values));
 
         }
     }, [propBrunch, activeBrunch, dispatch]);
@@ -35,7 +35,14 @@ export default function StepTwo({ brunch: propBrunch }) {
     const [showDialog, setShowDialog] = useState(false);
     const [newBranchName, setNewBranchName] = useState('');
 
-    const nextStepInRedux = () => {
+
+    const nextStepInRedux = async () => {
+        const errors = await formik.validateForm();
+        if (Object.keys(errors).length > 0) {
+            console.log("יש שדות חובה שלא מולאו:", errors);
+            return;
+        }
+
         if (brunches.length === 1) {
             dispatch(setActiveStep(activeStep + 1));
         } else {
@@ -49,6 +56,7 @@ export default function StepTwo({ brunch: propBrunch }) {
             }
         }
     };
+
 
     const previousStepInRedux = () => {
         if (brunches.length === 1) {
@@ -121,28 +129,30 @@ export default function StepTwo({ brunch: propBrunch }) {
 
     return (
         <div className="flex justify-center">
-            <div className="flex flex-col w-full max-w-[1440px] lg:px-[20px] py-[30px] items-end">
-                <div className="flex flex-col lg:flex-row w-full h-full gap-[24px] lg:gap-[30px]">
-                    <div className="flex flex-col lg:flex-row w-full h-full gap-8">
+            <div className="flex flex-col w-full max-w-[1440px] lg:px-[20px] lg:py-[30px] items-end">
+                <div className="flex flex-col lg:flex-row w-full h-full lg:gap-[30px]">
+                    <div className="flex flex-col lg:flex-row w-full h-full lg:gap-8">
                         <div className="flex flex-col w-full h-full lg:p-4 p-5">
                             <AddressSearchMap typeMarketer={typeMarketer} />
                         </div>
                         <div className='lg:p-5 p-5 w-full'>
-                            <div className="flex flex-col h-full  lg:h-full bg-white rounded-[40px]">
-                                <HoursOpen typeMarketer={typeMarketer} />
-                                <Button onClick={handleAddBranchClick}
-                                    className="lg:hidden cursor-pointer bg-black border hover:bg-white hover:text-black hover:border-black text-white p-5 gap-2 rounded-full"
-                                >
-                                    <PlusCircleIcon className="w-5 h-5" />
-                                    הוספת סניף נוסף
-                                </Button>
+                            <div className="flex flex-col h-full bg-white rounded-[40px]">
+                                <div className="hidden lg:block">
+                                    <HoursOpen typeMarketer={typeMarketer} />
+                                </div>
+                                <div className="block lg:hidden">
+                                    <HoursOpenMobile typeMarketer={typeMarketer} />
+
+                                </div>
+
                             </div>
+
                         </div>
                     </div>
                 </div>
 
-                <div className="flex w-full items-center justify-between px-8">
-                    {typeMarketer === "חנות" ? (
+                <div className="flex w-full items-end justify-between px-8">
+                    {typeMarketer === "חנות" && (
                         <div className="hidden lg:flex flex-row gap-4">
                             <Button onClick={handleAddBranchClick}
                                 className="cursor-pointer bg-black border hover:bg-white hover:text-black hover:border-black text-white p-5 gap-2 rounded-full"
@@ -160,8 +170,12 @@ export default function StepTwo({ brunch: propBrunch }) {
                                 />
                             )}
                         </div>
-                    ) : (
-                        <Carusel activeBrunch={activeBrunch} />
+                    )}
+
+                    {typeMarketer === "סוכן" && (
+                        <div className="hidden lg:block lg:w-[43%]">
+                            <Carusel activeBrunch={activeBrunch} />
+                        </div>
                     )}
 
                     <div className="hidden lg:flex gap-4">

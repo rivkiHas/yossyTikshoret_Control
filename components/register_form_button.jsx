@@ -4,11 +4,13 @@ import { Typography } from "./typhography";
 import { CustomButton, CustomButtonRectangle } from "./custom_button";
 import { useDispatch, useSelector } from 'react-redux';
 import { setFormData } from '../store/form_store';
+import { useFormikContext } from 'formik';
 
 export function RegisterFormButton() {
     const dispatch = useDispatch();
     const { typeMarketer, typeSales = [] } = useSelector((state) => state.form.pertip);
-
+    const formik = useFormikContext();
+    
     const marketerOptions = [
         {
             value: "סוכן",
@@ -43,6 +45,7 @@ export function RegisterFormButton() {
 
     const handleSelectMarketer = (value) => {
         dispatch(setFormData({ typeMarketer: value }));
+        formik.setFieldValue("typeMarketer", value);
     };
 
     const handleSelectSales = (value) => {
@@ -50,11 +53,12 @@ export function RegisterFormButton() {
             ? typeSales.filter((item) => item !== value)
             : [...typeSales, value];
         dispatch(setFormData({ typeSales: updated }));
+        formik.setFieldValue("typeSales", updated);
     };
 
     return (
         <div className="flex flex-col w-full items-start lg:bg-transparent lg:p-0 lg:gap-[24px] gap-10 ">
-            <div className="flex flex-col w-full justify-center lg:p-4 p-8 bg-white rounded-[40px]">
+            <div className="flex flex-col w-full justify-center lg:p-4 p-4 bg-white rounded-[40px]">
                 <Typography className="text-[24px] font-bold">סוג משווק</Typography>
                 <div className="flex flex-col gap-4 lg:flex-row lg:justify-between">
                     {marketerOptions.map((item) => (
@@ -68,8 +72,8 @@ export function RegisterFormButton() {
                 </div>
             </div>
 
-            <div className="flex flex-col w-full justify-center gap-6 lg:p-4 p-8 bg-white rounded-[40px]">
-                <div className="flex flex-row sm:flex-row justify-between items-start sm:items-center w-full gap-2 sm:gap-0">
+            <div className="flex flex-col w-full justify-center gap-6 lg:p-4 p-4 bg-white rounded-[40px]">
+                <div className="flex flex-row sm:flex-row justify-between items-center  w-full gap-2 sm:gap-0">
                     <Typography className="text-[24px] font-bold">סוג המכירות</Typography>
                     <Typography className="text-sm text-black-500 font-medium">אפשר לבחור יותר מאפשרות אחת</Typography>
                 </div>

@@ -30,36 +30,6 @@ export default function StepThree() {
   const user = useSelector((state) => state.form.pertip);
   const brunches = useSelector((state) => state.brunch.brunches);
 
-  const isPertipComplete = useSelector(isPertipStepComplete);
-  const isContactComplete = useSelector(isContactStepComplete);
-  const isBrunchComplete = useSelector(isBrunchStepComplete);
-  const isAllComplete = useSelector(isAllStepsComplete);
-
-  const validateFunction = () => {
-    return Object.values(validators).every(fn => fn?.() === true);
-  };
-
-  const validateAllSteps = () => {
-    const validationErrors = [];
-
-    if (!isPertipComplete) {
-      validationErrors.push('אנא השלם את כל השדות בשלב פרטי העסק');
-    }
-
-    if (!isContactComplete) {
-      validationErrors.push('אנא השלם את כל השדות של אנשי הקשר');
-    }
-
-    if (!isBrunchComplete) {
-      validationErrors.push('אנא השלם את כל השדות של הסניפים');
-    }
-
-    return {
-      isValid: validationErrors.length === 0,
-      errors: validationErrors
-    };
-  };
-
   const sendDataToServer = async () => {
     const payload = {
       business_name: user.name,

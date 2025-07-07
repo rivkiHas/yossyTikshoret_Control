@@ -74,7 +74,7 @@ export default function BranchCarousel() {
 
     return (
         <div
-            className="w-1/2 overflow-x-auto scrollbar-none cursor-pointer"
+            className="w-full lg:w-[100%] overflow-x-auto scrollbar-none cursor-pointer"
             dir="rtl"
         >
             <div className="flex gap-2">

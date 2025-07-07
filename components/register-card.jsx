@@ -1,3 +1,4 @@
+import { useSelector } from 'react-redux';
 import { cn } from '@/lib/utils'
 import { Tabs } from './desktop/tabs'
 import {Tabs2} from './desktop/tabs2'
@@ -11,6 +12,7 @@ import {
 
 
 export function RegisterCard({ className, ...props }) {
+  const activeStep = useSelector((state) => state.stepper.activeStep);
   const initialValues = {
     name: '',
     email: '',
@@ -18,7 +20,6 @@ export function RegisterCard({ className, ...props }) {
     phone: '',
     typeMarketer: '',
     logo: null,
-
     brunches: [
       {
         name: '',
@@ -27,7 +28,6 @@ export function RegisterCard({ className, ...props }) {
         hoursOpen: [],
       }
     ],
-
     contactMans: [
       {
         name: '',
@@ -38,27 +38,38 @@ export function RegisterCard({ className, ...props }) {
     ],
   };
 
-  const validationSchema = Yup.object({
-    name: stepOneSchema.fields.name,
-    email: stepOneSchema.fields.email,
-    id: stepOneSchema.fields.id,
-    phone: stepOneSchema.fields.phone,
-    typeMarketer: stepOneSchema.fields.typeMarketer,
-    logo: stepOneSchema.fields.logo,
-    brunches: stepTwoSchema,
-    contactMans: stepThreeSchema,
-  });
-
+  const getValidationSchema = (step) => {
+    switch (step) {
+      case 0:
+        return Yup.object({
+          name: stepOneSchema.fields.name,
+          email: stepOneSchema.fields.email,
+          id: stepOneSchema.fields.id,
+          phone: stepOneSchema.fields.phone,
+          typeMarketer: stepOneSchema.fields.typeMarketer,
+          logo: stepOneSchema.fields.logo,
+        });
+      case 1:
+        return Yup.object({
+          brunches: stepTwoSchema,
+        });
+      case 2:
+        return Yup.object({
+          contactMans: stepThreeSchema,
+        });
+      default:
+        return Yup.object(); // בלי ולידציה
+    }
+  };
 
   const handleSubmit = (values) => {
     console.log('Submitting...', values);
   };
 
   return (
-
     <Formik
       initialValues={initialValues}
-      validationSchema={validationSchema}
+      validationSchema={getValidationSchema(activeStep)}
       onSubmit={handleSubmit}
       validateOnBlur={true}
       validateOnChange={true}
@@ -67,10 +78,10 @@ export function RegisterCard({ className, ...props }) {
         <Form>
           <div className={cn('lg:flex lg:space-x-[28px]', className)} {...props}>
             <div className="block md:hidden">
-              <Tabs2/>
+              <Tabs2 />
             </div>
             <div className="hidden md:block">
-              <Tabs/>
+              <Tabs />
             </div>
           </div>
         </Form>

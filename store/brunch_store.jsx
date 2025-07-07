@@ -31,6 +31,8 @@ const brunchSlice = createSlice({
     reducers: {
         addBrunch: (state, action) => {
             state.brunches.push(action.payload);
+            
+
         },
         setActiveBrunch: (state, action) => {
             state.activeBrunch = action.payload;

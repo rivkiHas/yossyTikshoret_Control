@@ -36,7 +36,7 @@ export function Tabs({ className, ...props }) {
                 steps.push({
                     id: brunch.id,
                     type: 'branch',
-                    title: brunch.name || 'סניף',
+                    title: ' סניף ' + (brunch.name || 'סניף'),
                     brunchData: brunch
                 });
             });

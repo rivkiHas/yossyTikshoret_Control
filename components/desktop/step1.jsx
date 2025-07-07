@@ -17,20 +17,24 @@ export default function StepOne({ index }) {
   const user = useSelector((state) => state.form.pertip);
   const formik = useFormikContext();
 
-
-  const handleNextStep = () => {
-    formik.validateForm().then(() => {
+const handleNextStep = () => {
+  formik.validateForm().then((errors) => {
+    if (Object.keys(errors).length === 0) {
       dispatch(setFormData(formik.values));
       dispatch(setActiveStep(activeStep + 1));
-    });
-
-  };
+    } else {
+      formik.setTouched(
+        Object.keys(errors).reduce((acc, key) => ({ ...acc, [key]: true }), {})
+      );
+    }
+  });
+};
 
   return (
     <div className="flex justify-center">
-      <div className="flex flex-col items-end w-full max-w-[1440px] lg:px-[20px] md:px-[50px] py-[30px] ">
+      <div className="flex flex-col items-end w-full max-w-[1440px] lg:px-[20px] md:px-[50px] lg:py-[30px] ">
         <div className="flex flex-col lg:flex-row w-full gap-[24px] lg:gap-[36px]">
-          <div className="flex flex-col lg:flex-row w-full gap-4">
+          <div className="flex flex-col lg:flex-row w-full lg:gap-4">
             <div className="flex flex-col lg:w-1/2 w-full lg:mx-auto p-4 rounded-[40px]">
               <RegisterForm1 />
             </div>
@@ -45,6 +49,7 @@ export default function StepOne({ index }) {
         <div className="hidden lg:block px-8">
           <Button
             onClick={handleNextStep}
+            type="button"
             className="flex cursor-pointer items-center gap-2 text-[14px] bg-yellow-400 text-black p-5 rounded-full border border-transparent hover:bg-white hover:text-black hover:border-[#F8BD03]"
           >
             שלב הבא
@@ -53,7 +58,5 @@ export default function StepOne({ index }) {
         </div>
       </div>
     </div>
-
-
   );
 }
