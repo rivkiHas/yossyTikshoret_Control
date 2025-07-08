@@ -46,7 +46,7 @@ export function RegisterCard({ className, ...props }) {
           email: stepOneSchema.fields.email,
           id: stepOneSchema.fields.id,
           phone: stepOneSchema.fields.phone,
-          typeMarketer: stepOneSchema.fields.typeMarketer,
+          typeMarketer: Yup.string().oneOf(['store', 'agent']).required('סוג משווק הוא שדה חובה'),
           logo: stepOneSchema.fields.logo,
         });
       case 1:

@@ -36,40 +36,47 @@ const stepsData = [
 ];
 
 export function Tabs2() {
+  
   const [activeStep, setActiveStep] = useState(1);
   const [isCompleted, setIsCompleted] = useState(false);
   const sectionRefs = useRef([]);
   const [openedStep, setOpenedStep] = useState(null);
   const formik = useFormikContext();
 
-  useEffect(() => {
-    const observerOptions = {
-      root: null,
-      rootMargin: '0px 0px -60% 0px',
-      threshold: 0,
-    };
+useEffect(() => {
+  const observerOptions = {
+    root: null,
+    rootMargin: '0px 0px -60% 0px',
+    threshold: 0,
+  };
 
-    const observerCallback = (entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const stepId = parseInt(entry.target.dataset.stepId, 10);
-          setActiveStep(stepId);
-        }
-      });
-    };
-
-    const observer = new IntersectionObserver(observerCallback, observerOptions);
-    const refs = sectionRefs.current;
-    refs.forEach(ref => {
-      if (ref) observer.observe(ref);
+  const observerCallback = (entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const stepId = parseInt(entry.target.dataset.stepId, 10);
+        setActiveStep(stepId);
+        if (stepId === 3) {
+          setIsCompleted(true);
+         }
+         // else {
+        //   setIsCompleted(false); // אם חזר אחורה - לבטל
+        // }
+      }
     });
+  };
 
-    return () => {
-      refs.forEach(ref => {
-        if (ref) observer.unobserve(ref);
-      });
-    };
-  }, []);
+  const observer = new IntersectionObserver(observerCallback, observerOptions);
+  const refs = sectionRefs.current;
+  refs.forEach(ref => {
+    if (ref) observer.observe(ref);
+  });
+
+  return () => {
+    refs.forEach(ref => {
+      if (ref) observer.unobserve(ref);
+    });
+  };
+}, []);
 
   useEffect(() => {
     const noErrors = Object.keys(formik.errors).length === 0;
@@ -136,13 +143,13 @@ export function Tabs2() {
         </div>
         <div className="fixed bottom-6 left-6 right-6 flex">
           {isCompleted ? (
-            <div className="flex w-full bg-yellow-400 rounded-[40px] mx-auto p-3 shadow-lg justify-between items-center" dir="rtl">
+            <div className="flex w-full bg-yellow-400 rounded-[40px] h-[90px] mx-auto p-3 shadow-lg justify-between items-center" dir="rtl">
               <div className="flex items-center">
                 {stepsData.map(step => {
                   const Icon = step.icon;
                   return (
-                    <button key={step.id} onClick={() => handleStepClick(step)} className="relative mx-1 cursor-pointer bg-white rounded-full w-[55px] h-[55px] flex items-center justify-center flex-shrink-0">
-                      <Icon className="w-6 h-6 text-black" />
+                    <button key={step.id} onClick={() => handleStepClick(step)} className="relative mx-1 cursor-pointer bg-white rounded-full w-[60px] h-[60px] flex items-center justify-center flex-shrink-0">
+                      <Icon className="w-8 h-8 text-black" />
                       {step.statusIcon && (
                         <span className="absolute -top-1 -right-1 bg-black text-white text-xs rounded-full w-7 h-7 flex items-center justify-center border-2 border-yellow-400 font-bold">
                           {step.statusIcon}
@@ -152,7 +159,7 @@ export function Tabs2() {
                   );
                 })}
               </div>
-              <button onClick={submitForm} className="bg-white text-black rounded-full flex items-center justify-center px-6 py-2 mr-1 font-bold">
+              <button onClick={submitForm} className="bg-white text-black rounded-full flex items-center justify-center px-5 py-3 mr-1 font-bold gap-3">
                 <span>שלח</span>
                 <span className="text-lg ml-2">←</span>
               </button>

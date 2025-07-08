@@ -152,7 +152,7 @@ export default function StepTwo({ brunch: propBrunch }) {
                 </div>
 
                 <div className="flex w-full items-end justify-between px-8">
-                    {typeMarketer === "חנות" && (
+                    {typeMarketer === "store" && (
                         <div className="hidden lg:flex flex-row gap-4">
                             <Button onClick={handleAddBranchClick}
                                 className="cursor-pointer bg-black border hover:bg-white hover:text-black hover:border-black text-white p-5 gap-2 rounded-full"
@@ -172,7 +172,7 @@ export default function StepTwo({ brunch: propBrunch }) {
                         </div>
                     )}
 
-                    {typeMarketer === "סוכן" && (
+                    {typeMarketer === "agent" && (
                         <div className="hidden lg:block lg:w-[43%]">
                             <Carusel activeBrunch={activeBrunch} />
                         </div>

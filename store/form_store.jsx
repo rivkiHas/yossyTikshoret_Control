@@ -9,8 +9,8 @@ const formSlice = createSlice({
             email: '',
             id: '',
             phone: '',
-            logo: null,
-            typeMarketer: 'חנות',
+            logo: '',
+            typeMarketer: 'store',
             typeSales: []
         }
 

@@ -54,12 +54,12 @@ export default function StepThree() {
     };
 
     try {
+      const csrf = () => axios.get('/sanctum/csrf-cookie')
+      await csrf(); 
       const response = await axios.post(
-        'https://api.yossi-tikshoret.test/api/register',
+        '/api/register',
         payload,
-
       );
-
       return response.data;
     } catch (error) {
       let errorMsg = 'שגיאה בשליחת הנתונים לשרת';
@@ -146,7 +146,7 @@ export default function StepThree() {
   };
 
   return (
-    <div className="flex flex-col gap-6 max-w-[1440px] lg:pb-0 p-5 pb-18 direction-rtl">
+    <div className="flex flex-col gap-6 max-w-[1440px] lg:pb-0 p-5 pb-25 direction-rtl">
       <div className="grid grid-cols-1 md:grid-cols-1 lg:pr-2 justify-center lg:h-[60vh]  lg:overflow-y-auto w-full ">
         <div className="flex flex-col lg:pr-2 lg:gap-6 gap-6">
           {contactMans.map((x) => (

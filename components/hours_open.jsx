@@ -9,6 +9,7 @@ import { PencilSquareIcon } from '@heroicons/react/24/solid';
 import { PlusCircleIcon, MinusCircleIcon } from "@heroicons/react/24/outline";
 import CustomTimeInput from './custom_time_input';
 import { useFormikContext } from 'formik';
+import { object } from 'yup';
 
 const validateHours = (hoursData) => {
   const newErrors = {};
@@ -104,6 +105,7 @@ const HoursOpen = ({ typeMarketer }) => {
     setErrors(validationErrors);
 
     if (brunch && Object.keys(validationErrors).length === 0) {
+      // formik.handleChange(object.key)
       dispatch(updateBrunchDetails({
         id: brunch.id,
         hoursOpen: updatedHours,

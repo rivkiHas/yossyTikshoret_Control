@@ -13,12 +13,12 @@ export function RegisterFormButton() {
     
     const marketerOptions = [
         {
-            value: "סוכן",
+            value: "agent",
             label: "סוכן",
             image: "images/agent.png",
         },
         {
-            value: "חנות",
+            value: "store",
             label: "חנות",
             image: "images/store.png",
         }

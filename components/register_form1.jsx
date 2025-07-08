@@ -72,7 +72,7 @@ export function RegisterForm1() {
                             onChange={(e) => {
                                 const selectedFile = e.target.files?.[0];
                                 formik.setFieldValue("logo", selectedFile);
-                                dispatch(setFormData({ logo: selectedFile }));
+                               // dispatch(setFormData({ logo: selectedFile }));
                             }}
                         />
                         <div className="flex justify-between items-center h-9 px-4 border border-input rounded-md bg-background text-sm text-muted-foreground peer-hover:border-primary peer-focus-visible:ring-1 peer-focus-visible:ring-ring transition-colors">
@@ -86,7 +86,7 @@ export function RegisterForm1() {
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         formik.setFieldValue("logo", null);
-                                        dispatch(setFormData({ logo: null }));
+                                        // dispatch(setFormData({ logo: null }));
                                     }}
                                 >
                                     ✕

@@ -17,10 +17,29 @@ export default function StepOne({ index }) {
   const user = useSelector((state) => state.form.pertip);
   const formik = useFormikContext();
 
+// const handleNextStep = () => {
+//   formik.validateForm().then((errors) => {
+//     if (Object.keys(errors).length === 0) {
+//       dispatch(setFormData(formik.values));
+//       dispatch(setActiveStep(activeStep + 1));
+//     } else {
+//       formik.setTouched(
+//         Object.keys(errors).reduce((acc, key) => ({ ...acc, [key]: true }), {})
+//       );
+//     }
+//   });
+// };
 const handleNextStep = () => {
   formik.validateForm().then((errors) => {
     if (Object.keys(errors).length === 0) {
-      dispatch(setFormData(formik.values));
+      const { logo, ...rest } = formik.values;
+
+      // שומרים רק את הנתונים הסידוריים ב־Redux
+      dispatch(setFormData({
+        ...rest,
+        logo: logo?.name || "" // או כתובת זמנית אם את יוצרת URL
+      }));
+
       dispatch(setActiveStep(activeStep + 1));
     } else {
       formik.setTouched(
@@ -29,6 +48,7 @@ const handleNextStep = () => {
     }
   });
 };
+
 
   return (
     <div className="flex justify-center">
