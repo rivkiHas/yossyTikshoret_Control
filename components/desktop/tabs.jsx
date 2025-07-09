@@ -28,10 +28,10 @@ export function Tabs({ className, ...props }) {
     const generateSteps = () => {
         const steps = [
             { id: 'step1', type: 'main', title: 'שלב ראשון', subtitle: 'פרטים על העסק' },
-            { id: 'step2', type: 'main', title: 'שלב שני', subtitle: 'כתובת ושעות נוספות', disabled: typeMarketer === "חנות" && brunches.length > 1 }
+            { id: 'step2', type: 'main', title: 'שלב שני', subtitle: 'כתובת ושעות נוספות', disabled: typeMarketer === "store" && brunches.length > 1 }
         ];
 
-        if (typeMarketer === "חנות" && brunches.length > 1) {
+        if (typeMarketer === "store" && brunches.length > 1) {
             brunches.forEach(brunch => {
                 steps.push({
                     id: brunch.id,
@@ -106,7 +106,7 @@ export function Tabs({ className, ...props }) {
 
         const baseClass = 'text-start ps-6 pe-5 py-4 w-full flex flex-row items-center gap-5 rounded-[16px]';
         const selectedClass = selected ? 'bg-[#FDEBB2] ps-5 [#FDEBB2]' : '';
-        const disabledClass = step.id === 'step2' && typeMarketer === "חנות" && brunches.length > 1
+        const disabledClass = step.id === 'step2' && typeMarketer === "store" && brunches.length > 1
             ? ' cursor-not-allowed bg-[#FEF8E5] ps-5'
             : 'cursor-pointer';
 
@@ -151,7 +151,7 @@ export function Tabs({ className, ...props }) {
                                     <Tab
                                         key={`${step.id}-${index}`}
                                         as={Fragment}
-                                        disabled={step.id === 'step2' && typeMarketer === "חנות" && brunches.length > 1}
+                                        disabled={step.id === 'step2' && typeMarketer === "store" && brunches.length > 1}
                                     >
                                         {({ selected }) => (
                                             <button className={getTabClass(step, selected)}>

@@ -114,7 +114,7 @@ export default function AddressSearchMap({ typeMarketer }) {
           lat: place.geometry.location.lat(),
           lng: place.geometry.location.lng(),
         };
-        if (typeMarketer !== "סוכן") {
+        if (typeMarketer !== "agent") {
           dispatch(
             updateBrunchDetails({
               id: brunch.id,
@@ -127,32 +127,6 @@ export default function AddressSearchMap({ typeMarketer }) {
       }
     }
   };
-//   const handlePlaceChanged = () => {
-//   if (autocompleteRef.current) {
-//     const place = autocompleteRef.current.getPlace();
-//     if (place.geometry) {
-//       const newLocation = {
-//         lat: place.geometry.location.lat(),
-//         lng: place.geometry.location.lng(),
-//       };
-
-//       setLocalInputValue(place.formatted_address);
-
-//       if (typeMarketer !== "סוכן") {
-//         dispatch(
-//           updateBrunchDetails({
-//             id: brunch.id,
-//             address: place.formatted_address,
-//             location: newLocation,
-//           })
-//         );
-//       } else {
-//         // הוספה אוטומטית אחרי בחירה
-//         handleAddBranch();
-//       }
-//     }
-//   }
-// };
 
   const handleAddBranch = () => {
     if (!localInputValue.trim()) {
@@ -168,7 +142,7 @@ export default function AddressSearchMap({ typeMarketer }) {
     <div className="lg:h-[60vh] flex flex-col bg-white rounded-[40px] lg:p-5 p-5">
       <div className="flex items-center lg:justify-between gap-2 mb-4">
         <div className="flex flex-row items-center text-[24px] font-bold justify-around">
-          {typeMarketer === "סוכן" ? (
+          {typeMarketer === "agent" ? (
             <span className="block">אזור פעילות</span>
           ) : brunches.length === 1 ? (
             <span className="block">כתובת חנות</span>
@@ -193,7 +167,7 @@ export default function AddressSearchMap({ typeMarketer }) {
           )}
         </div>
 
-        {typeMarketer === "חנות" && brunches.length > 1 && (
+        {typeMarketer === "store" && brunches.length > 1 && (
           <button
             onClick={handleEditBrunch}
             className="cursor-pointer p-1 hover:bg-gray-100 rounded-full"
@@ -205,7 +179,7 @@ export default function AddressSearchMap({ typeMarketer }) {
 
 
       <Typography className="text-[16px] font-medium mb-4">
-        {typeMarketer === "סוכן"
+        {typeMarketer === "agent"
           ? "אזור פעילות"
           : brunches.length > 1
             ? `כתובת חנות: ${brunchName}`
@@ -213,7 +187,7 @@ export default function AddressSearchMap({ typeMarketer }) {
       </Typography>
 
       <div className="flex-1 flex flex-col gap-4">
-        {typeMarketer === "סוכן" ? (
+        {typeMarketer === "agent" ? (
           <div className="relative w-full">
             <Autocomplete onLoad={handleLoad} onPlaceChanged={handlePlaceChanged}>
               <input
@@ -264,7 +238,7 @@ export default function AddressSearchMap({ typeMarketer }) {
           </GoogleMap>
         </div>
       </div>
-      {typeMarketer === "סוכן" && (
+      {typeMarketer === "agent" && (
         <div className="lg:hidden mt-4">
           <Carusel activeBrunch={activeBrunch} />
         </div>)}

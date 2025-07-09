@@ -121,7 +121,7 @@ const HoursOpen = ({ typeMarketer }) => {
     <div className="h-full w-full flex flex-col bg-white rounded-[40px] ">
       <div className="flex flex-row justify-between mb-4">
         <Typography className='text-2xl font-bold'>
-          {typeMarketer === "סוכן" ? "שעות זמינות  " : "שעות פתיחה "}
+          {typeMarketer === "agent" ? "שעות זמינות  " : "שעות פתיחה "}
         </Typography>
         <button
           onClick={() => setIsGrouped((prev) => !prev)}
