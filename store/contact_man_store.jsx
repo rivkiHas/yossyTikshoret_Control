@@ -10,7 +10,7 @@ const conectManSlice = createSlice({
                 contactManPhone: '',
                 contactManEmail: '',
                 brunch: '',
-                role: ''
+                role: 'seller'
             }],  
     },
     reducers: {

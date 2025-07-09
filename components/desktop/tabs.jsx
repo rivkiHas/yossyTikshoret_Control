@@ -37,7 +37,7 @@ export function Tabs({ className, ...props }) {
                     id: brunch.id,
                     type: 'branch',
                     title: ' סניף ' + (brunch.name || 'סניף'),
-                    brunchData: brunch
+                    //brunchData: brunch
                 });
             });
         }
@@ -127,7 +127,7 @@ export function Tabs({ className, ...props }) {
         }
 
         if (step.type === 'branch') {
-            return <StepTwo brunch={step.brunchData} />;
+            return <StepTwo brunch={activeStep - 2} />;
         }
 
         return null;

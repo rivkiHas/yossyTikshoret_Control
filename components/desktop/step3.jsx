@@ -14,7 +14,7 @@ import {
   isContactStepComplete,
   isBrunchStepComplete,
   isAllStepsComplete
-} from '@/store/selectors'; 
+} from '@/store/selectors';
 import { useFormikContext } from 'formik';
 
 export default function StepThree() {
@@ -41,8 +41,14 @@ export default function StepThree() {
         address: b.address,
         brunchName: b.name,
         hours_open: b.hoursOpen.map(day => ({
-          morning: [{ open: day.morning.open, close: day.morning.close }],
-          evening: [{ open: day.evening.open, close: day.evening.close }]
+          morning: {
+            open: day.morning.open,
+            close: day.morning.close
+          },
+          evening: {
+            open: day.evening.open,
+            close: day.evening.close
+          }
         }))
       })),
       contact: contactMans.map(c => ({
@@ -55,7 +61,7 @@ export default function StepThree() {
 
     try {
       const csrf = () => axios.get('/sanctum/csrf-cookie')
-      await csrf(); 
+      await csrf();
       const response = await axios.post(
         '/api/register',
         payload,
@@ -100,7 +106,7 @@ export default function StepThree() {
   };
 
   const nextStepInRedux = async () => {
-   
+
 
     if (activeStep === 2) {
 
@@ -173,7 +179,7 @@ export default function StepThree() {
 
         <div className="hidden lg:flex gap-4">
           <Button onClick={previousStepInRedux}
-                            className="cursor-pointer flex items-center bg-white text-black border border-[#F8BD00]  p-5 gap-3 rounded-full hover:bg-white hover:text-black hover:border-black"
+            className="cursor-pointer flex items-center bg-white text-black border border-[#F8BD00]  p-5 gap-3 rounded-full hover:bg-white hover:text-black hover:border-black"
           >
             <ArrowLongRightIcon />
             שלב קודם

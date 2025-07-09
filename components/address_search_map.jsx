@@ -129,14 +129,43 @@ export default function AddressSearchMap({ typeMarketer }) {
   };
 
   const handleAddBranch = () => {
-    if (!localInputValue.trim()) {
-      alert("אנא הכנס כתובת להוספה");
-      return;
-    }
-    dispatch(addBrunch({ address: localInputValue, name: localInputValue }));
-    console.log(`Triggering Redux action to add branch: ${localInputValue}`);
-    setLocalInputValue("");
+  if (!localInputValue.trim()) {
+    alert("אנא הכנס כתובת להוספה");
+    return;
+  }
+
+  const place = autocompleteRef.current?.getPlace?.();
+
+  if (!place || !place.geometry) {
+    alert("אנא בחר כתובת מהרשימה של גוגל (Autocomplete)");
+    return;
+  }
+
+  const newLocation = {
+    lat: place.geometry.location.lat(),
+    lng: place.geometry.location.lng(),
   };
+
+  const newId = Math.max(...brunches.map((b) => b.id), 0) + 1;
+
+  const newBrunch = {
+    id: newId,
+    address: place.formatted_address || localInputValue,
+    location: newLocation,
+    hoursOpen: [
+      { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
+      { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
+      { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
+      { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
+      { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
+    ],
+    name: place.formatted_address || localInputValue,
+  };
+
+  dispatch(addBrunch(newBrunch));
+  setLocalInputValue("");
+};
+
 
   return (
     <div className="lg:h-[60vh] flex flex-col bg-white rounded-[40px] lg:p-5 p-5">
@@ -197,7 +226,7 @@ export default function AddressSearchMap({ typeMarketer }) {
                 onChange={(e) => handleInputChange(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
-                    e.preventDefault(); // חשוב למנוע רפרוש
+                    e.preventDefault();
                     handleAddBranch();
                   }
                 }}

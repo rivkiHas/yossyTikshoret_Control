@@ -31,30 +31,25 @@ const brunchSlice = createSlice({
     reducers: {
         addBrunch: (state, action) => {
             state.brunches.push(action.payload);
-            
-
         },
         setActiveBrunch: (state, action) => {
             state.activeBrunch = action.payload;
-            console.log(action.payload);
-
+            console.log("active brunch", action.payload);
         },
         removeBrunch: (state, action) => {
             state.brunches = state.brunches.filter(brunch => brunch.id !== action.payload);
 
         },
         updateBrunchDetails: (state, action) => {
+            console.log("update brunch details", action.payload.id);
             const { id, address, hoursOpen, location, name, weekday } = action.payload;
             const brunch = state.brunches.find(b => b.id === id);
             if (!brunch) return;
-
             if (address !== undefined) brunch.address = address;
             if (location !== undefined) brunch.location = location;
             if (name !== undefined) brunch.name = name;
-
-
             if (hoursOpen) {
-                brunch.hoursOpen = hoursOpen; // מחליף את המערך כולו
+                brunch.hoursOpen = hoursOpen;
             }
 
         }

@@ -30,7 +30,7 @@ export default function StepTwo({ brunch: propBrunch }) {
             dispatch(setActiveBrunch(propBrunch.id));
 
         }
-    }, [propBrunch, activeBrunch, dispatch]);
+    }, [propBrunch, activeBrunch]);
 
     const [showDialog, setShowDialog] = useState(false);
     const [newBranchName, setNewBranchName] = useState('');
@@ -95,6 +95,7 @@ export default function StepTwo({ brunch: propBrunch }) {
                 { morning: { open: "", close: "" }, evening: { open: "", close: "" } }
             ],
         };
+
         dispatch(addBrunch(newBrunch));
         dispatch(setActiveBrunch(newId));
         const newBrunchIndex = brunches.length;

@@ -69,7 +69,7 @@ export default function BranchCarousel() {
 
 
     const handleSelect = (index) => {
-        dispatch(setActiveBrunch(index));
+        dispatch(setActiveBrunch(brunches[index].id));
     };
 
     return (
