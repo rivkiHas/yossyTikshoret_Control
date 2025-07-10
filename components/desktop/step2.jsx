@@ -23,13 +23,13 @@ export default function StepTwo({ brunch: propBrunch }) {
     const activeStep = useSelector((state) => state.stepper.activeStep)
     const activeBrunch = useSelector((state) => state.brunch.activeBrunch);
     const formik = useFormikContext();
+    const [forceValidate, setForceValidate] = useState(false);
 
     const brunch = propBrunch || brunches.find(b => b.id === activeBrunch);
 
     useEffect(() => {
         if (propBrunch && propBrunch.id && propBrunch.id !== activeBrunch) {
             dispatch(setActiveBrunch(propBrunch.id));
-
         }
     }, [propBrunch, activeBrunch]);
 
@@ -38,25 +38,28 @@ export default function StepTwo({ brunch: propBrunch }) {
 
 
     const nextStepInRedux = async () => {
-        const errors = await formik.validateForm();
-        console.log(Object.keys(errors), "errors in step2");
-        if (errors['branchSchema'] && errors['branchSchema'].length > 0) {
-            console.log("יש שדות חובה שלא מולאו:", errors);
-            return;
-        }
-
-        if (brunches.length === 1) {
-            dispatch(setActiveStep(activeStep + 1));
-        } else {
-            const currentBrunchIndex = brunches.findIndex(b => b.id === activeBrunch);
-            if (currentBrunchIndex < brunches.length - 1) {
-                const nextBrunch = brunches[currentBrunchIndex + 1];
-                dispatch(setActiveBrunch(nextBrunch.id));
-                dispatch(setActiveStep(2 + currentBrunchIndex + 1));
+       
+        formik.validateForm().then((errors) => {
+            console.log("Errors:", errors);
+            if (Object.keys(errors).length === 0) {
+                if (brunches.length === 1) {
+                    dispatch(setActiveStep(activeStep + 1));
+                } else {
+                    const currentBrunchIndex = brunches.findIndex(b => b.id === activeBrunch);
+                    if (currentBrunchIndex < brunches.length - 1) {
+                        const nextBrunch = brunches[currentBrunchIndex + 1];
+                        dispatch(setActiveBrunch(nextBrunch.id));
+                        dispatch(setActiveStep(2 + currentBrunchIndex + 1));
+                    } else {
+                        dispatch(setActiveStep(2 + brunches.length));
+                    }
+                }
             } else {
-                dispatch(setActiveStep(2 + brunches.length));
+                formik.setTouched(
+                    Object.keys(errors).reduce((acc, key) => ({ ...acc, [key]: true }), {})
+                );
             }
-        }
+        });
     };
 
 

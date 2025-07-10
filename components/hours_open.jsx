@@ -10,6 +10,8 @@ import { PlusCircleIcon, MinusCircleIcon } from "@heroicons/react/24/outline";
 import CustomTimeInput from './custom_time_input';
 import { useFormikContext } from 'formik';
 import { object } from 'yup';
+import TooltipValid from './tooltip_valid';
+
 
 const validateHours = (hoursData) => {
   const newErrors = {};
@@ -88,7 +90,7 @@ const HoursOpen = ({ typeMarketer }) => {
     let updatedHours = JSON.parse(JSON.stringify(localHoursOpen));
 
     if (!isGrouped && index === 1) {
-      const daysToUpdate = [0,1, 2, 3, 4, 5];
+      const daysToUpdate = [0, 1, 2, 3, 4, 5];
       daysToUpdate.forEach((dayIndex) => {
         if (!updatedHours[dayIndex]) updatedHours[dayIndex] = { morning: {}, evening: {} };
         if (!updatedHours[dayIndex][period]) updatedHours[dayIndex][period] = {};
@@ -104,12 +106,19 @@ const HoursOpen = ({ typeMarketer }) => {
     const validationErrors = validateHours(updatedHours);
     setErrors(validationErrors);
 
-    if (brunch && Object.keys(validationErrors).length === 0) {
-      dispatch(updateBrunchDetails({
-        id: brunch.id,
-        hoursOpen: updatedHours,
-      }));
-    }
+    // if (brunch && Object.keys(validationErrors).length === 0) {
+    //   formik.setFieldValue(`brunches[${index}].hoursOpen`, updatedHours);
+    //   dispatch(updateBrunchDetails({
+    //     id: brunch.id,
+    //     hoursOpen: updatedHours,
+    //   }));
+    // }
+    formik.setFieldValue(`brunches[${activeBrunch}].hoursOpen`, updatedHours);
+    dispatch(updateBrunchDetails({
+      id: brunch.id,
+      hoursOpen: updatedHours,
+    }));
+
   };
 
   const handleSwitchChange = (checked) => {
@@ -216,6 +225,18 @@ const DayRow = ({ day, label, hours, handleChange, errors, index, disabled, isFr
           <Typography className="text-[24px] font-bold text-[#F8BD00] mb-2 text-left">{label}</Typography>
           {isEveningVisible && <span className='text-sm text-black text-left'> בוקר</span>}
         </div>
+        {/* <div className='flex flex-col relative'>
+          <div className="flex items-center gap-2 relative">
+            <Typography className="text-[24px] font-bold text-[#F8BD00] mb-2 text-left">{label}</Typography>
+
+            {(errors?.morning?.open || errors?.morning?.close || errors?.evening?.open || errors?.evening?.close ||
+              (!hours?.morning?.open || !hours?.morning?.close)) && (
+                <TooltipValid tooltipText="נא למלא את כל השעות כראוי" />
+              )}
+          </div>
+          {isEveningVisible && <span className='text-sm text-black text-left'>בוקר</span>}
+        </div> */}
+
         <div className="flex flex-row-reverse items-center justify-start gap-5 rounded-xl">
           {!isFriday && (
             <button onClick={toggleEvening} disabled={disabled} className="group cursor-pointer outline-none hover:rotate-90 duration-300">

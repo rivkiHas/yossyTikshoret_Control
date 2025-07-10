@@ -23,12 +23,19 @@ export default function StepThree() {
   const [showErrorAlert, setShowErrorAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-
+    const formik = useFormikContext();
   const contactMans = useSelector(state => state.conectMan.contactMans || []);
   const activeStep = useSelector(state => state.stepper.activeStep);
   const [validators, setValidators] = useState({});
   const user = useSelector((state) => state.form.pertip);
   const brunches = useSelector((state) => state.brunch.brunches);
+  const salesMap = {
+    "קווי": 1,
+    "סלולרי": 2,
+    "רכבים": 3,
+  };
+  const resellerTypeIds = user.typeSales.map((sale) => salesMap[sale]);
+
 
   const sendDataToServer = async () => {
     const payload = {
@@ -37,7 +44,7 @@ export default function StepThree() {
       tax_id: user.id,
       phone: user.phone,
       type: user.typeMarketer,
-      reseller_type_id: user.resellerTypeId,
+      reseller_type_id: resellerTypeIds,
       brunches: brunches.map(b => ({
         address: b.address,
         brunchName: b.name,
@@ -71,7 +78,7 @@ export default function StepThree() {
         contactRole: c.contactRole
       }))
     };
-
+    console.log(payload, "payload");
 
     try {
       const csrf = () => axios.get('/sanctum/csrf-cookie')
@@ -120,27 +127,37 @@ export default function StepThree() {
   };
 
   const nextStepInRedux = async () => {
+  const errors = await formik.validateForm();
 
-
-    if (activeStep === 2) {
-
+  if (Object.keys(errors).length === 0) {
+    if (activeStep >= 2) {
       setIsLoading(true);
       try {
         await sendDataToServer();
         dispatch(nextStep());
         setShowAlert(true);
         console.log("הנתונים נשלחו בהצלחה!");
+        return null; 
       } catch (error) {
         console.error("שגיאה בשליחה לשרת:", error.message);
         setErrorMessage(error.message);
         setShowErrorAlert(true);
+        return { server: error.message };
       } finally {
         setIsLoading(false);
       }
     } else {
       dispatch(nextStep());
+      return null; 
     }
-  };
+  } else {
+    formik.setTouched(
+      Object.keys(errors).reduce((acc, key) => ({ ...acc, [key]: true }), {})
+    );
+    return errors; 
+  }
+};
+
 
   const previousStepInRedux = () => {
     dispatch(setActiveStep(activeStep - 1));

@@ -23,8 +23,8 @@ export function RegisterCard({ className, ...props }) {
     brunches: [
       {
         name: 'מספר סניף',
-        address: '',
-        location: { lat: '', lng: '' },
+        address: 'אדוריים, קרית גת, ישראל',
+        location: { lat: '31.609538', lng: '34.751944' },
         hoursOpen: [],
       }
     ],

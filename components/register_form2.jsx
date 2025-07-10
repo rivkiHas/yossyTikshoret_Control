@@ -72,7 +72,6 @@ export function RegisterForm2({ OkFunction, contactId, canDelete }) {
             placeholder="יש להזין מספר טלפון אישי"
             value={formik.values.contactMans?.[contactIndex]?.contactPhone || ""}
             onChange={(e) => {
-              //formik.handleChange(e);
               dispatch(setFormData({
                 name: "contactPhone",
                 value: e.target.value,

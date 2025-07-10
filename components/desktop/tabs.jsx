@@ -117,11 +117,9 @@ export function Tabs({ className, ...props }) {
         if (step.id === 'step1') {
             return <StepOne />;
         }
-
         if (step.id === 'step2') {
             return <StepTwo brunch={{}}  />;
         }
-
         if (step.id === 'step3') {
             return <StepThree  />;
         }
@@ -129,7 +127,6 @@ export function Tabs({ className, ...props }) {
         if (step.type === 'branch') {
             return <StepTwo brunch={activeStep - 2} />;
         }
-
         return null;
     }
 

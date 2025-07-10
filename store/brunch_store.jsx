@@ -4,10 +4,10 @@ const initialState = {
     brunches: [
         {
             id: 0,
-            address: "ינאי",
+            address: "אדוריים, קרית גת, ישראל",
             location: {
-                lat: 32.0853,
-                lng: 34.7818
+                lat: 31.609538,
+                lng: 34.751944
             },
             hoursOpen: [
                 { morning: { open: "", close: "" }, evening: { open: "", close: "" } },

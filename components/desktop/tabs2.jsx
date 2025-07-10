@@ -50,7 +50,12 @@ export function Tabs2() {
   const brunches = useSelector((state) => state.brunch.brunches);
   const typeMarketer = useSelector((state) => state.form.pertip.typeMarketer)
   const activeBrunch = useSelector((state) => state.brunch.activeBrunch);
-
+const salesMap = {
+    "קווי": 1,
+    "סלולרי": 2,
+    "רכבים": 3,
+  };
+  const resellerTypeIds = user.typeSales.map((sale) => salesMap[sale]);
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -115,27 +120,41 @@ export function Tabs2() {
       tax_id: user.id,
       phone: user.phone,
       type: user.typeMarketer,
+      reseller_type_id: resellerTypeIds,
       brunches: brunches.map(b => ({
         address: b.address,
         brunchName: b.name,
         hours_open: b.hoursOpen.map(day => ({
           morning: {
-            open: day.morning.open,
-            close: day.morning.close
+            open: {
+              open: day.morning.open,
+              close: day.morning.close
+            },
+            close: {
+              open: "00:00",
+              close: "00:00"
+            }
           },
           evening: {
-            open: day.evening.open,
-            close: day.evening.close
+            open: {
+              open: day.evening.open,
+              close: day.evening.close
+            },
+            close: {
+              open: "00:00",
+              close: "00:00"
+            }
           }
         }))
       })),
       contact: contactMans.map(c => ({
-        contactName: c.name,
-        contactPhone: c.phone,
-        contactEmail: c.email,
-        contactRole: c.role
+        contactName: c.contactName,
+        contactPhone: c.contactPhone,
+        contactEmail: c.contactEmail,
+        contactRole: c.contactRole
       }))
     };
+    console.log(payload, "payload");
 
     try {
       const csrf = () => axios.get('/sanctum/csrf-cookie')
@@ -295,7 +314,7 @@ export function Tabs2() {
                       </button> */}
                       <button
                         onClick={() => {
-                          dispatch(setActiveBrunch(brunch.id)); 
+                          dispatch(setActiveBrunch(brunch.id));
                         }}
                         className={`w-5 h-5 rounded-full border-2 border-white transition-all duration-200
     ${activeBrunch === brunch.id ? 'bg-white border-white shadow-md max-w-[190px] pb-6' : 'bg-white p-3'}`}
