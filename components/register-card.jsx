@@ -22,7 +22,7 @@ export function RegisterCard({ className, ...props }) {
     logo: null,
     brunches: [
       {
-        name: '',
+        name: 'מספר סניף',
         address: '',
         location: { lat: '', lng: '' },
         hoursOpen: [],
@@ -30,10 +30,10 @@ export function RegisterCard({ className, ...props }) {
     ],
     contactMans: [
       {
-        name: '',
-        phone: '',
-        email: '',
-        role: ''
+        contactName: '',
+        contactPhone: '',
+        contactEmail: '',
+        contactRole: 'seller'
       }
     ],
   };
@@ -58,7 +58,7 @@ export function RegisterCard({ className, ...props }) {
           contactMans: stepThreeSchema,
         });
       default:
-        return Yup.object(); // בלי ולידציה
+        return Yup.object(); 
     }
   };
 

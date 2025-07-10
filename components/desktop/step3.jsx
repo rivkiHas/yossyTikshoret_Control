@@ -37,27 +37,41 @@ export default function StepThree() {
       tax_id: user.id,
       phone: user.phone,
       type: user.typeMarketer,
+      reseller_type_id: user.resellerTypeId,
       brunches: brunches.map(b => ({
         address: b.address,
         brunchName: b.name,
         hours_open: b.hoursOpen.map(day => ({
           morning: {
-            open: day.morning.open,
-            close: day.morning.close
+            open: {
+              open: day.morning.open,
+              close: day.morning.close
+            },
+            close: {
+              open: "00:00",
+              close: "00:00"
+            }
           },
           evening: {
-            open: day.evening.open,
-            close: day.evening.close
+            open: {
+              open: day.evening.open,
+              close: day.evening.close
+            },
+            close: {
+              open: "00:00",
+              close: "00:00"
+            }
           }
         }))
       })),
       contact: contactMans.map(c => ({
-        contactName: c.name,
-        contactPhone: c.phone,
-        contactEmail: c.email,
-        contactRole: c.role
+        contactName: c.contactName,
+        contactPhone: c.contactPhone,
+        contactEmail: c.contactEmail,
+        contactRole: c.contactRole
       }))
     };
+
 
     try {
       const csrf = () => axios.get('/sanctum/csrf-cookie')

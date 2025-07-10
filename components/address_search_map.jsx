@@ -8,6 +8,7 @@ import { Typography } from "./typhography";
 import { MagnifyingGlassIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 import Carusel from "./carusel";
 import { addBrunch } from "../store/brunch_store";
+import { useFormikContext } from 'formik';
 
 
 const containerStyle = {
@@ -35,7 +36,7 @@ const customMarkerIcon = {
 export default function AddressSearchMap({ typeMarketer }) {
   const dispatch = useDispatch();
   const autocompleteRef = useRef(null);
-
+  const formik = useFormikContext();
   const brunches = useSelector((state) => state.brunch.brunches);
   const activeBrunch = useSelector((state) => state.brunch.activeBrunch);
   const brunch = brunches.find((b) => b.id === activeBrunch) || brunches[0];
@@ -49,7 +50,6 @@ export default function AddressSearchMap({ typeMarketer }) {
     brunch?.name?.trim() !== ""
       ? brunch.name
       : `${brunches.findIndex((b) => b.id === activeBrunch) + 1}`;
-
   const [brunchName, setBrunchName] = useState(defaultBrunchName);
 
   useEffect(() => {
@@ -70,6 +70,8 @@ export default function AddressSearchMap({ typeMarketer }) {
               lng: results[0].geometry.location.lng(),
             };
             if (!location || newLocation.lat !== location.lat || newLocation.lng !== location.lng) {
+              console.log(newLocation, "newLocation");
+              formik.setFieldValue(`brunches[${activeBrunch}].location`, newLocation);
               dispatch(
                 updateBrunchDetails({
                   id: activeBrunch,
@@ -98,6 +100,7 @@ export default function AddressSearchMap({ typeMarketer }) {
 
   const handleSaveBrunch = () => {
     setIsEditing(false);
+    formik.setFieldValue(`brunches[${activeBrunch}].name`, brunchName);
     dispatch(
       updateBrunchDetails({
         id: brunch.id,
@@ -115,6 +118,8 @@ export default function AddressSearchMap({ typeMarketer }) {
           lng: place.geometry.location.lng(),
         };
         if (typeMarketer !== "agent") {
+          formik.setFieldValue(`brunches[${activeBrunch}].location`, newLocation);
+          formik.setFieldValue(`brunches[${activeBrunch}].address`, place.formatted_address);
           dispatch(
             updateBrunchDetails({
               id: brunch.id,
@@ -129,42 +134,40 @@ export default function AddressSearchMap({ typeMarketer }) {
   };
 
   const handleAddBranch = () => {
-  if (!localInputValue.trim()) {
-    alert("אנא הכנס כתובת להוספה");
-    return;
-  }
+    if (!localInputValue.trim()) {
+      alert("אנא הכנס כתובת להוספה");
+      return;
+    }
 
-  const place = autocompleteRef.current?.getPlace?.();
+    const place = autocompleteRef.current?.getPlace?.();
 
-  if (!place || !place.geometry) {
-    alert("אנא בחר כתובת מהרשימה של גוגל (Autocomplete)");
-    return;
-  }
+    if (!place || !place.geometry) {
+      alert("אנא בחר כתובת מהרשימה של גוגל (Autocomplete)");
+      return;
+    }
 
-  const newLocation = {
-    lat: place.geometry.location.lat(),
-    lng: place.geometry.location.lng(),
+    const newLocation = {
+      lat: place.geometry.location.lat(),
+      lng: place.geometry.location.lng(),
+    };
+
+    const newId = Math.max(...brunches.map((b) => b.id), 0) + 1;
+
+    const newBrunch = {
+      id: newId,
+      address: place.formatted_address || localInputValue,
+      location: newLocation,
+      hoursOpen: [
+        { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
+        { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
+        { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
+        { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
+        { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
+      ],
+      name: place.formatted_address || localInputValue,
+    };
+        setLocalInputValue("");
   };
-
-  const newId = Math.max(...brunches.map((b) => b.id), 0) + 1;
-
-  const newBrunch = {
-    id: newId,
-    address: place.formatted_address || localInputValue,
-    location: newLocation,
-    hoursOpen: [
-      { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
-      { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
-      { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
-      { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
-      { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
-    ],
-    name: place.formatted_address || localInputValue,
-  };
-
-  dispatch(addBrunch(newBrunch));
-  setLocalInputValue("");
-};
 
 
   return (

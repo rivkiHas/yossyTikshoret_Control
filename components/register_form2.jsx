@@ -9,7 +9,7 @@ import IconButton from "./icon_button";
 import TooltipValid from "./tooltip_valid";
 import { addContactMan, deleteContactMan } from "@/store/contact_man_store";
 import { Button } from "./ui/button";
-import { PlusCircleIcon} from '@heroicons/react/24/outline'
+import { PlusCircleIcon } from '@heroicons/react/24/outline'
 import {
   Select,
   SelectContent,
@@ -17,11 +17,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { setFormData } from "../store/contact_man_store";
 
 export function RegisterForm2({ OkFunction, contactId, canDelete }) {
   const dispatch = useDispatch();
   const formik = useFormikContext();
-
   const contactMans = useSelector((state) => state.conectMan.contactMans || []);
   const brunches = useSelector((state) => state.brunch.brunches || []);
   const contactIndex = contactMans.findIndex((c) => c.id === contactId);
@@ -46,45 +46,67 @@ export function RegisterForm2({ OkFunction, contactId, canDelete }) {
         <div className="relative">
           <label className="block mb-1">שם מלא</label>
           <Input
-            name={`contactMans.${contactIndex}.name`}
+            name={`contactMans.${contactIndex}.contactName`}
             placeholder="יש להזין שם מלא"
-            value={formik.values.contactMans?.[contactIndex]?.name || ""}
-            onChange={formik.handleChange}
+            value={formik.values.contactMans?.[contactIndex]?.contactName || ""}
+            onChange={(e) => {
+              dispatch(setFormData({
+                name: "contactName",
+                value: e.target.value,
+                contactId: contactId
+              }));
+              formik.setFieldValue(`contactMans.${contactIndex}.contactName`, e.target.value);
+            }}
             onBlur={formik.handleBlur}
           />
-          {formik.touched.contactMans?.[contactIndex]?.name &&
-            formik.errors.contactMans?.[contactIndex]?.name && (
-              <TooltipValid tooltipText={formik.errors.contactMans[contactIndex].name} />
+          {formik.touched.contactMans?.[contactIndex]?.contactName &&
+            formik.errors.contactMans?.[contactIndex]?.contactName && (
+              <TooltipValid tooltipText={formik.errors.contactMans[contactIndex].contactName} />
             )}
         </div>
 
         <div className="relative">
           <label className="block mb-1">טלפון אישי</label>
           <Input
-            name={`contactMans.${contactIndex}.phone`}
+            name={`contactMans.${contactIndex}.contactPhone`}
             placeholder="יש להזין מספר טלפון אישי"
-            value={formik.values.contactMans?.[contactIndex]?.phone || ""}
-            onChange={formik.handleChange}
+            value={formik.values.contactMans?.[contactIndex]?.contactPhone || ""}
+            onChange={(e) => {
+              //formik.handleChange(e);
+              dispatch(setFormData({
+                name: "contactPhone",
+                value: e.target.value,
+                contactId: contactId
+              }));
+              formik.setFieldValue(`contactMans.${contactIndex}.contactPhone`, e.target.value);
+            }}
             onBlur={formik.handleBlur}
           />
-          {formik.touched.contactMans?.[contactIndex]?.phone &&
-            formik.errors.contactMans?.[contactIndex]?.phone && (
-              <TooltipValid tooltipText={formik.errors.contactMans[contactIndex].phone} />
+          {formik.touched.contactMans?.[contactIndex]?.contactPhone &&
+            formik.errors.contactMans?.[contactIndex]?.contactPhone && (
+              <TooltipValid tooltipText={formik.errors.contactMans[contactIndex].contactPhone} />
             )}
         </div>
 
         <div className="relative">
           <label className="block mb-1">אימייל אישי</label>
           <Input
-            name={`contactMans.${contactIndex}.email`}
+            name={`contactMans.${contactIndex}.contactEmail`}
             placeholder="יש להזין אימייל אישי"
-            value={formik.values.contactMans?.[contactIndex]?.email || ""}
-            onChange={formik.handleChange}
+            value={formik.values.contactMans?.[contactIndex]?.contactEmail || ""}
+            onChange={(e) => {
+              dispatch(setFormData({
+                name: "contactEmail",
+                value: e.target.value,
+                contactId: contactId
+              }));
+              formik.setFieldValue(`contactMans.${contactIndex}.contactEmail`, e.target.value);
+            }}
             onBlur={formik.handleBlur}
           />
-          {formik.touched.contactMans?.[contactIndex]?.email &&
-            formik.errors.contactMans?.[contactIndex]?.email && (
-              <TooltipValid tooltipText={formik.errors.contactMans[contactIndex].email} />
+          {formik.touched.contactMans?.[contactIndex]?.contactEmail &&
+            formik.errors.contactMans?.[contactIndex]?.contactEmail && (
+              <TooltipValid tooltipText={formik.errors.contactMans[contactIndex].contactEmail} />
             )}
         </div>
 
@@ -94,9 +116,15 @@ export function RegisterForm2({ OkFunction, contactId, canDelete }) {
               <label className="block mb-1">סניף</label>
               <Select
                 value={formik.values.contactMans?.[contactIndex]?.brunchId || ""}
-                onValueChange={(val) =>
-                  formik.setFieldValue(`contactMans.${contactIndex}.brunchId`, val)
-                }
+                onValueChange={(val) => {
+                  formik.setFieldValue(`contactMans.${contactIndex}.brunchId`, val);
+                  dispatch(setFormData({
+                    name: "contactBrunchId",
+                    value: val,
+                    contactId: contactId
+                  }));
+
+                }}
               >
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="בחר סניף" />
@@ -114,10 +142,15 @@ export function RegisterForm2({ OkFunction, contactId, canDelete }) {
             <div>
               <label className="block mb-1">תפקיד</label>
               <Select
-                value={formik.values.contactMans?.[contactIndex]?.role || ""}
-                onValueChange={(val) =>
-                  formik.setFieldValue(`contactMans.${contactIndex}.role`, val)
-                }
+                value={formik.values.contactMans?.[contactIndex]?.contactRole || ""}
+                onValueChange={(val) => {
+                  formik.setFieldValue(`contactMans.${contactIndex}.contactRole`, val);
+                  dispatch(setFormData({
+                    name: "contactRole",
+                    value: val,
+                    contactId: contactId
+                  }));
+                }}
               >
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="בחר תפקיד" />
@@ -132,11 +165,11 @@ export function RegisterForm2({ OkFunction, contactId, canDelete }) {
         )}
       </div>
       <div className=" lg:hidden ">
-      <Button onClick={addContactManHandler}
-        className="w-full cursor-pointer bg-black border hover:bg-white hover:text-black hover:border-black text-white p-5 gap-2 rounded-full">
-        <PlusCircleIcon />
-        הוספת איש קשר נוסף
-      </Button>
+        <Button onClick={addContactManHandler}
+          className="w-full cursor-pointer bg-black border hover:bg-white hover:text-black hover:border-black text-white p-5 gap-2 rounded-full">
+          <PlusCircleIcon />
+          הוספת איש קשר נוסף
+        </Button>
       </div>
     </div>
   );

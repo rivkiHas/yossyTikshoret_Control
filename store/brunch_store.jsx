@@ -42,7 +42,7 @@ const brunchSlice = createSlice({
         },
         updateBrunchDetails: (state, action) => {
             console.log("update brunch details", action.payload.id);
-            const { id, address, hoursOpen, location, name, weekday } = action.payload;
+            const { id, address, hoursOpen, location, name} = action.payload;
             const brunch = state.brunches.find(b => b.id === id);
             if (!brunch) return;
             if (address !== undefined) brunch.address = address;

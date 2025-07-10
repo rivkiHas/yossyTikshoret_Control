@@ -88,7 +88,7 @@ const HoursOpen = ({ typeMarketer }) => {
     let updatedHours = JSON.parse(JSON.stringify(localHoursOpen));
 
     if (!isGrouped && index === 1) {
-      const daysToUpdate = [1, 2, 3, 4, 5];
+      const daysToUpdate = [0,1, 2, 3, 4, 5];
       daysToUpdate.forEach((dayIndex) => {
         if (!updatedHours[dayIndex]) updatedHours[dayIndex] = { morning: {}, evening: {} };
         if (!updatedHours[dayIndex][period]) updatedHours[dayIndex][period] = {};
@@ -105,7 +105,6 @@ const HoursOpen = ({ typeMarketer }) => {
     setErrors(validationErrors);
 
     if (brunch && Object.keys(validationErrors).length === 0) {
-      // formik.handleChange(object.key)
       dispatch(updateBrunchDetails({
         id: brunch.id,
         hoursOpen: updatedHours,

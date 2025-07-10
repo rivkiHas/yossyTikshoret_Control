@@ -33,11 +33,9 @@ const handleNextStep = () => {
   formik.validateForm().then((errors) => {
     if (Object.keys(errors).length === 0) {
       const { logo, ...rest } = formik.values;
-
-      // שומרים רק את הנתונים הסידוריים ב־Redux
       dispatch(setFormData({
         ...rest,
-        logo: logo?.name || "" // או כתובת זמנית אם את יוצרת URL
+        logo: logo?.name || "" 
       }));
 
       dispatch(setActiveStep(activeStep + 1));

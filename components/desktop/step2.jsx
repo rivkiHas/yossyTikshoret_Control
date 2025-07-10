@@ -13,6 +13,7 @@ import { useState, useEffect } from 'react';
 import { AlertDialogEdit } from '../alert_dialog_edit'
 import Carusel from "../carusel";
 import { useFormikContext } from 'formik';
+import { object } from 'yup';
 
 
 export default function StepTwo({ brunch: propBrunch }) {
@@ -38,7 +39,8 @@ export default function StepTwo({ brunch: propBrunch }) {
 
     const nextStepInRedux = async () => {
         const errors = await formik.validateForm();
-        if (Object.keys(errors).length > 0) {
+        console.log(Object.keys(errors), "errors in step2");
+        if (errors['branchSchema'] && errors['branchSchema'].length > 0) {
             console.log("יש שדות חובה שלא מולאו:", errors);
             return;
         }

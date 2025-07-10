@@ -6,11 +6,11 @@ const conectManSlice = createSlice({
         contactMans:
             [{
                 id: 1,
-                contactManName: '',
-                contactManPhone: '',
-                contactManEmail: '',
+                contactName: '',
+                contactPhone: '',
+                contactEmail: '',
                 brunch: '',
-                role: 'seller'
+                contactRole: 'seller'
             }],  
     },
     reducers: {
@@ -26,11 +26,11 @@ const conectManSlice = createSlice({
             const newId = state.contactMans.length > 0 ? state.contactMans[state.contactMans.length - 1].id + 1 : 1; 
             state.contactMans.push({
                 id: newId,
-                contactManName: '',
-                contactManPhone: '',
-                contactManEmail: '',
+                contactName: '',
+                contactPhone: '',
+                contactEmail: '',
                 brunch: '',
-                role: '',   
+                contactRole: '',   
             });
         },
 

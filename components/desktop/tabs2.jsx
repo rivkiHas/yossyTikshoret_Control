@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import axios from '@/lib/axios'
 import StepOne from './step1';
 import StepTwo from './step2';
 import StepThree from './step3';
@@ -6,7 +8,8 @@ import { BuildingStorefrontIcon, MapPinIcon, UserCircleIcon } from '@heroicons/r
 import { motion, AnimatePresence } from "framer-motion";
 import { useFormikContext } from 'formik';
 import { validateBrunch, validatePertip, validateContact } from '@/store/validation';
-
+import { setActiveBrunch } from '@/store/brunch_store'
+import { setActiveStep } from '@/store/step_store'
 
 const stepsData = [
   {
@@ -36,47 +39,51 @@ const stepsData = [
 ];
 
 export function Tabs2() {
-  
+
   const [activeStep, setActiveStep] = useState(1);
   const [isCompleted, setIsCompleted] = useState(false);
   const sectionRefs = useRef([]);
   const [openedStep, setOpenedStep] = useState(null);
   const formik = useFormikContext();
+  const contactMans = useSelector(state => state.conectMan.contactMans || []);
+  const user = useSelector((state) => state.form.pertip);
+  const brunches = useSelector((state) => state.brunch.brunches);
+  const typeMarketer = useSelector((state) => state.form.pertip.typeMarketer)
+  const activeBrunch = useSelector((state) => state.brunch.activeBrunch);
 
-useEffect(() => {
-  const observerOptions = {
-    root: null,
-    rootMargin: '0px 0px -60% 0px',
-    threshold: 0,
-  };
+  const dispatch = useDispatch()
 
-  const observerCallback = (entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const stepId = parseInt(entry.target.dataset.stepId, 10);
-        setActiveStep(stepId);
-        if (stepId === 3) {
-          setIsCompleted(true);
-         }
-         // else {
-        //   setIsCompleted(false); // אם חזר אחורה - לבטל
-        // }
-      }
-    });
-  };
+  useEffect(() => {
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px 0px -60% 0px',
+      threshold: 0,
+    };
 
-  const observer = new IntersectionObserver(observerCallback, observerOptions);
-  const refs = sectionRefs.current;
-  refs.forEach(ref => {
-    if (ref) observer.observe(ref);
-  });
+    const observerCallback = (entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const stepId = parseInt(entry.target.dataset.stepId, 10);
+          setActiveStep(stepId);
+          if (stepId === 3) {
+            setIsCompleted(true);
+          }
+        }
+      });
+    };
 
-  return () => {
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+    const refs = sectionRefs.current;
     refs.forEach(ref => {
-      if (ref) observer.unobserve(ref);
+      if (ref) observer.observe(ref);
     });
-  };
-}, []);
+
+    return () => {
+      refs.forEach(ref => {
+        if (ref) observer.unobserve(ref);
+      });
+    };
+  }, []);
 
   useEffect(() => {
     const noErrors = Object.keys(formik.errors).length === 0;
@@ -101,8 +108,79 @@ useEffect(() => {
     document.getElementById(step.targetId)?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const submitForm = () => {
-    alert("הטופס נשלח!");
+  const submitForm = async () => {
+    const payload = {
+      business_name: user.name,
+      email: user.email,
+      tax_id: user.id,
+      phone: user.phone,
+      type: user.typeMarketer,
+      brunches: brunches.map(b => ({
+        address: b.address,
+        brunchName: b.name,
+        hours_open: b.hoursOpen.map(day => ({
+          morning: {
+            open: day.morning.open,
+            close: day.morning.close
+          },
+          evening: {
+            open: day.evening.open,
+            close: day.evening.close
+          }
+        }))
+      })),
+      contact: contactMans.map(c => ({
+        contactName: c.name,
+        contactPhone: c.phone,
+        contactEmail: c.email,
+        contactRole: c.role
+      }))
+    };
+
+    try {
+      const csrf = () => axios.get('/sanctum/csrf-cookie')
+      await csrf();
+      const response = await axios.post(
+        '/api/register',
+        payload,
+      );
+      return response.data;
+    } catch (error) {
+      let errorMsg = 'שגיאה בשליחת הנתונים לשרת';
+
+      if (error.response) {
+        const status = error.response.status;
+        const data = error.response.data;
+
+        switch (status) {
+          case 400:
+            errorMsg = data.message || 'נתונים לא תקינים';
+            break;
+          case 401:
+            errorMsg = 'שגיאת הרשאה - אנא התחבר מחדש';
+            break;
+          case 422:
+            if (data.errors) {
+              const serverErrors = Object.values(data.errors).flat();
+              errorMsg = serverErrors.join(', ');
+            } else {
+              errorMsg = data.message || 'שגיאת תקינות נתונים';
+            }
+            break;
+          case 500:
+            errorMsg = 'שגיאת שרת פנימית - אנא נסה שוב מאוחר יותר';
+            break;
+          default:
+            errorMsg = data.message || `שגיאה ${status}`;
+        }
+      } else if (error.request) {
+        errorMsg = 'שגיאת חיבור לשרת - אנא בדק את החיבור לאינטרנט';
+      } else {
+        errorMsg = error.message || 'שגיאה לא צפויה';
+      }
+
+      throw new Error(errorMsg);
+    }
   };
 
   return (
@@ -136,7 +214,10 @@ useEffect(() => {
         <div className="flex flex-col gap-0 m-0 p-0">
 
           <div id="step-one" ref={el => sectionRefs.current[0] = el} data-step-id="1"><StepOne /></div>
-          <div id="step-two" ref={el => sectionRefs.current[1] = el} data-step-id="2"><StepTwo /></div>
+          <div id="step-two" ref={el => sectionRefs.current[1] = el} data-step-id="2">
+            {console.log("Rendering StepTwo, activeBrunch =", activeBrunch)}
+            <StepTwo activeBrunch={activeBrunch} /></div>
+
           <div id="step-three" ref={el => sectionRefs.current[2] = el} data-step-id="3">
             <StepThree />
           </div>
@@ -166,13 +247,12 @@ useEffect(() => {
             </div>
           ) : (
             <div className='flex flex-col items-center w-full bg-yellow-400 justify-between rounded-[40px] mx-auto p-3 shadow-lg'>
-              <div className="flex justify-between items-center w-full ">
+              <div className="flex justify-between items-center w-full">
                 {stepsData.map(step => {
                   const Icon = step.icon;
                   return (
                     <div key={step.id}>
                       <button
-                        key={step.id}
                         onClick={() => handleStepClick(step)}
                         className="flex items-center justify-center transition-all duration-300 ease-in-out"
                       >
@@ -192,13 +272,44 @@ useEffect(() => {
                           </div>
                         )}
                       </button>
-
                     </div>
                   );
                 })}
               </div>
+
+              {typeMarketer === "store" && activeStep === 2 && brunches.length > 1 && (
+                <div className="flex gap-3 mt-4 justify-center items-center w-full">
+                  {brunches.map((brunch, index) => (
+                    <div key={brunch.id} className="flex items-center gap-2">
+                      {/* <button
+                        onClick={() => {
+                          setActiveBrunch(brunch.id);
+                          dispatch(setActiveBrunch(brunch.id));
+                        }}
+                        className={`w-5 h-5 rounded-full border-2 transition-all duration-200
+                          ${activeBrunch === brunch.id ? 'bg-white border-white shadow-md w-[180px]' : 'bg-white opacity-50'}`}
+                      >
+                        {activeBrunch === brunch.id && (
+                          <span className="text-xs text-black">{brunch.name + ' סניף' || 'סניף'}</span>
+                        )}
+                      </button> */}
+                      <button
+                        onClick={() => {
+                          dispatch(setActiveBrunch(brunch.id)); 
+                        }}
+                        className={`w-5 h-5 rounded-full border-2 border-white transition-all duration-200
+    ${activeBrunch === brunch.id ? 'bg-white border-white shadow-md max-w-[190px] pb-6' : 'bg-white p-3'}`}
+                      >
+                        {activeBrunch === brunch.id && (
+                          <span className="text-xs text-black ">{' כתובת ושעות סניף ' + brunch.name || 'סניף'}</span>
+                        )}
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
               {openedStep && (
-                <p className="text-black text-sm font-medium leading-relaxed w-5/6 bg-yellow-400 p-3">
+                <p className="text-black text-sm font-medium leading-relaxed w-full bg-yellow-400 p-3">
                   להצטרפות כמשווק רשמי בחברת 'יוסי תקשורת', יש למלא את פרטי העסק שלך.
                   המידע יסייע לנו להעניק לך את הכלים והמשאבים להצלחה מירבית.
                 </p>
