@@ -23,12 +23,12 @@ export default function StepThree() {
   const [showErrorAlert, setShowErrorAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-    const formik = useFormikContext();
-  const contactMans = useSelector(state => state.conectMan.contactMans || []);
+  const formik = useFormikContext();
   const activeStep = useSelector(state => state.stepper.activeStep);
   const [validators, setValidators] = useState({});
   const user = useSelector((state) => state.form.pertip);
   const brunches = useSelector((state) => state.brunch.brunches);
+  const contactMans = useSelector(state => state.conectMan.contactMans || []);
   const salesMap = {
     "קווי": 1,
     "סלולרי": 2,
@@ -53,21 +53,14 @@ export default function StepThree() {
             open: {
               open: day.morning.open,
               close: day.morning.close
-            },
-            close: {
-              open: "00:00",
-              close: "00:00"
             }
           },
           evening: {
             open: {
               open: day.evening.open,
               close: day.evening.close
-            },
-            close: {
-              open: "00:00",
-              close: "00:00"
             }
+
           }
         }))
       })),
@@ -127,36 +120,36 @@ export default function StepThree() {
   };
 
   const nextStepInRedux = async () => {
-  const errors = await formik.validateForm();
+    const errors = await formik.validateForm();
 
-  if (Object.keys(errors).length === 0) {
-    if (activeStep >= 2) {
-      setIsLoading(true);
-      try {
-        await sendDataToServer();
+    if (Object.keys(errors).length === 0) {
+      if (activeStep >= 2) {
+        setIsLoading(true);
+        try {
+          await sendDataToServer();
+          dispatch(nextStep());
+          setShowAlert(true);
+          console.log("הנתונים נשלחו בהצלחה!");
+          return null;
+        } catch (error) {
+          console.error("שגיאה בשליחה לשרת:", error.message);
+          setErrorMessage(error.message);
+          setShowErrorAlert(true);
+          return { server: error.message };
+        } finally {
+          setIsLoading(false);
+        }
+      } else {
         dispatch(nextStep());
-        setShowAlert(true);
-        console.log("הנתונים נשלחו בהצלחה!");
-        return null; 
-      } catch (error) {
-        console.error("שגיאה בשליחה לשרת:", error.message);
-        setErrorMessage(error.message);
-        setShowErrorAlert(true);
-        return { server: error.message };
-      } finally {
-        setIsLoading(false);
+        return null;
       }
     } else {
-      dispatch(nextStep());
-      return null; 
+      formik.setTouched(
+        Object.keys(errors).reduce((acc, key) => ({ ...acc, [key]: true }), {})
+      );
+      return errors;
     }
-  } else {
-    formik.setTouched(
-      Object.keys(errors).reduce((acc, key) => ({ ...acc, [key]: true }), {})
-    );
-    return errors; 
-  }
-};
+  };
 
 
   const previousStepInRedux = () => {

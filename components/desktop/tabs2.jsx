@@ -5,11 +5,8 @@ import StepOne from './step1';
 import StepTwo from './step2';
 import StepThree from './step3';
 import { BuildingStorefrontIcon, MapPinIcon, UserCircleIcon } from '@heroicons/react/24/outline';
-import { motion, AnimatePresence } from "framer-motion";
 import { useFormikContext } from 'formik';
-import { validateBrunch, validatePertip, validateContact } from '@/store/validation';
 import { setActiveBrunch } from '@/store/brunch_store'
-import { setActiveStep } from '@/store/step_store'
 
 const stepsData = [
   {
@@ -126,21 +123,14 @@ export function Tabs2() {
             open: {
               open: day.morning.open,
               close: day.morning.close
-            },
-            close: {
-              open: "00:00",
-              close: "00:00"
             }
           },
           evening: {
             open: {
               open: day.evening.open,
               close: day.evening.close
-            },
-            close: {
-              open: "00:00",
-              close: "00:00"
             }
+
           }
         }))
       })),
@@ -239,12 +229,11 @@ export function Tabs2() {
         </div>
 
 
-        <div className="fixed bottom-[calc(theme('spacing.6')+90px)] left-0 right-0 h-20
+        <div className="fixed bottom-[calc(theme('spacing.6')+90px)] left-1 right-1 h-10
             rounded-t-[58px]
             bg-gradient-to-t from-[rgba(255,255,255,0.50)] via-[rgba(255,255,255,0.25)] to-[rgba(255,255,255,0.00)]
             backdrop-blur-[2.2px] z-5">
         </div>
-
 
         <div className="fixed bottom-6 left-6 right-6 flex z-10"> 
           {isCompleted ? (

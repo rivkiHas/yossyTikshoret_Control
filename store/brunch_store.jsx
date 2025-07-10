@@ -10,11 +10,13 @@ const initialState = {
                 lng: 34.751944
             },
             hoursOpen: [
-                { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
-                { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
-                { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
-                { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
-                { morning: { open: "", close: "" }, evening: { open: "", close: "" } }
+                { morning: { open: "00:00", close: "00:00" }, evening: { open: "00:00", close: "00:00" } },
+                { morning: { open: "00:00", close: "00:00" }, evening: { open: "00:00", close: "00:00" } },
+                { morning: { open: "00:00", close: "00:00" }, evening: { open: "00:00", close: "00:00" } },
+                { morning: { open: "00:00", close: "00:00" }, evening: { open: "00:00", close: "00:00" } },
+                { morning: { open: "00:00", close: "00:00" }, evening: { open: "00:00", close: "00:00" } },
+                { morning: { open: "00:00", close: "00:00" }, evening: { open: "00:00", close: "00:00" } },
+                { morning: { open: "00:00", close: "00:00" }, evening: { open: "00:00", close: "00:00" } }
             ],
             name: " מספר 01"
         }
