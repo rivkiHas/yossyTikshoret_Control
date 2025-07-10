@@ -121,7 +121,6 @@ export default function StepThree() {
 
   const nextStepInRedux = async () => {
     const errors = await formik.validateForm();
-
     if (Object.keys(errors).length === 0) {
       if (activeStep >= 2) {
         setIsLoading(true);
@@ -144,6 +143,7 @@ export default function StepThree() {
         return null;
       }
     } else {
+      
       formik.setTouched(
         Object.keys(errors).reduce((acc, key) => ({ ...acc, [key]: true }), {})
       );

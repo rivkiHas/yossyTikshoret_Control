@@ -38,9 +38,8 @@ export default function StepTwo({ brunch: propBrunch }) {
 
 
     const nextStepInRedux = async () => {
-       
         formik.validateForm().then((errors) => {
-            console.log("Errors:", errors);
+            console.log("Errors in StepTwo:", errors);
             if (Object.keys(errors).length === 0) {
                 if (brunches.length === 1) {
                     dispatch(setActiveStep(activeStep + 1));

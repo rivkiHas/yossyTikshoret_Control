@@ -38,6 +38,8 @@ export function Tabs2() {
   const [isCompleted, setIsCompleted] = useState(false);
   const sectionRefs = useRef([]);
   const [openedStep, setOpenedStep] = useState(null);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [showErrorAlert, setShowErrorAlert] = useState(false);
   const formik = useFormikContext();
   const contactMans = useSelector(state => state.conectMan.contactMans || []);
   const user = useSelector((state) => state.form.pertip);
@@ -107,7 +109,8 @@ export function Tabs2() {
     document.getElementById(step.targetId)?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const submitForm = async () => {
+  const sendDataToServer = async () => {
+
     const payload = {
       business_name: user.name,
       email: user.email,
@@ -189,6 +192,33 @@ export function Tabs2() {
     }
   };
 
+  const submitForm = async () => {
+    const errors = await formik.validateForm();
+    console.log(errors, "errors");
+    if (Object.keys(errors).length === 0) {
+      if (activeStep >= 2) {
+        try {
+          await sendDataToServer();
+          dispatch(nextStep());
+          setShowAlert(true);
+          console.log("הנתונים נשלחו בהצלחה!");
+          return null;
+        } catch (error) {
+          console.error("שגיאה בשליחה לשרת:", error.message);
+          setErrorMessage(error.message);
+          setShowErrorAlert(true);
+          return { server: error.message };
+        } finally {
+        }
+      }
+    } else {
+      formik.setTouched(
+        Object.keys(errors).reduce((acc, key) => ({ ...acc, [key]: true }), {})
+      );
+      return errors;
+    }
+  }
+
   return (
     <>
       <div className="fixed top-0 z-10 w-full flex flex-col items-center p-2 px-3 gap-4 flex-shrink-0 bg-[#F4F4F4]">
@@ -235,7 +265,7 @@ export function Tabs2() {
             backdrop-blur-[2.2px] z-5">
         </div>
 
-        <div className="fixed bottom-6 left-6 right-6 flex z-10"> 
+        <div className="fixed bottom-6 left-6 right-6 flex z-10">
           {isCompleted ? (
             <div className="flex w-full bg-yellow-400 rounded-[40px] h-[90px] mx-auto p-3 shadow-lg justify-between items-center" dir="rtl">
               <div className="flex items-center">

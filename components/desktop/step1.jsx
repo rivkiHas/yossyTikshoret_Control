@@ -17,18 +17,6 @@ export default function StepOne({ index }) {
   const user = useSelector((state) => state.form.pertip);
   const formik = useFormikContext();
 
-// const handleNextStep = () => {
-//   formik.validateForm().then((errors) => {
-//     if (Object.keys(errors).length === 0) {
-//       dispatch(setFormData(formik.values));
-//       dispatch(setActiveStep(activeStep + 1));
-//     } else {
-//       formik.setTouched(
-//         Object.keys(errors).reduce((acc, key) => ({ ...acc, [key]: true }), {})
-//       );
-//     }
-//   });
-// };
 const handleNextStep = () => {
   formik.validateForm().then((errors) => {
     if (Object.keys(errors).length === 0) {
