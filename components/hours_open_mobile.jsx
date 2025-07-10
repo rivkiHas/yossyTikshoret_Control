@@ -169,8 +169,9 @@ const HoursOpenMobile = ({ typeMarketer }) => {
 
       <div className="flex-1 relative">
         {isSwitchOn && (
-          <div className="absolute inset-0 bg-white/20 backdrop-blur-sm z-10" />
-        )}
+ <div className="absolute inset-0 z-10 
+            left-[30.16px] bottom-[0.989px] 
+            bg-white/30 backdrop-blur-xs" />        )}
         <div className="h-full lg:max-h-[400px] lg:overflow-y-auto lg:scrollbar-custom flex flex-col text-[22px] font-semibold text-[#F8BD00]">
           {!isGrouped ? (
             <DayRow

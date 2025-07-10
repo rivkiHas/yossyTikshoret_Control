@@ -163,7 +163,7 @@ export function RegisterForm2({ OkFunction, contactId, canDelete }) {
           </>
         )}
       </div>
-      <div className=" lg:hidden ">
+      <div className=" lg:hidden  ">
         <Button onClick={addContactManHandler}
           className="w-full cursor-pointer bg-black border hover:bg-white hover:text-black hover:border-black text-white p-5 gap-2 rounded-full">
           <PlusCircleIcon />

@@ -154,7 +154,9 @@ const HoursOpen = ({ typeMarketer }) => {
 
       <div className="flex-1 relative">
         {isSwitchOn && (
-          <div className="absolute inset-0 bg-white/0 backdrop-blur-sm z-10 shadow-[4px_4px_160.2px_0px_rgba(0,0,0,0.01)]" />
+          <div className="absolute inset-0 z-10 
+            left-[30.16px] bottom-[0.989px] 
+            bg-white/30 backdrop-blur-xs" />
         )}
 
         <div className="h-full lg:max-h-[400px] lg:overflow-y-auto lg:scrollbar-custom overflow-visible flex flex-col text-[22px] font-semibold text-[#F8BD00] ">
@@ -225,18 +227,6 @@ const DayRow = ({ day, label, hours, handleChange, errors, index, disabled, isFr
           <Typography className="text-[24px] font-bold text-[#F8BD00] mb-2 text-left">{label}</Typography>
           {isEveningVisible && <span className='text-sm text-black text-left'> בוקר</span>}
         </div>
-        {/* <div className='flex flex-col relative'>
-          <div className="flex items-center gap-2 relative">
-            <Typography className="text-[24px] font-bold text-[#F8BD00] mb-2 text-left">{label}</Typography>
-
-            {(errors?.morning?.open || errors?.morning?.close || errors?.evening?.open || errors?.evening?.close ||
-              (!hours?.morning?.open || !hours?.morning?.close)) && (
-                <TooltipValid tooltipText="נא למלא את כל השעות כראוי" />
-              )}
-          </div>
-          {isEveningVisible && <span className='text-sm text-black text-left'>בוקר</span>}
-        </div> */}
-
         <div className="flex flex-row-reverse items-center justify-start gap-5 rounded-xl">
           {!isFriday && (
             <button onClick={toggleEvening} disabled={disabled} className="group cursor-pointer outline-none hover:rotate-90 duration-300">
@@ -247,7 +237,6 @@ const DayRow = ({ day, label, hours, handleChange, errors, index, disabled, isFr
               )}
             </button>
           )}
-
           <div className={`flex flex-row gap-3 items-end ${isFriday ? 'ml-[60px]' : ''}`}>
             <div className="flex flex-col gap-1">
               <label className="text-sm text-black">שעת פתיחה</label>

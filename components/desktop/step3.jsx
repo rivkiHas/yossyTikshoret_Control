@@ -183,7 +183,7 @@ export default function StepThree() {
   };
 
   return (
-    <div className="flex flex-col gap-6 max-w-[1440px] lg:pb-0 p-5 pb-25 direction-rtl">
+    <div className="flex flex-col gap-6 max-w-[1440px] lg:pb-0 p-5 pb-35 direction-rtl">
       <div className="grid grid-cols-1 md:grid-cols-1 lg:pr-2 justify-center lg:h-[60vh]  lg:overflow-y-auto w-full ">
         <div className="flex flex-col lg:pr-2 lg:gap-6 gap-6">
           {contactMans.map((x) => (
@@ -201,7 +201,7 @@ export default function StepThree() {
         </div>
       </div>
 
-      <div className="hidden lg:flex w-full justify-between px-8">
+      <div className="hidden lg:flex w-full justify-between px-8 mb-6">
         <Button onClick={addContactManHandler}
           className="cursor-pointer bg-black border hover:bg-white hover:text-black hover:border-black text-white p-5 gap-2 rounded-full">
           <PlusCircleIcon />

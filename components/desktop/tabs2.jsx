@@ -18,7 +18,6 @@ const stepsData = [
     subtitle: 'פרטים על העסק',
     icon: BuildingStorefrontIcon,
     targetId: 'step-one',
-    statusIcon: validatePertip ? '!' : '✓',
   },
   {
     id: 2,
@@ -26,7 +25,6 @@ const stepsData = [
     subtitle: 'כתובת ושעות העסק',
     icon: MapPinIcon,
     targetId: 'step-two',
-    statusIcon: validateBrunch ? '!' : '✓',
   },
   {
     id: 3,
@@ -34,7 +32,6 @@ const stepsData = [
     subtitle: 'פרטי איש קשר',
     icon: UserCircleIcon,
     targetId: 'step-three',
-    statusIcon: validateContact ? '!' : '✓',
   },
 ];
 
@@ -50,7 +47,7 @@ export function Tabs2() {
   const brunches = useSelector((state) => state.brunch.brunches);
   const typeMarketer = useSelector((state) => state.form.pertip.typeMarketer)
   const activeBrunch = useSelector((state) => state.brunch.activeBrunch);
-const salesMap = {
+  const salesMap = {
     "קווי": 1,
     "סלולרי": 2,
     "רכבים": 3,
@@ -206,7 +203,7 @@ const salesMap = {
     <>
       <div className="fixed top-0 z-10 w-full flex flex-col items-center p-2 px-3 gap-4 flex-shrink-0 bg-[#F4F4F4]">
         <svg
-          xmlns="http://www.w3.org/2000/svg"
+          xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)"
           width="251"
           height="34"
           viewBox="0 0 251 34"
@@ -226,12 +223,11 @@ const salesMap = {
           <path d="M181.091 22.87H183.648C185.256 22.87 186.062 21.9945 186.062 20.3498V11.3197H181.566V7.22363H190.959V20.5999C190.959 24.696 188.726 26.9222 184.78 26.9222H181.091V22.87Z" fill="black" />
           <path d="M195.355 11.3197H193.122V7.22363H200.327V26.8535H195.355V11.3197Z" fill="black" />
           <path d="M215.935 11.3197H202.447V7.22363H221.126V11.2071L215.604 26.8535H210.489L215.935 11.3197ZM202.59 16.729H207.487V31.5686H202.59V16.729Z" fill="black" />
-          <path d="M248.985 7.22974H225.297C224.246 7.22974 223.396 8.08022 223.396 9.13081V24.971C223.396 26.0216 224.246 26.8721 225.297 26.8783H248.985C250.036 26.8783 250.893 26.0278 250.893 24.971V9.16833C250.911 8.11774 250.08 7.2485 249.029 7.22974H248.985ZM239.786 20.4247L236.572 23.6578H227.373C227.004 23.6703 226.698 23.3826 226.685 23.0136V16.116C226.673 15.7345 226.973 15.4219 227.354 15.4156H239.161C239.542 15.4156 239.849 15.722 239.849 16.1035V16.1223L239.786 20.4247ZM239.105 15.9472H227.298C227.211 15.9534 227.135 16.0284 227.129 16.116V22.9886C227.129 23.0824 227.204 23.1575 227.298 23.1575H236.284L239.274 20.187V16.0972C239.267 16.0159 239.192 15.9534 239.105 15.9472ZM229.85 21.2064C229.868 21.6754 229.506 22.0756 229.037 22.0944C229.012 22.0944 228.987 22.0944 228.955 22.0944C228.474 22.0944 228.08 21.7004 228.08 21.2189C228.092 20.7374 228.48 20.3559 228.955 20.3434C229.431 20.3559 229.812 20.7436 229.812 21.2189L229.85 21.2064ZM232.401 21.2064C232.413 21.6754 232.038 22.0694 231.569 22.0819C231.557 22.0819 231.544 22.0819 231.532 22.0819C231.05 22.0819 230.656 21.6941 230.656 21.2064C230.669 20.7248 231.056 20.3434 231.532 20.3309C232.007 20.3434 232.388 20.7311 232.388 21.2064H232.401ZM234.952 21.2064C234.965 21.6816 234.59 22.0694 234.114 22.0819C234.102 22.0819 234.089 22.0819 234.077 22.0819C233.595 22.0819 233.201 21.6941 233.201 21.2064C233.214 20.7248 233.595 20.3434 234.077 20.3309C234.552 20.3434 234.934 20.7311 234.934 21.2064H234.952ZM235.772 27.4912V32.2313C235.772 33.2569 235.215 33.457 234.571 32.6878L230.018 27.4912H235.772Z" fill="#F8BD03" />
+          <path d="M248.985 7.22974H225.297C224.246 7.22974 223.396 8.08022 223.396 9.13081V24.971C223.396 26.0216 224.246 26.8721 225.297 26.8783H248.985C250.036 26.8783 250.893 26.0278 250.893 24.971V9.16833C250.911 8.11774 250.08 7.2485 249.029 7.22974H248.985ZM239.786 20.4247L236.572 23.6578H227.373C227.004 23.6703 226.698 23.3826 226.685 23.0136V16.116C226.673 15.7345 226.973 15.4219 227.354 15.4156H239.161C239.542 15.4156 239.849 15.722 239.849 16.1035V16.1223L239.786 20.4247ZM239.105 15.9472H227.298C227.211 15.9534 227.135 16.0284 227.129 16.116V22.9886C227.129 23.0824 227.204 23.1575 227.298 23.1575H236.284L239.274 20.187V16.0972C239.267 16.0159 239.192 15.9534 239.105 15.9472ZM229.85 21.2064C229.868 21.6754 229.506 22.0756 229.037 22.0944C229.012 22.0944 228.987 22.0944 228.955 22.0944C228.474 22.0944 228.08 21.7004 228.08 21.2189C228.092 20.7374 228.48 20.3559 228.955 20.3434C229.431 20.3559 229.812 20.7436 229.812 21.2189L229.85 21.2064ZM232.401 21.2064C232.413 21.6754 232.038 22.0694 231.569 22.0819C231.557 22.0819 231.544 22.0819 231.532 22.0819C231.050 22.0819 230.656 21.6941 230.656 21.2064C230.669 20.7248 231.056 20.3434 231.532 20.3309C232.007 20.3434 232.388 20.7311 232.388 21.2064H232.401ZM234.952 21.2064C234.965 21.6816 234.590 22.0694 234.114 22.0819C234.102 22.0819 234.089 22.0819 234.077 22.0819C233.595 22.0819 233.201 21.6941 233.201 21.2064C233.214 20.7248 233.595 20.3434 234.077 20.3309C234.552 20.3434 234.934 20.7311 234.934 21.2064H234.952ZM235.772 27.4912V32.2313C235.772 33.2569 235.215 33.4570 234.571 32.6878L230.018 27.4912H235.772Z" fill="#F8BD03" />
         </svg>
       </div>
       <div>
         <div className="flex flex-col gap-0 m-0 p-0">
-
           <div id="step-one" ref={el => sectionRefs.current[0] = el} data-step-id="1"><StepOne /></div>
           <div id="step-two" ref={el => sectionRefs.current[1] = el} data-step-id="2">
             {console.log("Rendering StepTwo, activeBrunch =", activeBrunch)}
@@ -241,7 +237,16 @@ const salesMap = {
             <StepThree />
           </div>
         </div>
-        <div className="fixed bottom-6 left-6 right-6 flex">
+
+
+        <div className="fixed bottom-[calc(theme('spacing.6')+90px)] left-0 right-0 h-20
+            rounded-t-[58px]
+            bg-gradient-to-t from-[rgba(255,255,255,0.50)] via-[rgba(255,255,255,0.25)] to-[rgba(255,255,255,0.00)]
+            backdrop-blur-[2.2px] z-5">
+        </div>
+
+
+        <div className="fixed bottom-6 left-6 right-6 flex z-10"> 
           {isCompleted ? (
             <div className="flex w-full bg-yellow-400 rounded-[40px] h-[90px] mx-auto p-3 shadow-lg justify-between items-center" dir="rtl">
               <div className="flex items-center">
@@ -299,25 +304,12 @@ const salesMap = {
               {typeMarketer === "store" && activeStep === 2 && brunches.length > 1 && (
                 <div className="flex gap-3 mt-4 justify-center items-center w-full">
                   {brunches.map((brunch, index) => (
-                    <div key={brunch.id} className="flex items-center gap-2">
-                      {/* <button
-                        onClick={() => {
-                          setActiveBrunch(brunch.id);
-                          dispatch(setActiveBrunch(brunch.id));
-                        }}
-                        className={`w-5 h-5 rounded-full border-2 transition-all duration-200
-                          ${activeBrunch === brunch.id ? 'bg-white border-white shadow-md w-[180px]' : 'bg-white opacity-50'}`}
-                      >
-                        {activeBrunch === brunch.id && (
-                          <span className="text-xs text-black">{brunch.name + ' סניף' || 'סניף'}</span>
-                        )}
-                      </button> */}
+                    <div key={brunch.id} className="flex items-center gap-2 ">
                       <button
                         onClick={() => {
                           dispatch(setActiveBrunch(brunch.id));
                         }}
-                        className={`w-5 h-5 rounded-full border-2 border-white transition-all duration-200
-    ${activeBrunch === brunch.id ? 'bg-white border-white shadow-md max-w-[190px] pb-6' : 'bg-white p-3'}`}
+                        className={`w-5 h-5 rounded-full border-2 border-white transition-all duration-200 ${activeBrunch === brunch.id ? 'bg-white border-white shadow-md w-[190px] pb-6' : 'bg-white p-3'}`}
                       >
                         {activeBrunch === brunch.id && (
                           <span className="text-xs text-black ">{' כתובת ושעות סניף ' + brunch.name || 'סניף'}</span>
@@ -336,6 +328,8 @@ const salesMap = {
             </div>
           )}
         </div>
+
+        <div className="fixed top-[calc(100vh-theme('spacing.6'))] left-0 right-0 h-10 bg-white bg-opacity-20 backdrop-blur-md border-t border-white border-opacity-30 z-5"></div>
       </div>
     </>
   );

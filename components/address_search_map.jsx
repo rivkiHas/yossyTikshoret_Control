@@ -50,6 +50,7 @@ export default function AddressSearchMap({ typeMarketer }) {
     brunch?.name?.trim() !== ""
       ? brunch.name
       : `${brunches.findIndex((b) => b.id === activeBrunch) + 1}`;
+
   const [brunchName, setBrunchName] = useState(defaultBrunchName);
 
   useEffect(() => {
@@ -57,7 +58,6 @@ export default function AddressSearchMap({ typeMarketer }) {
   }, [address]);
 
   useEffect(() => {
-
     if (!address.trim()) return;
     const interval = setInterval(() => {
       if (window.google && window.google.maps) {
@@ -92,6 +92,8 @@ export default function AddressSearchMap({ typeMarketer }) {
 
   const handleEditBrunch = () => {
     setIsEditing(true);
+    console.log("brunchName", brunchName);
+    
   };
 
   const handleInputChange = (value) => {
@@ -166,7 +168,7 @@ export default function AddressSearchMap({ typeMarketer }) {
       ],
       name: place.formatted_address || localInputValue,
     };
-        setLocalInputValue("");
+    setLocalInputValue("");
   };
 
 
