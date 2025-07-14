@@ -255,6 +255,7 @@ const submitForm = async () => {
         console.error("שגיאה בשליחה לשרת:", error.message);
         setErrorMessage(error.message);
         setShowErrorAlert(true);
+        alert(`שגיאה בשליחה לשרת: ${error.message}`);
         return { server: error.message };
       }
     }
