@@ -37,10 +37,7 @@ const validateHours = (hoursData) => {
       };
     }
 
-    if (morning?.close && evening?.open && evening.open <= morning.close) {
-      dayErrors.morning = { ...dayErrors.morning, close: "סגירת בוקר חייבת להיות לפני פתיחת ערב" };
-      dayErrors.evening = { ...dayErrors.evening, open: "פתיחת ערב חייבת להיות אחרי סגירת בוקר" };
-    }
+   
 
     if (Object.keys(dayErrors).length > 0) {
       newErrors[index] = dayErrors;
@@ -228,15 +225,11 @@ const HoursOpenMobile = ({ typeMarketer }) => {
 };
 
 const DayRow = ({ day, label, hours, handleChange, errors, index, disabled, isFriday = false }) => {
-  const [isEveningVisible, setIsEveningVisible] = useState(
-    !!(hours?.evening?.open || hours?.evening?.close || errors?.evening)
-  );
+ const [isEveningVisible, setIsEveningVisible] = useState(false);
 
   const toggleEvening = () => {
-    if (isFriday) return;
-    setIsEveningVisible((prev) => !prev);
-  };
-
+  setIsEveningVisible((prev) => !prev);
+};
   return (
     <div className="flex-shrink-0 bg-white rounded-xl mb-4">
       <div className={`flex items-center mb-2 ${isFriday ? 'justify-start pr-12' : 'justify-around'}`}>

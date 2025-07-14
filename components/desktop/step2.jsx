@@ -41,6 +41,7 @@ export default function StepTwo({ brunch: propBrunch }) {
             console.log("formik errors:", errors);
             console.log("formik values:", formik.values);
             if (Object.keys(errors).length === 0) {
+
                 if (brunches.length === 1) {
                     dispatch(setActiveStep(activeStep + 1));
                 } else {
@@ -147,11 +148,8 @@ export default function StepTwo({ brunch: propBrunch }) {
                                 </div>
                                 <div className="block lg:hidden">
                                     <HoursOpenMobile typeMarketer={typeMarketer} />
-
                                 </div>
-
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -165,7 +163,6 @@ export default function StepTwo({ brunch: propBrunch }) {
                                 <PlusCircleIcon className="w-5 h-5" />
                                 הוספת סניף נוסף
                             </Button>
-
                             {brunches.length > 1 && brunch && (
                                 <IconButton
                                     headerText="מחיקה"

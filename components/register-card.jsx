@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
 import { cn } from '@/lib/utils'
 import { Tabs } from './desktop/tabs'
-import {Tabs2} from './desktop/tabs2'
+import { Tabs2 } from './desktop/tabs2'
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import {
@@ -22,10 +22,10 @@ export function RegisterCard({ className, ...props }) {
     logo: null,
     brunches: [
       {
-        name: 'מספר סניף',
-        address: 'אדוריים, קרית גת, ישראל',
-        location: { lat: 31.609538, lng: 34.751944 },
-        hoursOpen: [],
+        name: 'number1',
+        address: '',
+        location: {},
+        hoursOpen: '',
       }
     ],
     contactMans: [
@@ -50,18 +50,31 @@ export function RegisterCard({ className, ...props }) {
           logo: stepOneSchema.fields.logo,
         });
       case 1:
-       
-         return Yup.object({
-          brunches: Yup.array().min(1, 'חייב להיות לפחות סניף אחד'),
+        return Yup.object({
+          brunches: stepTwoSchema.fields.brunches,
         });
-
-       
       case 2:
         return Yup.object({
           contactMans: stepThreeSchema,
+          name: Yup.string().required('שם הוא שדה חובה'),
+          email: Yup.string().email('כתובת אימייל לא תקינה').required('אימייל הוא שדה חובה'),
+          id: Yup.string().required('תעודת זהות היא שדה חובה'),
+          phone: Yup.string().required('טלפון הוא שדה חובה'),
+          typeMarketer: Yup.string().oneOf(['store', 'agent']).required('סוג משווק הוא שדה חובה'),
+          logo: Yup.mixed().nullable(),
+          brunches: stepTwoSchema.fields.brunches,
         });
       default:
-        return Yup.object(); 
+        return Yup.object({
+          name: Yup.string().required('שם הוא שדה חובה'),
+          email: Yup.string().email('כתובת אימייל לא תקינה').required('אימייל הוא שדה חובה'),
+          id: Yup.string().required('תעודת זהות היא שדה חובה'),
+          phone: Yup.string().required('טלפון הוא שדה חובה'),
+          typeMarketer: Yup.string().oneOf(['store', 'agent']).required('סוג משווק הוא שדה חובה'),
+          logo: Yup.mixed().nullable(),
+          brunches: stepTwoSchema.fields.brunches,
+          contactMans: stepThreeSchema
+        });
     }
   };
 

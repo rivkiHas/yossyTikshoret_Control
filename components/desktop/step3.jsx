@@ -9,12 +9,6 @@ import { Button } from "../ui/button";
 import { RegisterForm2 } from "../register_form2";
 import { ArrowLongLeftIcon, PlusCircleIcon, ArrowLongRightIcon } from '@heroicons/react/24/outline'
 import AlertSuccess from '../alert_sucsses'
-import {
-  isPertipStepComplete,
-  isContactStepComplete,
-  isBrunchStepComplete,
-  isAllStepsComplete
-} from '@/store/selectors';
 import { useFormikContext } from 'formik';
 
 export default function StepThree() {
@@ -129,12 +123,9 @@ export default function StepThree() {
           dispatch(nextStep());
           setShowAlert(true);
           console.log("הנתונים נשלחו בהצלחה!");
-
           return null;
         } catch (error) {
           console.error("שגיאה בשליחה לשרת:", error.message);
-          //setErrorMessage(error.message);
-          // setShowErrorAlert(true);
           alert(`שגיאה בשליחה לשרת: ${error.message}`);
           return { server: error.message };
         } finally {
@@ -145,14 +136,12 @@ export default function StepThree() {
         return null;
       }
     } else {
-
       formik.setTouched(
         Object.keys(errors).reduce((acc, key) => ({ ...acc, [key]: true }), {})
       );
       return errors;
     }
   };
-
 
   const previousStepInRedux = () => {
     dispatch(setActiveStep(activeStep - 1));

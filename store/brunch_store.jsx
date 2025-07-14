@@ -4,7 +4,7 @@ const initialState = {
     brunches: [
         {
             id: 0,
-            address: "אדוריים, קרית גת, ישראל",
+            address: '',
             location: {
                 lat: 31.609538,
                 lng: 34.751944

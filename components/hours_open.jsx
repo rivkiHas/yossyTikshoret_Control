@@ -21,7 +21,6 @@ const validateHours = (hoursData) => {
     const dayErrors = {};
     const { morning, evening } = dayHours;
 
-    // בדיקת חובת מילוי שדות בוקר
     if (!morning?.open) {
       dayErrors.morning = { ...(dayErrors.morning || {}), open: "שעת פתיחה חובה" };
     }
@@ -29,7 +28,6 @@ const validateHours = (hoursData) => {
       dayErrors.morning = { ...(dayErrors.morning || {}), close: "שעת סגירה חובה" };
     }
 
-    // בדיקת חובת מילוי שדות ערב אם אחד מהם מולא
     if ((evening?.open && !evening?.close) || (!evening?.open && evening?.close)) {
       if (!evening?.open) {
         dayErrors.evening = { ...(dayErrors.evening || {}), open: "שעת פתיחה חובה" };
@@ -39,7 +37,6 @@ const validateHours = (hoursData) => {
       }
     }
 
-    // השוואת שעות בוקר
     if (morning?.open && morning?.close && morning.open >= morning.close) {
       dayErrors.morning = {
         ...dayErrors.morning,
@@ -48,7 +45,6 @@ const validateHours = (hoursData) => {
       };
     }
 
-    // השוואת שעות ערב
     if (evening?.open && evening?.close && evening.open >= evening.close) {
       dayErrors.evening = {
         ...dayErrors.evening,
@@ -218,20 +214,12 @@ const HoursOpen = ({ typeMarketer }) => {
 
 
 const DayRow = ({ day, label, hours, handleChange, errors, index, disabled, isFriday = false, forceHideEvening = false }) => {
-  const [isEveningVisible, setIsEveningVisible] = useState(() => {
-    if (forceHideEvening) {
-      return false;
-    }
-    return !!((hours?.evening?.open || hours?.evening?.close) || errors?.evening);
-  });
-
-
+ const [isEveningVisible, setIsEveningVisible] = useState(false);
 
   const toggleEvening = () => {
-    if (isFriday && isEveningVisible) return;
-    if (isFriday && !isEveningVisible) return;
-    setIsEveningVisible(prev => !prev);
-  };
+  setIsEveningVisible((prev) => !prev);
+};
+
 
   return (
     <div className="flex-shrink-0 bg-white rounded-xl relative group lg:w-full mb-4">

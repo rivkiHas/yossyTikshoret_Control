@@ -57,6 +57,7 @@ export default function AddressSearchMap({ typeMarketer }) {
   }, [address]);
 
   useEffect(() => {
+
     if (!address.trim()) return;
     const interval = setInterval(() => {
       if (window.google && window.google.maps) {
@@ -90,7 +91,7 @@ export default function AddressSearchMap({ typeMarketer }) {
 
   const handleEditBrunch = () => {
     setIsEditing(true);
-    };
+  };
 
   const handleInputChange = (value) => {
     setLocalInputValue(value);
@@ -248,13 +249,17 @@ export default function AddressSearchMap({ typeMarketer }) {
           </div>
         ) : (
           <Autocomplete onLoad={handleLoad} onPlaceChanged={handlePlaceChanged}>
-            <input
-              type="text"
-              placeholder="הכנס כתובת..."
-              value={localInputValue}
-              onChange={(e) => handleInputChange(e.target.value)}
-              className="w-full h-11 px-4 border border-input rounded-md bg-background text-sm text-muted-foreground transition-colors focus:outline-none focus:ring-1 focus:ring-ring"
-            />
+            <>
+              <input
+                type="text"
+                placeholder="הכנס כתובת..."
+                value={localInputValue}
+                onChange={(e) => handleInputChange(e.target.value)}
+                className="w-full h-11 px-4 border border-input rounded-md bg-background text-sm text-muted-foreground transition-colors focus:outline-none focus:ring-1 focus:ring-ring"
+              />
+              {formik.touched[address] && (formik.errors[address] || errorsPertip[address]) && (
+                <TooltipValid tooltipText={formik.errors[address] || errorsPertip[address]} />
+              )}</>
           </Autocomplete>
         )}
 
