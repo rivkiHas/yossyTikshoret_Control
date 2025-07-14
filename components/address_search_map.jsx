@@ -7,7 +7,6 @@ import { updateBrunchDetails, setActiveBrunch } from "../store/brunch_store";
 import { Typography } from "./typhography";
 import { MagnifyingGlassIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 import Carusel from "./carusel";
-import { addBrunch } from "../store/brunch_store";
 import { useFormikContext } from 'formik';
 
 
@@ -70,7 +69,6 @@ export default function AddressSearchMap({ typeMarketer }) {
               lng: results[0].geometry.location.lng(),
             };
             if (!location || newLocation.lat !== location.lat || newLocation.lng !== location.lng) {
-              console.log(newLocation, "newLocation");
               formik.setFieldValue(`brunches[${activeBrunch}].location`, newLocation);
               dispatch(
                 updateBrunchDetails({
@@ -92,9 +90,7 @@ export default function AddressSearchMap({ typeMarketer }) {
 
   const handleEditBrunch = () => {
     setIsEditing(true);
-    console.log("brunchName", brunchName);
-    
-  };
+    };
 
   const handleInputChange = (value) => {
     setLocalInputValue(value);

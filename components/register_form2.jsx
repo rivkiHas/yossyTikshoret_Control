@@ -127,6 +127,7 @@ export function RegisterForm2({ OkFunction, contactId, canDelete }) {
                   }));
 
                 }}
+                onBlur={formik.handleBlur}
               >
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="בחר סניף" />

@@ -24,7 +24,7 @@ export function RegisterCard({ className, ...props }) {
       {
         name: 'מספר סניף',
         address: 'אדוריים, קרית גת, ישראל',
-        location: { lat: '31.609538', lng: '34.751944' },
+        location: { lat: 31.609538, lng: 34.751944 },
         hoursOpen: [],
       }
     ],
@@ -50,9 +50,12 @@ export function RegisterCard({ className, ...props }) {
           logo: stepOneSchema.fields.logo,
         });
       case 1:
-        return Yup.object({
-          brunches: stepTwoSchema,
+       
+         return Yup.object({
+          brunches: Yup.array().min(1, 'חייב להיות לפחות סניף אחד'),
         });
+
+       
       case 2:
         return Yup.object({
           contactMans: stepThreeSchema,

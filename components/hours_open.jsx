@@ -12,7 +12,6 @@ import { useFormikContext } from 'formik';
 import { object } from 'yup';
 import TooltipValid from './tooltip_valid';
 
-
 const validateHours = (hoursData) => {
   const newErrors = {};
 
@@ -22,24 +21,40 @@ const validateHours = (hoursData) => {
     const dayErrors = {};
     const { morning, evening } = dayHours;
 
+    // בדיקת חובת מילוי שדות בוקר
+    if (!morning?.open) {
+      dayErrors.morning = { ...(dayErrors.morning || {}), open: "שעת פתיחה חובה" };
+    }
+    if (!morning?.close) {
+      dayErrors.morning = { ...(dayErrors.morning || {}), close: "שעת סגירה חובה" };
+    }
+
+    // בדיקת חובת מילוי שדות ערב אם אחד מהם מולא
+    if ((evening?.open && !evening?.close) || (!evening?.open && evening?.close)) {
+      if (!evening?.open) {
+        dayErrors.evening = { ...(dayErrors.evening || {}), open: "שעת פתיחה חובה" };
+      }
+      if (!evening?.close) {
+        dayErrors.evening = { ...(dayErrors.evening || {}), close: "שעת סגירה חובה" };
+      }
+    }
+
+    // השוואת שעות בוקר
     if (morning?.open && morning?.close && morning.open >= morning.close) {
       dayErrors.morning = {
+        ...dayErrors.morning,
         open: "שעת פתיחה חייבת להיות לפני שעת סגירה",
         close: "שעת סגירה חייבת להיות אחרי שעת פתיחה"
       };
     }
 
+    // השוואת שעות ערב
     if (evening?.open && evening?.close && evening.open >= evening.close) {
       dayErrors.evening = {
         ...dayErrors.evening,
         open: "שעת פתיחה חייבת להיות לפני שעת סגירה",
         close: "שעת סגירה חייבת להיות אחרי שעת פתיחה"
       };
-    }
-
-    if (morning?.close && evening?.open && evening.open <= morning.close) {
-      dayErrors.morning = { ...dayErrors.morning, close: "סגירת בוקר חייבת להיות לפני פתיחת ערב" };
-      dayErrors.evening = { ...dayErrors.evening, open: "פתיחת ערב חייבת להיות אחרי סגירת בוקר" };
     }
 
     if (Object.keys(dayErrors).length > 0) {
@@ -54,7 +69,6 @@ const validateHours = (hoursData) => {
 const HoursOpen = ({ typeMarketer }) => {
   const dispatch = useDispatch();
   const [isGrouped, setIsGrouped] = useState(false);
-  const [hover, setHover] = useState(-1);
   const [isSwitchOn, setIsSwitchOn] = useState(false);
   const brunches = useSelector((state) => state.brunch.brunches);
   const activeBrunch = useSelector((state) => state.brunch.activeBrunch);
@@ -62,7 +76,7 @@ const HoursOpen = ({ typeMarketer }) => {
   const [localHoursOpen, setLocalHoursOpen] = useState([]);
   const [errors, setErrors] = useState({});
   const formik = useFormikContext();
- 
+
   useEffect(() => {
 
     const initialHours = Array.from({ length: 7 }, () => ({
@@ -103,23 +117,17 @@ const HoursOpen = ({ typeMarketer }) => {
     }
 
     setLocalHoursOpen(updatedHours);
+
     const validationErrors = validateHours(updatedHours);
     setErrors(validationErrors);
-
-    // if (brunch && Object.keys(validationErrors).length === 0) {
-    //   formik.setFieldValue(`brunches[${index}].hoursOpen`, updatedHours);
-    //   dispatch(updateBrunchDetails({
-    //     id: brunch.id,
-    //     hoursOpen: updatedHours,
-    //   }));
-    // }
     formik.setFieldValue(`brunches[${activeBrunch}].hoursOpen`, updatedHours);
     dispatch(updateBrunchDetails({
       id: brunch.id,
       hoursOpen: updatedHours,
     }));
-
   };
+
+
 
   const handleSwitchChange = (checked) => {
     setIsSwitchOn(checked);
@@ -127,6 +135,11 @@ const HoursOpen = ({ typeMarketer }) => {
 
   return (
     <div className="h-full w-full flex flex-col bg-white rounded-[40px] ">
+      {formik.touched?.brunches?.[activeBrunch]?.hoursOpen?.[1]?.morning?.open &&
+        formik.errors?.brunches?.[activeBrunch]?.hoursOpen?.[1]?.morning?.open && (
+          <TooltipValid message={formik.errors.brunches[activeBrunch].hoursOpen} />
+        )}
+
       <div className="flex flex-row justify-between mb-4">
         <Typography className='text-2xl font-bold'>
           {typeMarketer === "agent" ? "שעות זמינות  " : "שעות פתיחה "}
