@@ -129,11 +129,13 @@ export default function StepThree() {
           dispatch(nextStep());
           setShowAlert(true);
           console.log("הנתונים נשלחו בהצלחה!");
+
           return null;
         } catch (error) {
           console.error("שגיאה בשליחה לשרת:", error.message);
-          setErrorMessage(error.message);
-          setShowErrorAlert(true);
+          //setErrorMessage(error.message);
+          // setShowErrorAlert(true);
+          alert(`שגיאה בשליחה לשרת: ${error.message}`);
           return { server: error.message };
         } finally {
           setIsLoading(false);
@@ -143,7 +145,7 @@ export default function StepThree() {
         return null;
       }
     } else {
-      
+
       formik.setTouched(
         Object.keys(errors).reduce((acc, key) => ({ ...acc, [key]: true }), {})
       );
@@ -221,6 +223,9 @@ before:z-[-1] before:rounded-full hover:before:right-0 disabled:opacity-50 disab
           </Button>
         </div>
       </div>
+      {showAlert && (
+        <AlertSuccess onClose={() => setShowAlert(false)} />
+      )}
 
     </div>
 

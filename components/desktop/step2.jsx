@@ -13,7 +13,6 @@ import { useState, useEffect } from 'react';
 import { AlertDialogEdit } from '../alert_dialog_edit'
 import Carusel from "../carusel";
 import { useFormikContext } from 'formik';
-import { object } from 'yup';
 
 
 export default function StepTwo({ brunch: propBrunch }) {

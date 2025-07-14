@@ -7,6 +7,7 @@ import StepThree from './step3';
 import { BuildingStorefrontIcon, MapPinIcon, UserCircleIcon } from '@heroicons/react/24/outline';
 import { useFormikContext } from 'formik';
 import { setActiveBrunch } from '@/store/brunch_store'
+import { fullFormSchema } from '@/lib/validation_schema';
 
 const stepsData = [
   {
@@ -39,6 +40,7 @@ export function Tabs2() {
   const sectionRefs = useRef([]);
   const [openedStep, setOpenedStep] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
+    const [showAlert, setShowAlert] = useState(false);
   const [showErrorAlert, setShowErrorAlert] = useState(false);
   const formik = useFormikContext();
   const contactMans = useSelector(state => state.conectMan.contactMans || []);
@@ -192,32 +194,78 @@ export function Tabs2() {
     }
   };
 
-  const submitForm = async () => {
-    const errors = await formik.validateForm();
-    console.log(errors, "errors");
-    if (Object.keys(errors).length === 0) {
-      if (activeStep >= 2) {
-        try {
-          await sendDataToServer();
-          dispatch(nextStep());
-          setShowAlert(true);
-          console.log("הנתונים נשלחו בהצלחה!");
-          return null;
-        } catch (error) {
-          console.error("שגיאה בשליחה לשרת:", error.message);
-          setErrorMessage(error.message);
-          setShowErrorAlert(true);
-          return { server: error.message };
-        } finally {
-        }
-      }
-    } else {
-      formik.setTouched(
-        Object.keys(errors).reduce((acc, key) => ({ ...acc, [key]: true }), {})
-      );
-      return errors;
-    }
+//   const submitForm = async () => {
+// try {
+//   await fullFormSchema.validate(formik.values, { abortEarly: false });
+// } catch (err) {
+//   const formattedErrors = err.inner.reduce((acc, curr) => {
+//     acc[curr.path] = curr.message;
+//     return acc;
+//   }, {});
+//   formik.setErrors(formattedErrors);
+// }
+//     console.log(errors, "errors");
+//     if (Object.keys(errors).length === 0) {
+//       if (activeStep >= 2) {
+//         try {
+//           await sendDataToServer();
+//           dispatch(nextStep());
+//           setShowAlert(true);
+//           console.log("הנתונים נשלחו בהצלחה!");
+//           return null;
+//         } catch (error) {
+//           console.error("שגיאה בשליחה לשרת:", error.message);
+//           setErrorMessage(error.message);
+//           setShowErrorAlert(true);
+//           return { server: error.message };
+//         } finally {
+//         }
+//       }
+//     } else {
+//       formik.setTouched(
+//         Object.keys(errors).reduce((acc, key) => ({ ...acc, [key]: true }), {})
+//       );
+//       return errors;
+//     }
+//   }
+const submitForm = async () => {
+  let errors = {}; 
+  try {
+    await fullFormSchema.validate(formik.values, { abortEarly: false });
+  } catch (err) {
+    const formattedErrors = Array.isArray(err.inner)
+      ? err.inner.reduce((acc, curr) => {
+          acc[curr.path] = curr.message;
+          return acc;
+        }, {})
+      : {};
+    errors = formattedErrors;
+    formik.setErrors(formattedErrors);
   }
+  console.log(errors, "errors");
+  if (Object.keys(errors).length === 0) {
+    if (activeStep >= 2) {
+      try {
+        await sendDataToServer();
+        dispatch(nextStep());
+        setShowAlert(true);
+        console.log("הנתונים נשלחו בהצלחה!");
+        return null;
+      } catch (error) {
+        console.error("שגיאה בשליחה לשרת:", error.message);
+        setErrorMessage(error.message);
+        setShowErrorAlert(true);
+        return { server: error.message };
+      }
+    }
+  } else {
+    formik.setTouched(
+      Object.keys(errors).reduce((acc, key) => ({ ...acc, [key]: true }), {})
+    );
+    return errors;
+  }
+};
+
 
   return (
     <>
@@ -350,6 +398,9 @@ export function Tabs2() {
 
         <div className="fixed top-[calc(100vh-theme('spacing.6'))] left-0 right-0 h-10 bg-white bg-opacity-20 backdrop-blur-md border-t border-white border-opacity-30 z-5"></div>
       </div>
+       {showAlert && (
+              <AlertSuccess onClose={() => setShowAlert(false)} />
+            )}
     </>
   );
 };

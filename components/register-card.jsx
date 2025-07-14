@@ -38,8 +38,8 @@ export function RegisterCard({ className, ...props }) {
     ],
   };
 
-  const getValidationSchema = (step) => {
-    switch (step) {
+  const getValidationSchema = (activeStep) => {
+    switch (activeStep) {
       case 0:
         return Yup.object({
           name: stepOneSchema.fields.name,

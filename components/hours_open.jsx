@@ -62,7 +62,7 @@ const HoursOpen = ({ typeMarketer }) => {
   const [localHoursOpen, setLocalHoursOpen] = useState([]);
   const [errors, setErrors] = useState({});
   const formik = useFormikContext();
-
+ 
   useEffect(() => {
 
     const initialHours = Array.from({ length: 7 }, () => ({
