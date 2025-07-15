@@ -19,7 +19,6 @@ import {
 } from "@/components/ui/select";
 import { setFormData } from "../store/contact_man_store";
 
-// עדכון RegisterForm2 - ודא שהשדות מסומנים נכון כ-touched:
 
 export function RegisterForm2({ OkFunction, contactId, canDelete }) {
   const dispatch = useDispatch();
@@ -84,7 +83,6 @@ export function RegisterForm2({ OkFunction, contactId, canDelete }) {
               const fieldPath = `contactMans[${contactIndex}].contactPhone`;
               formik.setFieldValue(fieldPath, e.target.value);
               formik.setFieldTouched(fieldPath, true); 
-              
               dispatch(setFormData({
                 name: "contactPhone",
                 value: e.target.value,

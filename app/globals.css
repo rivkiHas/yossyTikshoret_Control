@@ -43,8 +43,8 @@
     url('/fonts/SimplerPro/SimplerPro_HLAR-Black.woff') format('woff');
 }
 
-@tailwind base;
-@tailwind components;
+/* @tailwind base; */
+/* @tailwind components; */
 @tailwind utilities;
 
 @import 'tailwindcss';
