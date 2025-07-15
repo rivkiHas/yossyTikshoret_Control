@@ -194,40 +194,6 @@ export function Tabs2() {
     }
   };
 
-//   const submitForm = async () => {
-// try {
-//   await fullFormSchema.validate(formik.values, { abortEarly: false });
-// } catch (err) {
-//   const formattedErrors = err.inner.reduce((acc, curr) => {
-//     acc[curr.path] = curr.message;
-//     return acc;
-//   }, {});
-//   formik.setErrors(formattedErrors);
-// }
-//     console.log(errors, "errors");
-//     if (Object.keys(errors).length === 0) {
-//       if (activeStep >= 2) {
-//         try {
-//           await sendDataToServer();
-//           dispatch(nextStep());
-//           setShowAlert(true);
-//           console.log("הנתונים נשלחו בהצלחה!");
-//           return null;
-//         } catch (error) {
-//           console.error("שגיאה בשליחה לשרת:", error.message);
-//           setErrorMessage(error.message);
-//           setShowErrorAlert(true);
-//           return { server: error.message };
-//         } finally {
-//         }
-//       }
-//     } else {
-//       formik.setTouched(
-//         Object.keys(errors).reduce((acc, key) => ({ ...acc, [key]: true }), {})
-//       );
-//       return errors;
-//     }
-//   }
 const submitForm = async () => {
   let errors = {}; 
   try {
@@ -332,6 +298,7 @@ const submitForm = async () => {
                   );
                 })}
               </div>
+              
               <button onClick={submitForm} className="bg-white text-black rounded-full flex items-center justify-center px-5 py-3 mr-1 font-bold gap-3">
                 <span>שלח</span>
                 <span className="text-lg ml-2">←</span>

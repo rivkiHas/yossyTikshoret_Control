@@ -8,7 +8,7 @@ import { Typography } from "./typhography";
 import { MagnifyingGlassIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 import Carusel from "./carusel";
 import { useFormikContext } from 'formik';
-
+import TooltipValid from "./tooltip_valid";
 
 const containerStyle = {
   height: "100%",
@@ -220,21 +220,27 @@ export default function AddressSearchMap({ typeMarketer }) {
       <div className="flex-1 flex flex-col gap-4">
         {typeMarketer === "agent" ? (
           <div className="relative w-full">
-            <Autocomplete onLoad={handleLoad} onPlaceChanged={handlePlaceChanged}>
-              <input
-                type="text"
-                placeholder="חפש מיקום נוסף"
-                value={localInputValue}
-                onChange={(e) => handleInputChange(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    e.preventDefault();
-                    handleAddBranch();
-                  }
-                }}
-                className="w-full h-11 px-4 border border-input rounded-md bg-background text-sm text-muted-foreground transition-colors focus:outline-none focus:ring-1 focus:ring-ring"
-              />
-            </Autocomplete>
+            <div className="relative flex flex-col gap-3 ">
+              <Autocomplete onLoad={handleLoad} onPlaceChanged={handlePlaceChanged}>
+                <input
+                  type="text"
+                  placeholder="חפש מיקום נוסף"
+                  value={localInputValue}
+                  onChange={(e) => handleInputChange(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      handleAddBranch();
+                    }
+                  }}
+                  className="w-full h-11 px-4 border border-input rounded-md bg-background text-sm text-muted-foreground transition-colors focus:outline-none focus:ring-1 focus:ring-ring"
+                />
+              </Autocomplete>
+              {formik.touched?.brunches?.[activeBrunch]?.address &&
+                formik.errors?.brunches?.[activeBrunch]?.address && (
+                  <TooltipValid tooltipText={formik.errors.brunches[activeBrunch].address} />
+                )}
+            </div>
 
             <button
               type="button"
@@ -248,8 +254,9 @@ export default function AddressSearchMap({ typeMarketer }) {
             </button>
           </div>
         ) : (
-          <Autocomplete onLoad={handleLoad} onPlaceChanged={handlePlaceChanged}>
-            <>
+<div className="flex flex-col space-y-6 relative w-full">
+            <div>
+            <Autocomplete onLoad={handleLoad} onPlaceChanged={handlePlaceChanged}>
               <input
                 type="text"
                 placeholder="הכנס כתובת..."
@@ -257,10 +264,14 @@ export default function AddressSearchMap({ typeMarketer }) {
                 onChange={(e) => handleInputChange(e.target.value)}
                 className="w-full h-11 px-4 border border-input rounded-md bg-background text-sm text-muted-foreground transition-colors focus:outline-none focus:ring-1 focus:ring-ring"
               />
-              {formik.touched[address] && (formik.errors[address] || errorsPertip[address]) && (
-                <TooltipValid tooltipText={formik.errors[address] || errorsPertip[address]} />
-              )}</>
-          </Autocomplete>
+            </Autocomplete>
+            </div>
+            
+            {formik.touched?.brunches?.[activeBrunch]?.address &&
+              formik.errors?.brunches?.[activeBrunch]?.address && (
+                <TooltipValid tooltipText={formik.errors.brunches[activeBrunch].address} />
+              )}
+          </div>
         )}
 
         <div className="flex-1 min-h-[500px] lg:min-h-[300px] h-full">

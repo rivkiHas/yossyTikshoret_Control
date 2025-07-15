@@ -10,6 +10,7 @@ import { RegisterForm2 } from "../register_form2";
 import { ArrowLongLeftIcon, PlusCircleIcon, ArrowLongRightIcon } from '@heroicons/react/24/outline'
 import AlertSuccess from '../alert_sucsses'
 import { useFormikContext } from 'formik';
+import TooltipValid from "../tooltip_valid";
 
 export default function StepThree() {
   const dispatch = useDispatch();
@@ -20,6 +21,7 @@ export default function StepThree() {
   const formik = useFormikContext();
   const activeStep = useSelector(state => state.stepper.activeStep);
   const [validators, setValidators] = useState({});
+  const [formErrors, setFormErrors] = useState({});
   const user = useSelector((state) => state.form.pertip);
   const brunches = useSelector((state) => state.brunch.brunches);
   const contactMans = useSelector(state => state.conectMan.contactMans || []);
@@ -116,16 +118,15 @@ export default function StepThree() {
   const nextStepInRedux = async () => {
     const errors = await formik.validateForm();
     if (Object.keys(errors).length === 0) {
+      setFormErrors({}); // נקי שגיאות
       if (activeStep >= 2) {
         setIsLoading(true);
         try {
           await sendDataToServer();
           dispatch(nextStep());
           setShowAlert(true);
-          console.log("הנתונים נשלחו בהצלחה!");
           return null;
         } catch (error) {
-          console.error("שגיאה בשליחה לשרת:", error.message);
           alert(`שגיאה בשליחה לשרת: ${error.message}`);
           return { server: error.message };
         } finally {
@@ -136,12 +137,14 @@ export default function StepThree() {
         return null;
       }
     } else {
+      setFormErrors(errors); // שמור שגיאות ל-tooltip
       formik.setTouched(
         Object.keys(errors).reduce((acc, key) => ({ ...acc, [key]: true }), {})
       );
       return errors;
     }
   };
+
 
   const previousStepInRedux = () => {
     dispatch(setActiveStep(activeStep - 1));
@@ -199,17 +202,38 @@ export default function StepThree() {
             <ArrowLongRightIcon />
             שלב קודם
           </Button>
-          <Button
-            onClick={nextStepInRedux}
-            disabled={isLoading}
-            className="flex cursor-pointer items-center gap-3 text-black border border-black p-5 rounded-full relative overflow-hidden bg-white transition-all duration-400 ease-in-out shadow-md hover:scale-105 hover:text-black hover:shadow-lg active:scale-90
-before:absolute before:top-0 before:-right-full before:w-full before:h-full 
-before:bg-[#F8BD00] before:transition-all before:duration-500 before:ease-in-out 
-before:z-[-1] before:rounded-full hover:before:right-0 disabled:opacity-50 disabled:hover:scale-100"
-          >
-            {isLoading ? 'שולח...' : 'סיימתי, אפשר לשלוח'}
-            <ArrowLongLeftIcon />
-          </Button>
+
+          <div className="relative w-full max-w-[300px] mx-auto">
+            {Object.keys(formErrors).length > 0 && (
+              <TooltipValid
+                tooltipText={
+                  "לא מילאת את כל השדות בטופס.\n" +
+                  Object.keys(formErrors)
+                    .map((field) => {
+                      if (field === "pertip") return "שלב 1 - פרטי העסק";
+                      if (field === "brunches") return "שלב 2 - סניפים";
+                      if (field === "contactMans") return "שלב 3 - אנשי קשר";
+                      return field;
+                    })
+                    .join(", ")
+                }
+                className="absolute -top-18 right-0 max-w-[200px] w-max mb-3"
+              />
+            )}
+
+            <Button
+              onClick={nextStepInRedux}
+              disabled={isLoading}
+              className="flex cursor-pointer items-center gap-3 text-black border border-black p-5 rounded-full relative overflow-hidden bg-white transition-all duration-400 ease-in-out shadow-md hover:scale-105 hover:text-black hover:shadow-lg active:scale-90
+    before:absolute before:top-0 before:-right-full before:w-full before:h-full 
+    before:bg-[#F8BD00] before:transition-all before:duration-500 before:ease-in-out 
+    before:z-[-1] before:rounded-full hover:before:right-0 disabled:opacity-50 disabled:hover:scale-100"
+            >
+              {isLoading ? 'שולח...' : 'סיימתי, אפשר לשלוח'}
+              <ArrowLongLeftIcon />
+            </Button>
+          </div>
+
         </div>
       </div>
       {showAlert && (
