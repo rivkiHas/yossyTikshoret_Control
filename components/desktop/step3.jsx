@@ -115,10 +115,12 @@ export default function StepThree() {
     }
   };
 
-  const nextStepInRedux = async () => {
+
+const nextStepInRedux = async () => {
     const errors = await formik.validateForm();
+    
     if (Object.keys(errors).length === 0) {
-      setFormErrors({}); // נקי שגיאות
+      setFormErrors({});
       if (activeStep >= 2) {
         setIsLoading(true);
         try {
@@ -137,13 +139,59 @@ export default function StepThree() {
         return null;
       }
     } else {
-      setFormErrors(errors); // שמור שגיאות ל-tooltip
-      formik.setTouched(
-        Object.keys(errors).reduce((acc, key) => ({ ...acc, [key]: true }), {})
-      );
+      setFormErrors(errors);
+      
+      const createTouchedFromErrors = (errorsObj) => {
+        const touched = {};
+        
+        Object.keys(errorsObj).forEach(key => {
+          const errorValue = errorsObj[key];
+          
+          if (Array.isArray(errorValue)) {
+            touched[key] = errorValue.map((itemError, index) => {
+              if (typeof itemError === 'object' && itemError !== null) {
+                const itemTouched = {};
+                Object.keys(itemError).forEach(field => {
+                  itemTouched[field] = true;
+                });
+                return itemTouched;
+              }
+              return true;
+            });
+          } else if (typeof errorValue === 'object' && errorValue !== null) {
+            touched[key] = createTouchedFromErrors(errorValue);
+          } else {
+            touched[key] = true;
+          }
+        });
+        
+        return touched;
+      };
+      
+      const touchedFields = createTouchedFromErrors(errors);
+      
+      
+      
+      if (touchedFields.contactMans && Array.isArray(touchedFields.contactMans)) {
+        touchedFields.contactMans.forEach((contactTouched, index) => {
+          if (contactTouched && typeof contactTouched === 'object') {
+            Object.keys(contactTouched).forEach(field => {
+              const fieldPath = `contactMans[${index}].${field}`;
+              formik.setFieldTouched(fieldPath, true);
+            });
+          }
+        });
+      }
+      
+      Object.keys(touchedFields).forEach(key => {
+        if (!Array.isArray(touchedFields[key])) {
+          formik.setFieldTouched(key, true);
+        }
+      });
+      
       return errors;
     }
-  };
+};
 
 
   const previousStepInRedux = () => {
