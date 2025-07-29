@@ -1,36 +1,30 @@
 import {
-  AlertDialog as AlertDialogRoot,
-  AlertDialogTrigger,
+  AlertDialogAction,
   AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogFooter,
-  AlertDialogTitle,
   AlertDialogDescription,
-  AlertDialogCancel,
-  AlertDialogAction
-} from "@/components/ui/alert-dialog";
-import { Input } from "@/components/ui/input";
-import { ArrowLongLeftIcon } from '@heroicons/react/24/outline';
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialog as AlertDialogRoot,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
+import { Input } from '@/components/ui/input'
+import { ArrowLongLeftIcon } from '@heroicons/react/24/outline'
 
 export function AlertDialogEdit({ open, onConfirm, onCancel, value, onChange }) {
   return (
     <AlertDialogRoot open={open} dir="rtl" className={'font-assistant'}>
       <AlertDialogContent
-        className="flex w-[398px] p-8 flex-col justify-center items-start gap-4"
+        className="flex w-[398px] flex-col items-start justify-center gap-4 p-8"
         style={{ direction: 'rtl' }}
       >
         <AlertDialogHeader className="w-full">
-          <AlertDialogTitle
-            className="text-right text-black text-[25px] font-semibold"
-          >
+          <AlertDialogTitle className="text-right text-[25px] font-semibold text-black">
             כינוי שם לסניף
           </AlertDialogTitle>
-          <AlertDialogDescription
-            className="text-right text-black text-[16px] font-normal leading-6 mt-2"
-          >
+          <AlertDialogDescription className="mt-2 text-right text-[16px] leading-6 font-normal text-black">
             כדי לשמור על סדר במערכת הקונטרול, איזה שם תרצה לתת לסניף הזה?
           </AlertDialogDescription>
-          <div className="flex flex-col items-end gap-[5px] w-full mt-2">
+          <div className="mt-2 flex w-full flex-col items-end gap-[5px]">
             <Input
               value={value}
               onChange={(e) => onChange(e.target.value)}
@@ -39,16 +33,16 @@ export function AlertDialogEdit({ open, onConfirm, onCancel, value, onChange }) 
             />
           </div>
         </AlertDialogHeader>
-        <AlertDialogFooter className="w-full mt-4">
+        <AlertDialogFooter className="mt-4 w-full">
           <AlertDialogAction
             onClick={onConfirm}
-            className="flex cursor-pointer px-10 py-3 justify-center items-center gap-2 border border-[#F8BD00] bg-[#F8BD00] text-black rounded-full hover:bg-white"
+            className="flex cursor-pointer items-center justify-center gap-2 rounded-full border border-[#F8BD00] bg-[#F8BD00] px-10 py-3 text-black hover:bg-white"
           >
             סיימתי, הולך לסניף הבא
-            <ArrowLongLeftIcon className="w-5 h-5" />
+            <ArrowLongLeftIcon className="h-5 w-5" />
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialogRoot>
-  );
+  )
 }

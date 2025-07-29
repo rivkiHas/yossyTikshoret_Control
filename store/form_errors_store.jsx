@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit'
 
 const formErrorsSlice = createSlice({
   name: 'formErrors',
@@ -9,7 +9,7 @@ const formErrorsSlice = createSlice({
   },
   reducers: {
     setFormErrors: (state, action) => {
-      return action.payload;
+      return action.payload
     },
     clearFormErrors: () => ({
       pertip: {},
@@ -17,7 +17,7 @@ const formErrorsSlice = createSlice({
       contacts: [],
     }),
   },
-});
+})
 
-export const { setFormErrors, clearFormErrors } = formErrorsSlice.actions;
-export default formErrorsSlice.reducer;
+export const { setFormErrors, clearFormErrors } = formErrorsSlice.actions
+export default formErrorsSlice.reducer

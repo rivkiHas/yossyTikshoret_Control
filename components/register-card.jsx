@@ -1,18 +1,13 @@
-import { useSelector } from 'react-redux';
 import { cn } from '@/lib/utils'
+import { stepOneSchema, stepThreeSchema, stepTwoSchema } from '@/lib/validation_schema'
+import { Form, Formik } from 'formik'
+import { useSelector } from 'react-redux'
+import * as Yup from 'yup'
 import { Tabs } from './desktop/tabs'
 import { Tabs2 } from './desktop/tabs2'
-import { Formik, Form } from 'formik';
-import * as Yup from 'yup';
-import {
-  stepOneSchema,
-  stepTwoSchema,
-  stepThreeSchema
-} from '@/lib/validation_schema';
-
 
 export function RegisterCard({ className, ...props }) {
-  const activeStep = useSelector((state) => state.stepper.activeStep);
+  const activeStep = useSelector((state) => state.stepper.activeStep)
   const initialValues = {
     name: '',
     email: '',
@@ -26,17 +21,17 @@ export function RegisterCard({ className, ...props }) {
         address: '',
         location: {},
         hoursOpen: '',
-      }
+      },
     ],
     contactMans: [
       {
         contactName: '',
         contactPhone: '',
         contactEmail: '',
-        contactRole: 'seller'
-      }
+        contactRole: 'seller',
+      },
     ],
-  };
+  }
 
   const getValidationSchema = (activeStep) => {
     switch (activeStep) {
@@ -48,11 +43,11 @@ export function RegisterCard({ className, ...props }) {
           phone: stepOneSchema.fields.phone,
           typeMarketer: Yup.string().oneOf(['store', 'agent']).required('סוג משווק הוא שדה חובה'),
           logo: stepOneSchema.fields.logo,
-        });
+        })
       case 1:
         return Yup.object({
           brunches: stepTwoSchema.fields.brunches,
-        });
+        })
       case 2:
         return Yup.object({
           contactMans: stepThreeSchema,
@@ -63,7 +58,7 @@ export function RegisterCard({ className, ...props }) {
           typeMarketer: Yup.string().oneOf(['store', 'agent']).required('סוג משווק הוא שדה חובה'),
           logo: Yup.mixed().nullable(),
           brunches: stepTwoSchema.fields.brunches,
-        });
+        })
       default:
         return Yup.object({
           name: Yup.string().required('שם הוא שדה חובה'),
@@ -73,14 +68,14 @@ export function RegisterCard({ className, ...props }) {
           typeMarketer: Yup.string().oneOf(['store', 'agent']).required('סוג משווק הוא שדה חובה'),
           logo: Yup.mixed().nullable(),
           brunches: stepTwoSchema.fields.brunches,
-          contactMans: stepThreeSchema
-        });
+          contactMans: stepThreeSchema,
+        })
     }
-  };
+  }
 
   const handleSubmit = (values) => {
-    console.log('Submitting...', values);
-  };
+    console.log('Submitting...', values)
+  }
 
   return (
     <Formik
@@ -103,5 +98,5 @@ export function RegisterCard({ className, ...props }) {
         </Form>
       )}
     </Formik>
-  );
+  )
 }

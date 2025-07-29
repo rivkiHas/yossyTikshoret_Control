@@ -1,63 +1,57 @@
-'use client';
+'use client'
 
 import {
   AlertDialog,
-  AlertDialogTrigger,
+  AlertDialogAction,
+  AlertDialogCancel,
   AlertDialogContent,
+  AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogFooter,
-  AlertDialogCancel,
-  AlertDialogAction
-} from '@/components/ui/alert-dialog';
-import { Trash2 } from 'lucide-react';
-import { useState } from 'react';
-import { CheckCircleIcon } from '@heroicons/react/24/outline';
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
+import { CheckCircleIcon } from '@heroicons/react/24/outline'
+import { Trash2 } from 'lucide-react'
+import { useState } from 'react'
 
-
-export default function IconButton({ text, onConfirm, contactId , headerText}) {
-  const [open, setOpen] = useState(false);
+export default function IconButton({ text, onConfirm, contactId, headerText }) {
+  const [open, setOpen] = useState(false)
   const handleConfirm = () => {
-    onConfirm(contactId);
-    setOpen(false);
-  };
+    onConfirm(contactId)
+    setOpen(false)
+  }
 
   return (
-    <AlertDialog open={open} onOpenChange={setOpen} dir='rtl'>
+    <AlertDialog open={open} onOpenChange={setOpen} dir="rtl">
       <AlertDialogTrigger asChild>
         <button
           type="button"
-          className="group flex h-[40px] w-[40px] items-center cursor-pointer justify-center rounded-full bg-[#FEF2CC] text-[#F8BD00] transition-all duration-500 ease-in-out hover:w-auto hover:rounded-3xl hover:px-3 hover:flex-row-reverse"
+          className="group flex h-[40px] w-[40px] cursor-pointer items-center justify-center rounded-full bg-[#FEF2CC] text-[#F8BD00] transition-all duration-500 ease-in-out hover:w-auto hover:flex-row-reverse hover:rounded-3xl hover:px-3"
         >
-          <span
-            className="hidden group-hover:inline-block text-black text-base font-bold
-             opacity-0 group-hover:opacity-100
-             transition-opacity duration-300 ease-in-out
-             delay-[1500ms]"
-          >
+          <span className="hidden text-base font-bold text-black opacity-0 transition-opacity delay-[1500ms] duration-300 ease-in-out group-hover:inline-block group-hover:opacity-100">
             {headerText}
           </span>
 
-          <Trash2 className="w-5 h-5" />
+          <Trash2 className="h-5 w-5" />
         </button>
-
       </AlertDialogTrigger>
-      <AlertDialogContent dir='rtl' style={{ direction: 'rtl', textAlign: 'right', width: '350px' }}>
-        <AlertDialogHeader dir='rtl' style={{ direction: 'rtl', textAlign: 'right' }}>
+      <AlertDialogContent dir="rtl" style={{ direction: 'rtl', textAlign: 'right', width: '350px' }}>
+        <AlertDialogHeader dir="rtl" style={{ direction: 'rtl', textAlign: 'right' }}>
           <AlertDialogTitle className={'text-2xl font-semibold'}> {text}</AlertDialogTitle>
         </AlertDialogHeader>
-        <AlertDialogFooter >
-          <AlertDialogCancel className="flex cursor-pointer px-6 py-3 rounded-full justify-center items-center gap-2 border border-[#F8BD00] bg-white text-black">
+        <AlertDialogFooter>
+          <AlertDialogCancel className="flex cursor-pointer items-center justify-center gap-2 rounded-full border border-[#F8BD00] bg-white px-6 py-3 text-black">
             ביטול
           </AlertDialogCancel>
           <AlertDialogAction
             onClick={handleConfirm}
-            className="flex px-10 py-3 justify-center items-center gap-2 cursor-pointer border border-[#F8BD00] bg-[#F8BD00] text-black rounded-full hover:bg-white">
+            className="flex cursor-pointer items-center justify-center gap-2 rounded-full border border-[#F8BD00] bg-[#F8BD00] px-10 py-3 text-black hover:bg-white"
+          >
             אישור
             <CheckCircleIcon />
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
-  );
+  )
 }

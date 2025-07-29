@@ -1,175 +1,192 @@
-'use client';
+'use client'
 
-import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { updateBrunchDetails } from '@/store/brunch_store';
-import { Switch } from "@/components/ui/switch";
-import { Typography } from './typhography';
-import { PencilSquareIcon, PlusCircleIcon, MinusCircleIcon } from '@heroicons/react/24/solid';
-import { PlusCircleIcon as PlusCircleIconToButton } from '@heroicons/react/24/outline';
+import { Switch } from '@/components/ui/switch'
+import { updateBrunchDetails } from '@/store/brunch_store'
+import { PlusCircleIcon as PlusCircleIconToButton } from '@heroicons/react/24/outline'
+import { MinusCircleIcon, PencilSquareIcon, PlusCircleIcon } from '@heroicons/react/24/solid'
+import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { Typography } from './typhography'
 
-import CustomTimeInput from './custom_time_input';
-import { Button } from "./ui/button";
+import { addBrunch, setActiveBrunch } from '../store/brunch_store'
+import { setActiveStep } from '../store/step_store'
 import { AlertDialogEdit } from './alert_dialog_edit'
-import { addBrunch, removeBrunch, setActiveBrunch } from "../store/brunch_store";
-import { nextStep, prevStep, setActiveStep } from "../store/step_store";
+import CustomTimeInput from './custom_time_input'
+import { Button } from './ui/button'
 
 const validateHours = (hoursData) => {
-  const newErrors = {};
+  const newErrors = {}
 
   hoursData.forEach((dayHours, index) => {
-    if (!dayHours) return;
+    if (!dayHours) return
 
-    const dayErrors = {};
-    const { morning, evening } = dayHours;
+    const dayErrors = {}
+    const { morning, evening } = dayHours
+
+    if (!morning?.open) {
+      dayErrors.morning = { ...(dayErrors.morning || {}), open: 'שעת פתיחה חובה' }
+    }
+    if (!morning?.close) {
+      dayErrors.morning = { ...(dayErrors.morning || {}), close: 'שעת סגירה חובה' }
+    }
+
+    if ((evening?.open && !evening?.close) || (!evening?.open && evening?.close)) {
+      if (!evening?.open) {
+        dayErrors.evening = { ...(dayErrors.evening || {}), open: 'שעת פתיחה חובה' }
+      }
+      if (!evening?.close) {
+        dayErrors.evening = { ...(dayErrors.evening || {}), close: 'שעת סגירה חובה' }
+      }
+    }
 
     if (morning?.open && morning?.close && morning.open >= morning.close) {
       dayErrors.morning = {
-        open: "שעת פתיחה חייבת להיות לפני שעת סגירה",
-        close: "שעת סגירה חייבת להיות אחרי שעת פתיחה"
-      };
+        ...dayErrors.morning,
+        open: 'שעת פתיחה חייבת להיות לפני שעת סגירה',
+        close: 'שעת סגירה חייבת להיות אחרי שעת פתיחה',
+      }
     }
 
     if (evening?.open && evening?.close && evening.open >= evening.close) {
       dayErrors.evening = {
-        open: "שעת פתיחה חייבת להיות לפני שעת סגירה",
-        close: "שעת סגירה חייבת להיות אחרי שעת פתיחה"
-      };
+        ...dayErrors.evening,
+        open: 'שעת פתיחה חייבת להיות לפני שעת סגירה',
+        close: 'שעת סגירה חייבת להיות אחרי שעת פתיחה',
+      }
     }
-
-   
 
     if (Object.keys(dayErrors).length > 0) {
-      newErrors[index] = dayErrors;
+      newErrors[index] = dayErrors
     }
-  });
+  })
 
-  return newErrors;
-};
+  return newErrors
+}
 
 const HoursOpenMobile = ({ typeMarketer }) => {
-  const dispatch = useDispatch();
-  const [isGrouped, setIsGrouped] = useState(false);
-  const [isSwitchOn, setIsSwitchOn] = useState(false);
-  const brunches = useSelector((state) => state.brunch.brunches);
-  const activeBrunch = useSelector((state) => state.brunch.activeBrunch);
-  const brunch = brunches.find((b) => b.id === activeBrunch) || null;
-  const [localHoursOpen, setLocalHoursOpen] = useState([]);
-  const [errors, setErrors] = useState({});
-  const [showDialog, setShowDialog] = useState(false);
-  const [newBranchName, setNewBranchName] = useState('');
+  const dispatch = useDispatch()
+  const [isGrouped, setIsGrouped] = useState(false)
+  const [isSwitchOn, setIsSwitchOn] = useState(false)
+  const brunches = useSelector((state) => state.brunch.brunches)
+  const activeBrunch = useSelector((state) => state.brunch.activeBrunch)
+  const brunch = brunches.find((b) => b.id === activeBrunch) || null
+  const [localHoursOpen, setLocalHoursOpen] = useState([])
+  const [errors, setErrors] = useState({})
+  const [showDialog, setShowDialog] = useState(false)
+  const [newBranchName, setNewBranchName] = useState('')
 
   useEffect(() => {
     const initialHours = Array.from({ length: 7 }, () => ({
       morning: { open: '', close: '' },
-      evening: { open: '', close: '' }
-    }));
+      evening: { open: '', close: '' },
+    }))
 
     if (brunch?.hoursOpen) {
-      const parsedHours = JSON.parse(JSON.stringify(brunch.hoursOpen));
+      const parsedHours = JSON.parse(JSON.stringify(brunch.hoursOpen))
       parsedHours.forEach((day, index) => {
         if (day) {
-          initialHours[index] = { ...initialHours[index], ...day };
+          initialHours[index] = { ...initialHours[index], ...day }
         }
-      });
-      setLocalHoursOpen(initialHours);
-      setErrors(validateHours(initialHours));
+      })
+      setLocalHoursOpen(initialHours)
+      setErrors(validateHours(initialHours))
     } else {
-      setLocalHoursOpen(initialHours);
+      setLocalHoursOpen(initialHours)
     }
-  }, [brunch]);
+  }, [brunch])
 
   const handleChange = (day, period, type, value, index) => {
-    if (index === undefined || index === null) return;
+    if (index === undefined || index === null) return
 
-    let updatedHours = JSON.parse(JSON.stringify(localHoursOpen));
+    let updatedHours = JSON.parse(JSON.stringify(localHoursOpen))
 
     if (!isGrouped && index === 1) {
-      const daysToUpdate = [1, 2, 3, 4, 5];
+      const daysToUpdate = [1, 2, 3, 4, 5]
       daysToUpdate.forEach((dayIndex) => {
-        if (!updatedHours[dayIndex]) updatedHours[dayIndex] = { morning: {}, evening: {} };
-        if (!updatedHours[dayIndex][period]) updatedHours[dayIndex][period] = {};
-        updatedHours[dayIndex][period][type] = value;
-      });
+        if (!updatedHours[dayIndex]) updatedHours[dayIndex] = { morning: {}, evening: {} }
+        if (!updatedHours[dayIndex][period]) updatedHours[dayIndex][period] = {}
+        updatedHours[dayIndex][period][type] = value
+      })
     } else {
-      if (!updatedHours[index]) updatedHours[index] = { morning: {}, evening: {} };
-      if (!updatedHours[index][period]) updatedHours[index][period] = {};
-      updatedHours[index][period][type] = value;
+      if (!updatedHours[index]) updatedHours[index] = { morning: {}, evening: {} }
+      if (!updatedHours[index][period]) updatedHours[index][period] = {}
+      updatedHours[index][period][type] = value
     }
 
-    setLocalHoursOpen(updatedHours);
-    const validationErrors = validateHours(updatedHours);
-    setErrors(validationErrors);
+    setLocalHoursOpen(updatedHours)
+    const validationErrors = validateHours(updatedHours)
+    setErrors(validationErrors)
 
     if (brunch && Object.keys(validationErrors).length === 0) {
-      dispatch(updateBrunchDetails({
-        id: brunch.id,
-        hoursOpen: updatedHours,
-      }));
+      dispatch(
+        updateBrunchDetails({
+          id: brunch.id,
+          hoursOpen: updatedHours,
+        })
+      )
     }
-  };
+  }
 
   const handleAddBranchClick = () => {
-    setShowDialog(true);
-  };
+    setShowDialog(true)
+  }
   const handleConfirmAddBranch = () => {
-    const newId = Math.max(...brunches.map(b => b.id), 0) + 1;
+    const newId = Math.max(...brunches.map((b) => b.id), 0) + 1
     const newBrunch = {
       id: newId,
       name: newBranchName || `${brunches.length + 1}`,
-      address: "",
+      address: '',
       location: {
         lat: 32.0853,
-        lng: 34.7818
+        lng: 34.7818,
       },
       hoursOpen: [
-        { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
-        { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
-        { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
-        { morning: { open: "", close: "" }, evening: { open: "", close: "" } },
-        { morning: { open: "", close: "" }, evening: { open: "", close: "" } }
+        { morning: { open: '', close: '' }, evening: { open: '', close: '' } },
+        { morning: { open: '', close: '' }, evening: { open: '', close: '' } },
+        { morning: { open: '', close: '' }, evening: { open: '', close: '' } },
+        { morning: { open: '', close: '' }, evening: { open: '', close: '' } },
+        { morning: { open: '', close: '' }, evening: { open: '', close: '' } },
       ],
-    };
-    dispatch(addBrunch(newBrunch));
-    dispatch(setActiveBrunch(newId));
-    const newBrunchIndex = brunches.length;
-    dispatch(setActiveStep(2 + newBrunchIndex));
-    setShowDialog(false);
-    setNewBranchName('');
-  };
+    }
+    dispatch(addBrunch(newBrunch))
+    dispatch(setActiveBrunch(newId))
+    const newBrunchIndex = brunches.length
+    dispatch(setActiveStep(2 + newBrunchIndex))
+    setShowDialog(false)
+    setNewBranchName('')
+  }
 
   const handleSwitchChange = (checked) => {
-    setIsSwitchOn(checked);
-  };
+    setIsSwitchOn(checked)
+  }
 
   return (
-    <div className="h-full w-full flex flex-col bg-white rounded-[40px] p-6">
-      <div className="flex flex-row justify-between mb-4">
+    <div className="flex h-full w-full flex-col rounded-[40px] bg-white p-6">
+      <div className="mb-4 flex flex-row justify-between">
         <Typography className="text-2xl font-bold">
-          {typeMarketer === "agent" ? "שעות זמינות" : "שעות פתיחה"}
+          {typeMarketer === 'agent' ? 'שעות זמינות' : 'שעות פתיחה'}
         </Typography>
         <button
           onClick={() => setIsGrouped((prev) => !prev)}
           type="button"
           className="group flex h-[40px] w-[40px] items-center justify-center rounded-full bg-[#FEF2CC] text-[#F8BD00]"
         >
-          <PencilSquareIcon className="w-5 h-5" />
+          <PencilSquareIcon className="h-5 w-5" />
         </button>
       </div>
 
-      <div className="mb-5 bg-[#F4F4F4] rounded-4xl p-2 w-fit">
-        <div dir="ltr" className="flex items-center gap-2 w-fit">
-          <span className="text-sm text-[#111928] font-semibold">שעות בתיאום מראש</span>
-          <Switch checked={isSwitchOn} onCheckedChange={handleSwitchChange} className="duration-300 cursor-pointer" />
+      <div className="mb-5 w-fit rounded-4xl bg-[#F4F4F4] p-2">
+        <div dir="ltr" className="flex w-fit items-center gap-2">
+          <span className="text-sm font-semibold text-[#111928]">שעות בתיאום מראש</span>
+          <Switch checked={isSwitchOn} onCheckedChange={handleSwitchChange} className="cursor-pointer duration-300" />
         </div>
       </div>
 
-      <div className="flex-1 relative">
+      <div className="relative flex-1">
         {isSwitchOn && (
- <div className="absolute inset-0 z-10 
-            left-[30.16px] bottom-[0.989px] 
-            bg-white/30 backdrop-blur-xs" />        )}
-        <div className="h-full lg:max-h-[400px] lg:overflow-y-auto lg:scrollbar-custom flex flex-col text-[22px] font-semibold text-[#F8BD00]">
+          <div className="absolute inset-0 bottom-[0.989px] left-[30.16px] z-10 bg-white/30 backdrop-blur-xs" />
+        )}
+        <div className="lg:scrollbar-custom flex h-full flex-col text-[22px] font-semibold text-[#F8BD00] lg:max-h-[400px] lg:overflow-y-auto">
           {!isGrouped ? (
             <DayRow
               day="weekdays"
@@ -181,7 +198,7 @@ const HoursOpenMobile = ({ typeMarketer }) => {
               disabled={isSwitchOn}
             />
           ) : (
-            ["ראשון", "שני", "שלישי", "רביעי", "חמישי"].map((day, idx) => (
+            ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי'].map((day, idx) => (
               <DayRow
                 key={idx}
                 day={day}
@@ -208,9 +225,9 @@ const HoursOpenMobile = ({ typeMarketer }) => {
       </div>
       <Button
         onClick={handleAddBranchClick}
-        className="cursor-pointer bg-black border hover:bg-white hover:text-black hover:border-black text-white p-5 gap-2 rounded-full"
+        className="cursor-pointer gap-2 rounded-full border bg-black p-5 text-white hover:border-black hover:bg-white hover:text-black"
       >
-        <PlusCircleIconToButton className="w-5 h-5" />
+        <PlusCircleIconToButton className="h-5 w-5" />
         הוספת סניף נוסף
       </Button>
       <AlertDialogEdit
@@ -221,25 +238,21 @@ const HoursOpenMobile = ({ typeMarketer }) => {
         onCancel={() => setShowDialog(false)}
       />
     </div>
-  );
-};
+  )
+}
 
 const DayRow = ({ day, label, hours, handleChange, errors, index, disabled, isFriday = false }) => {
- const [isEveningVisible, setIsEveningVisible] = useState(false);
+  const [isEveningVisible, setIsEveningVisible] = useState(false)
 
   const toggleEvening = () => {
-  setIsEveningVisible((prev) => !prev);
-};
+    setIsEveningVisible((prev) => !prev)
+  }
   return (
-    <div className="flex-shrink-0 bg-white rounded-xl mb-4">
-      <div className={`flex items-center mb-2 ${isFriday ? 'justify-start pr-12' : 'justify-around'}`}>
+    <div className="mb-4 flex-shrink-0 rounded-xl bg-white">
+      <div className={`mb-2 flex items-center ${isFriday ? 'justify-start pr-12' : 'justify-around'}`}>
         <Typography className="text-[24px] font-bold text-[#F8BD00]">{label}</Typography>
         {!isFriday && (
-          <button
-            onClick={toggleEvening}
-            disabled={disabled}
-            className="cursor-pointer outline-none"
-          >
+          <button onClick={toggleEvening} disabled={disabled} className="cursor-pointer outline-none">
             {isEveningVisible ? (
               <MinusCircleIcon className="h-[30px] w-[30px] text-black hover:text-[#F8BD00]" />
             ) : (
@@ -249,20 +262,20 @@ const DayRow = ({ day, label, hours, handleChange, errors, index, disabled, isFr
         )}
       </div>
 
-      <div className="flex flex-col gap-3 items-center">
-       {isEveningVisible ? ( <label className="w-full text-black text-sm text-right pr-7">שעות בוקר</label>) : null}
-        <div className="flex gap-8 justify-between">
+      <div className="flex flex-col items-center gap-3">
+        {isEveningVisible ? <label className="w-full pr-7 text-right text-sm text-black">שעות בוקר</label> : null}
+        <div className="flex justify-between gap-8">
           <InputTimeBlock
             label="שעת פתיחה"
             value={hours?.morning?.open}
-            onChange={(e) => handleChange(day, "morning", "open", e.target.value, index)}
+            onChange={(e) => handleChange(day, 'morning', 'open', e.target.value, index)}
             disabled={disabled}
             error={errors?.morning?.open}
           />
           <InputTimeBlock
             label="שעת סגירה"
             value={hours?.morning?.close}
-            onChange={(e) => handleChange(day, "morning", "close", e.target.value, index)}
+            onChange={(e) => handleChange(day, 'morning', 'close', e.target.value, index)}
             disabled={disabled}
             error={errors?.morning?.close}
           />
@@ -270,19 +283,19 @@ const DayRow = ({ day, label, hours, handleChange, errors, index, disabled, isFr
 
         {isEveningVisible && (
           <>
-            <label className=" text-black text-sm mb-1 mt-3">שעות ערב</label>
+            <label className="mt-3 mb-1 text-sm text-black">שעות ערב</label>
             <div className="flex gap-8">
               <InputTimeBlock
                 label="שעת פתיחה"
                 value={hours?.evening?.open}
-                onChange={(e) => handleChange(day, "evening", "open", e.target.value, index)}
+                onChange={(e) => handleChange(day, 'evening', 'open', e.target.value, index)}
                 disabled={disabled}
                 error={errors?.evening?.open}
               />
               <InputTimeBlock
                 label="שעת סגירה"
                 value={hours?.evening?.close}
-                onChange={(e) => handleChange(day, "evening", "close", e.target.value, index)}
+                onChange={(e) => handleChange(day, 'evening', 'close', e.target.value, index)}
                 disabled={disabled}
                 error={errors?.evening?.close}
               />
@@ -291,15 +304,14 @@ const DayRow = ({ day, label, hours, handleChange, errors, index, disabled, isFr
         )}
       </div>
     </div>
-  );
-};
-
+  )
+}
 
 const InputTimeBlock = ({ label, value, onChange, disabled, error }) => (
-  <div className="flex flex-col min-h-[70px]">
+  <div className="flex min-h-[70px] flex-col">
     <label className="text-sm text-black">{label}</label>
-    <CustomTimeInput value={value || ""} onChange={onChange} disabled={disabled} error={error} />
+    <CustomTimeInput value={value || ''} onChange={onChange} disabled={disabled} error={error} />
   </div>
-);
+)
 
-export default HoursOpenMobile;
+export default HoursOpenMobile

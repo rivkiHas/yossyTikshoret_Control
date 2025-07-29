@@ -54,7 +54,7 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --font-display: "SimplerPro", "sans-serif";
+  --font-display: 'SimplerPro', 'sans-serif';
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -205,5 +205,4 @@
       opacity: 0;
     }
   }
-
 }

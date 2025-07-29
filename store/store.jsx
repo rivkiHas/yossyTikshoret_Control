@@ -1,9 +1,9 @@
-import { configureStore } from '@reduxjs/toolkit';
-import stepReducer from './step_store';
+import { configureStore } from '@reduxjs/toolkit'
 import brunchReducer from './brunch_store'
 import conectManReducer from './contact_man_store'
-import formReducer from './form_store'
 import formErrorsReducer from './form_errors_store'
+import formReducer from './form_store'
+import stepReducer from './step_store'
 
 const store = configureStore({
   reducer: {
@@ -13,6 +13,6 @@ const store = configureStore({
     conectMan: conectManReducer,
     formErrors: formErrorsReducer,
   },
-});
+})
 
-export default store;
+export default store

@@ -1,8 +1,6 @@
-
 import { ThemeProvider } from '@/components/theme-provider'
 
 import './globals.css'
-
 
 export const metadata = {
   title: 'יוסי תקשורת',
@@ -12,7 +10,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="he" dir="rtl" suppressHydrationWarning className="font-[SimplerPro]">
-      <body className={`antialiased `}>
+      <body className={`antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
           {children}
         </ThemeProvider>
