@@ -25,7 +25,6 @@ export default function StepOne({ index }) {
             logo: logo?.name || '',
           })
         )
-
         dispatch(setActiveStep(activeStep + 1))
       } else {
         formik.setTouched(Object.keys(errors).reduce((acc, key) => ({ ...acc, [key]: true }), {}))

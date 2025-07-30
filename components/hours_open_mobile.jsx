@@ -7,7 +7,6 @@ import { MinusCircleIcon, PencilSquareIcon, PlusCircleIcon } from '@heroicons/re
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Typography } from './typhography'
-
 import { addBrunch, setActiveBrunch } from '../store/brunch_store'
 import { setActiveStep } from '../store/step_store'
 import { AlertDialogEdit } from './alert_dialog_edit'
@@ -96,36 +95,34 @@ const HoursOpenMobile = ({ typeMarketer }) => {
   }, [brunch])
 
   const handleChange = (day, period, type, value, index) => {
-    if (index === undefined || index === null) return
+    if (index === undefined || index === null) return;
 
-    let updatedHours = JSON.parse(JSON.stringify(localHoursOpen))
+    let updatedHours = JSON.parse(JSON.stringify(localHoursOpen));
 
     if (!isGrouped && index === 1) {
-      const daysToUpdate = [1, 2, 3, 4, 5]
+      const daysToUpdate = [0, 1, 2, 3, 4, 5];
       daysToUpdate.forEach((dayIndex) => {
-        if (!updatedHours[dayIndex]) updatedHours[dayIndex] = { morning: {}, evening: {} }
-        if (!updatedHours[dayIndex][period]) updatedHours[dayIndex][period] = {}
-        updatedHours[dayIndex][period][type] = value
-      })
+        if (!updatedHours[dayIndex]) updatedHours[dayIndex] = { morning: {}, evening: {} };
+        if (!updatedHours[dayIndex][period]) updatedHours[dayIndex][period] = {};
+        updatedHours[dayIndex][period][type] = value;
+      });
     } else {
-      if (!updatedHours[index]) updatedHours[index] = { morning: {}, evening: {} }
-      if (!updatedHours[index][period]) updatedHours[index][period] = {}
-      updatedHours[index][period][type] = value
+      if (!updatedHours[index]) updatedHours[index] = { morning: {}, evening: {} };
+      if (!updatedHours[index][period]) updatedHours[index][period] = {};
+      updatedHours[index][period][type] = value;
     }
 
-    setLocalHoursOpen(updatedHours)
-    const validationErrors = validateHours(updatedHours)
-    setErrors(validationErrors)
+    setLocalHoursOpen(updatedHours);
 
-    if (brunch && Object.keys(validationErrors).length === 0) {
-      dispatch(
-        updateBrunchDetails({
-          id: brunch.id,
-          hoursOpen: updatedHours,
-        })
-      )
-    }
-  }
+    const validationErrors = validateHours(updatedHours);
+    setErrors(validationErrors);
+    formik.setFieldValue(`brunches[${activeBrunch}].hoursOpen`, updatedHours);
+    dispatch(updateBrunchDetails({
+      id: brunch.id,
+      hoursOpen: updatedHours,
+    }));
+  };
+
 
   const handleAddBranchClick = () => {
     setShowDialog(true)

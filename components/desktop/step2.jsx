@@ -50,7 +50,10 @@ export default function StepTwo({ brunch: propBrunch }) {
         }
       } else {
         formik.setTouched(Object.keys(errors).reduce((acc, key) => ({ ...acc, [key]: true }), {}))
+        formik.setErrors(errors)
         setForceValidate((prev) => !prev)
+        console.log('Validation errors:', errors) // Log validation errors for debugging;
+        
       }
     })
   }

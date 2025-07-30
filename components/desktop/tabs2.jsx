@@ -184,15 +184,16 @@ export function Tabs2() {
   }
 
   const submitForm = async () => {
+    console.log('Submitting form with values:', formik.values);
     let errors = {}
     try {
       await fullFormSchema.validate(formik.values, { abortEarly: false })
     } catch (err) {
       const formattedErrors = Array.isArray(err.inner)
         ? err.inner.reduce((acc, curr) => {
-            acc[curr.path] = curr.message
-            return acc
-          }, {})
+          acc[curr.path] = curr.message
+          return acc
+        }, {})
         : {}
       errors = formattedErrors
       formik.setErrors(formattedErrors)
@@ -216,7 +217,9 @@ export function Tabs2() {
       }
     } else {
       formik.setTouched(Object.keys(errors).reduce((acc, key) => ({ ...acc, [key]: true }), {}))
+      console.log(errors, 'errors')
       return errors
+
     }
   }
 
