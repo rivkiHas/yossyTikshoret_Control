@@ -12,6 +12,7 @@ import { setActiveStep } from '../store/step_store'
 import { AlertDialogEdit } from './alert_dialog_edit'
 import CustomTimeInput from './custom_time_input'
 import { Button } from './ui/button'
+import { useFormikContext } from 'formik'
 
 const validateHours = (hoursData) => {
   const newErrors = {}
@@ -63,6 +64,7 @@ const validateHours = (hoursData) => {
 }
 
 const HoursOpenMobile = ({ typeMarketer }) => {
+
   const dispatch = useDispatch()
   const [isGrouped, setIsGrouped] = useState(false)
   const [isSwitchOn, setIsSwitchOn] = useState(false)
@@ -73,6 +75,7 @@ const HoursOpenMobile = ({ typeMarketer }) => {
   const [errors, setErrors] = useState({})
   const [showDialog, setShowDialog] = useState(false)
   const [newBranchName, setNewBranchName] = useState('')
+  const formik = useFormikContext()
 
   useEffect(() => {
     const initialHours = Array.from({ length: 7 }, () => ({
