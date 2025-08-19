@@ -296,7 +296,6 @@ export function Tabs2() {
         </div>
 
         <div className="fixed right-1 bottom-[calc(theme('spacing.6')+90px)] left-1 z-5 h-10 rounded-t-[58px] bg-gradient-to-t from-[rgba(255,255,255,0.50)] via-[rgba(255,255,255,0.25)] to-[rgba(255,255,255,0.00)] backdrop-blur-[2.2px]"></div>
-
         <div className="fixed right-6 bottom-6 left-6 z-10 flex">
           {isCompleted ? (
             <div
